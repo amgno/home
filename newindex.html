@@ -3,7 +3,93 @@
 <meta name="color-scheme" content="dark light" />
 <meta name="robots" content="noindex" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/x-icon" href="./favicon.ico">
 <title>~</title>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function updateLinks(isLocal) {
+            COMMANDS.forEach((value, key) => {
+                try {
+                    const url = new URL(value.url);
+                    if (isLocal && url.hostname === 'ams') {
+                        url.hostname = '192.168.1.9';
+                    } else if (!isLocal && url.hostname === '192.168.1.9') {
+                        url.hostname = 'ams';
+                    }
+                    value.url = url.toString();
+                    console.log(`Updated command ${key}: ${value.url}`);
+                } catch (e) {
+                    console.error(`Error updating URL for command ${key}:`, e);
+                }
+            });
+        }
+
+        function isLocalNetwork() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const publicIP = data.ip;
+                    console.log('Detected public IP:', publicIP);
+
+                    // Resolve a.088899.xyz to get the current public IP
+                    fetch('https://dns.google/resolve?name=a.088899.xyz&type=A')
+                        .then(response => response.json())
+                        .then(dnsData => {
+                            const domainIP = dnsData.Answer[0].data;
+                            console.log('Resolved domain IP:', domainIP);
+
+                            const isLocal = publicIP === domainIP;
+                            console.log('Is local network:', isLocal);
+
+                            updateLinks(isLocal);
+                            // Reinitialize the commands component to apply the updated URLs
+                            document.querySelector('commands-component').initialize();
+                        })
+                        .catch(error => {
+                            console.error('Error resolving domain IP:', error);
+                        });
+                })
+                .catch(error => {
+                    console.error('Error detecting public IP:', error);
+                });
+        }
+
+        isLocalNetwork();
+    });
+
+    class Commands extends HTMLElement {
+        constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            this.initialize();
+        }
+
+        initialize() {
+            const template = document.getElementById('commands-template');
+            const clone = template.content.cloneNode(true);
+            const commands = clone.querySelector('.commands');
+            const commandTemplate = document.getElementById('command-template');
+
+            for (const [key, { name, url }] of COMMANDS.entries()) {
+                if (!name || !url) continue;
+                const clone = commandTemplate.content.cloneNode(true);
+                const command = clone.querySelector('.command');
+                command.href = url;
+                if (CONFIG.openLinksInNewTab) command.target = '_blank';
+                clone.querySelector('.key').innerText = key;
+                clone.querySelector('.name').innerText = name;
+                commands.append(clone);
+            }
+
+            this.shadowRoot.innerHTML = '';  // Clear the shadow DOM before appending
+            this.shadowRoot.append(clone);
+        }
+    }
+
+    customElements.define('commands-component', Commands);
+</script>
+
 
 <style>
     :root {
@@ -545,7 +631,7 @@
 
 
 
-<script>
+<!-- <script>
     window.onload = function () {
         // List of famous quotes and authors
         var quotesAndAuthors = [
@@ -614,7 +700,7 @@
         document.getElementById('quote').innerHTML = randomQuote;
         document.getElementById('author').innerHTML = "-" + randomAuthor;
     }
-</script>
+</script> -->
 
 <style>
     html {
