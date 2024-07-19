@@ -94,10 +94,10 @@
 <style>
     :root {
         /* --border-radius: 20rem; */
-        --color-background: #111;
+        --color-background: #383838;
         /* 888 before */
-        --color-text-subtle: #888; 
-        --color-text: #e93f21;
+        --color-text-subtle: #000000; 
+        --color-text: #ffffff;
         --font-family: -apple-system, Helvetica, sans-serif;
         --font-size: clamp(16px, 1.6vw, 18px);
         --font-weight-bold: 700;
@@ -108,9 +108,9 @@
 
     @media (prefers-color-scheme: light) {
     :root {
-      --color-background: #e8e8e8;
-      --color-text-subtle: #606060;
-      --color-text: #e93f21;
+      --color-background: #383838;
+      --color-text-subtle: #ffffff;
+      --color-text: #ffffff;
     }
   }
 </style>
@@ -756,6 +756,22 @@
     }
     
 
+    body {
+
+    }
+
+    bgelement {
+        position: absolute;
+        background-image: url('./bg.gif');
+        background-repeat: no-repeat;
+        /* background-size: cover; */
+        background-position: center; 
+        z-index: -100;
+        height: 100vh;
+        width: 100vw;
+        filter: blur(18px);
+        background-color: rgb(46, 46, 46);
+    }
 
 </style>
 
@@ -766,6 +782,8 @@
     <author id="author">Sutcaz</author>
 </div> -->
 
+
+<bgelement></bgelement>
 <main>
 
     <commands-component></commands-component>
