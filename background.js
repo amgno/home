@@ -1,65 +1,5 @@
-# Animated Background Startpage
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
 
-This project creates a visually stunning startpage with an animated background using Three.js. It features a customizable set of quick links and a search functionality, all wrapped in a sleek, modern design.
-
-## 🌟 Features
-
-- **Animated 3D Background**: Mesmerizing particle animation that changes with each page load.
-- **Quick Links**: Customizable shortcuts to your favorite websites.
-- **Search Functionality**: Integrated search with customizable search engines.
-- **Responsive Design**: Looks great on both desktop and mobile devices.
-- **Dark/Light Mode**: Automatically adapts to your system preferences.
-
-## 🚀 Getting Started
-
-1. Clone this repository to your local machine.
-2. Open `newindex.html` in your web browser.
-
-## 🛠️ Customization
-
-### Modifying Quick Links
-
-Edit the `COMMANDS` map in the `<script>` section of `newindex.html`:
-
-
-```127:154:newindex.html
-    const COMMANDS = new Map([
-        ['a', { name: 'Plex', url: 'https://app.plex.tv/desktop/' }],
-        ['b', { name: 'Sonarr', url: 'http://ams:8989' }],
-        ['c', { name: 'Radarr', url: 'http://ams:7878' }],
-        ['i', { name: 'Transmission', url: 'http://ams:9091' }],
-        ['f', { name: 'Metube', url: 'http://ams:84' }],
-        ['g', { name: 'Jackett', url: 'http://ams:9117' }],
-        ['h', { name: 'DNS', url: 'http://ams:8000' }],
-        ['d', { name: 'Twitch', url: 'https://twitch.tv' }],
-        ['j', { name: 'Twitter', url: 'https://x.com' }],
-        ['k', { name: 'Gmail', url: 'https://gmail.com/' }],
-        [
-            's',
-            {
-                name: 'YouTube',
-                searchTemplate: '/results?search_query={}',
-                url: 'https://youtube.com/',
-            },
-        ],
-        [
-            'q',
-            {
-                name: 'Most used',
-                searchTemplate: ':{}',
-                suggestions: ['web.whatsapp.com', 'anilist.co', 'discord.com/app'],
-                url: 'http://localhost:3000',
-            },
-        ],
-```
-
-
-### Changing Background Animation
-
-Modify the `AnimatedBackground` class in `background.js` to adjust the particle animation:
-
-
-```3:205:background.js
 class AnimatedBackground {
     constructor() {
         this.container = document.querySelector('bgelement');
@@ -119,6 +59,7 @@ class AnimatedBackground {
             pulseFreq: 0.1 + this.random() * 0.4
         };
     }
+
     createParticles() {
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(this.particleCount * 3);
@@ -183,6 +124,7 @@ class AnimatedBackground {
         this.particleSystem = new THREE.Points(geometry, material);
         this.particles.add(this.particleSystem);
     }
+
     addEvents() {
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
     }
@@ -192,6 +134,7 @@ class AnimatedBackground {
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
+
     animate() {
         requestAnimationFrame(this.animate.bind(this));
 
@@ -260,80 +203,5 @@ class AnimatedBackground {
         this.renderer.render(this.scene, this.camera);
     }
 }
-```
 
-
-### Styling
-
-Adjust the CSS variables in the `<style>` section of `newindex.html` to change colors and fonts:
-
-
-```95:115:newindex.html
-    :root {
-        /* --border-radius: 20rem; */
-        --color-background: #383838;
-        /* 888 before */
-        --color-text-subtle: #ffffff; 
-        --color-text: #b40000;
-        --font-family: -apple-system, Helvetica, sans-serif;
-        --font-size: clamp(16px, 1.6vw, 18px);
-        --font-weight-bold: 700;
-        --font-weight-normal: 400;
-        --space: .8rem;
-        --transition-speed: 200ms;
-    }
-
-    /* @media (prefers-color-scheme: light) {
-    :root {
-      --color-background: #383838;
-      --color-text-subtle: #ffffff;
-      --color-text: #ffffff;
-    }
-  } */
-```
-
-
-## 🎨 Color Scheme
-
-The default color scheme is a dark theme with red accents:
-
-- Background: `#383838`
-- Text: `#b40000`
-- Subtle Text: `#ffffff`
-
-To change the color scheme, modify the CSS variables in the `:root` selector.
-
-## 🔧 Configuration
-
-Adjust the `CONFIG` object in `newindex.html` to change behavior like opening links in new tabs or changing the default search engine:
-
-
-```119:125:newindex.html
-    const CONFIG = {
-        commandPathDelimiter: '/',
-        commandSearchDelimiter: ' ',
-        defaultSearchTemplate: 'https://www.google.com/search?q={}',
-        openLinksInNewTab: false,
-        suggestionLimit: 4,
-    };
-```
-
-
-## 📱 Responsive Design
-
-The startpage is designed to work well on both desktop and mobile devices. The font size and layout adjust automatically based on the screen size.
-
-## 🌐 Browser Compatibility
-
-This startpage uses modern web technologies and is compatible with the latest versions of major browsers.
-
-## 📜 License
-
-This project is open source and available under the MIT License.
-
-## 🙏 Acknowledgements
-
-- [Three.js](https://threejs.org/) for the 3D animation library
-- Inspiration from various startpage designs in the r/startpages community
-
-Enjoy your new animated startpage! 🎉
+new AnimatedBackground();
