@@ -748,6 +748,28 @@
         font-size: 0.65rem;
         letter-spacing: 0.05em;
     }
+
+    /* Settings dot styles */
+    .settings-dot {
+        position: fixed;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        background-color: var(--color-text-subtle);
+        border-radius: 50%;
+        opacity: 0.5;
+        cursor: pointer;
+        transition: all var(--transition-speed);
+        z-index: 10;
+    }
+
+    .settings-dot:hover {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.2);
+        background-color: var(--color-accent);
+    }
 </style>
 
 <script>
@@ -806,3 +828,205 @@
 <div class="corner-text bottom-right">
     A. Magno
 </div>
+
+<template id="settings-widget-template">
+    <style>
+        .settings-panel {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            width: 280px;
+            max-width: 90vw;
+            z-index: 9;
+            display: none;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .settings-panel.open {
+            display: block;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .settings-title {
+            font-size: 0.8rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text);
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 0.5rem;
+        }
+
+        .settings-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+
+        .settings-option-label {
+            font-size: 0.75rem;
+            color: var(--color-text-subtle);
+        }
+
+        .settings-checkbox {
+            position: relative;
+            width: 30px;
+            height: 16px;
+        }
+
+        .settings-checkbox input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .settings-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .settings-slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .settings-slider {
+            background-color: var(--color-accent);
+        }
+
+        input:checked + .settings-slider:before {
+            transform: translateX(14px);
+        }
+    </style>
+    <div class="settings-panel">
+        <div class="settings-title">Settings</div>
+        <div class="settings-option">
+            <span class="settings-option-label">Open links in new tab</span>
+            <label class="settings-checkbox">
+                <input type="checkbox" id="new-tab-setting">
+                <span class="settings-slider"></span>
+            </label>
+        </div>
+        <div class="settings-option">
+            <span class="settings-option-label">Dark mode</span>
+            <label class="settings-checkbox">
+                <input type="checkbox" id="dark-mode-setting">
+                <span class="settings-slider"></span>
+            </label>
+        </div>
+    </div>
+</template>
+
+<script type="module">
+    class SettingsWidget extends HTMLElement {
+        #panel;
+        #newTabSetting;
+        #darkModeSetting;
+        
+        constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            const template = document.getElementById('settings-widget-template');
+            const clone = template.content.cloneNode(true);
+            this.#panel = clone.querySelector('.settings-panel');
+            this.shadowRoot.append(clone);
+            
+            // Get checkbox elements
+            this.#newTabSetting = this.shadowRoot.querySelector('#new-tab-setting');
+            this.#darkModeSetting = this.shadowRoot.querySelector('#dark-mode-setting');
+            
+            // Initialize settings from the existing CONFIG
+            this.#newTabSetting.checked = CONFIG.openLinksInNewTab;
+            
+            // Add event listeners
+            this.#newTabSetting.addEventListener('change', this.#onNewTabChange);
+            this.#darkModeSetting.addEventListener('change', this.#onDarkModeChange);
+            
+            // Close panel when clicking outside
+            document.addEventListener('click', this.#onDocumentClick);
+        }
+        
+        toggle() {
+            this.#panel.classList.toggle('open');
+        }
+        
+        #onNewTabChange = (e) => {
+            CONFIG.openLinksInNewTab = e.target.checked;
+            // Re-initialize commands component to apply setting
+            document.querySelector('commands-component').initialize();
+        };
+        
+        #onDarkModeChange = (e) => {
+            if (e.target.checked) {
+                document.documentElement.style.setProperty('--color-background', '#1a1a1a');
+                document.documentElement.style.setProperty('--color-text', '#e0e0e0');
+                document.documentElement.style.setProperty('--color-text-subtle', '#a0a0a0');
+                document.documentElement.style.setProperty('--color-accent', '#505050');
+                document.documentElement.style.setProperty('--color-hover', '#707070');
+                document.documentElement.style.setProperty('--box-shadow', '0 1px 4px rgba(0, 0, 0, 0.2)');
+                document.documentElement.style.backgroundImage = 'linear-gradient(135deg, #222, #333)';
+            } else {
+                document.documentElement.style.setProperty('--color-background', '#f8f5e6');
+                document.documentElement.style.setProperty('--color-text', '#222222');
+                document.documentElement.style.setProperty('--color-text-subtle', '#666666');
+                document.documentElement.style.setProperty('--color-accent', '#333333');
+                document.documentElement.style.setProperty('--color-hover', '#444444');
+                document.documentElement.style.setProperty('--box-shadow', '0 1px 4px rgba(0, 0, 0, 0.03)');
+                document.documentElement.style.backgroundImage = 'linear-gradient(135deg, #f8f5e6, #f2edd0)';
+            }
+        };
+        
+        #onDocumentClick = (e) => {
+            // Don't close if clicking inside the settings panel or the dot
+            if (e.target.closest('.settings-dot') || e.target.closest('settings-widget')) {
+                return;
+            }
+            this.#panel.classList.remove('open');
+        };
+    }
+
+    customElements.define('settings-widget', SettingsWidget);
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create settings dot and widget
+        const settingsWidget = document.createElement('settings-widget');
+        document.body.appendChild(settingsWidget);
+        
+        const settingsDot = document.createElement('div');
+        settingsDot.className = 'settings-dot';
+        settingsDot.addEventListener('click', () => {
+            const settingsEl = document.querySelector('settings-widget');
+            settingsEl.toggle();
+        });
+        document.body.appendChild(settingsDot);
+        
+        // Existing event listeners
+        document.getElementById('greeting').textContent = getGreeting();
+        document.getElementById('quote').textContent = getRandomQuote();
+    });
+</script>
