@@ -862,20 +862,27 @@
         bottom: 1rem;
         left: 50%;
         transform: translateX(-50%);
-        width: 5px;
-        height: 5px;
+        width: 4px; /* Smaller visual dot */
+        height: 4px; /* Smaller visual dot */
         background-color: var(--color-text-subtle);
         border-radius: 50%;
         opacity: 0.5;
         cursor: pointer;
         transition: all var(--transition-speed);
         z-index: 10;
+        /* Make hit area much larger than visual dot */
+        margin: 1.3rem;
+        padding: 1px;
+        box-sizing: content-box;
+        /* Add subtle shadow to make it more visible */
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
     }
 
     .settings-dot:hover {
-        opacity: 1;
+        opacity: 0.8;
         transform: translateX(-50%) scale(1.2);
         background-color: var(--color-accent);
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
     }
 </style>
 
@@ -1112,7 +1119,10 @@
             transition: all var(--transition-speed);
             margin-bottom: 0.5rem;
             min-height: 60px;
+            max-height: 120px;
             resize: vertical;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
         }
         
         .share-input:focus {
@@ -1176,16 +1186,82 @@
             padding: 5px 8px;
             outline: none;
             transition: all var(--transition-speed);
+            box-sizing: border-box;
         }
         
         .shortcut-form-input:focus {
             border-color: var(--color-accent);
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .shortcut-form-key {
+            width: 3ch;
             text-align: center;
+        }
+        
+        .new-shortcut-button {
+            display: block;
+            width: 100%;
+            font-family: var(--font-family);
+            font-size: 0.75rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-subtle);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px dashed rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            text-align: center;
+            box-sizing: border-box;
         }
         
         .new-shortcut-button:hover {
             background-color: rgba(0, 0, 0, 0.03);
             color: var(--color-text);
+        }
+
+        .shortcut-form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .shortcut-form-button {
+            font-family: var(--font-family);
+            font-size: 0.7rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-subtle);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .shortcut-form-button:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .shortcut-form-button.primary {
+            background-color: var(--color-accent);
+            color: white;
+            border-color: transparent;
+        }
+
+        .shortcut-form-button.primary:hover {
+            opacity: 0.9;
+        }
+
+        .shortcut-form-button.danger {
+            color: #e53935;
+            border-color: rgba(229, 57, 53, 0.3);
+        }
+
+        .shortcut-form-button.danger:hover {
+            background-color: rgba(229, 57, 53, 0.1);
         }
     </style>
     <div class="settings-panel">
