@@ -1048,6 +1048,92 @@
             box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
         }
         
+        /* Share Settings Section */
+        .share-settings {
+            margin-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 1rem;
+        }
+        
+        .share-title {
+            font-size: 0.75rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: 0.8rem;
+            color: var(--color-text-subtle);
+        }
+        
+        .share-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .share-button {
+            font-family: var(--font-family);
+            font-size: 0.7rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-subtle);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .share-button:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+        
+        .share-button.import {
+            background-color: var(--color-accent);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .share-button.import:hover {
+            opacity: 0.9;
+        }
+        
+        .share-input {
+            width: 100%;
+            font-family: var(--font-family);
+            font-size: 0.75rem;
+            color: var(--color-text);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            padding: 5px 8px;
+            outline: none;
+            transition: all var(--transition-speed);
+            margin-bottom: 0.5rem;
+            min-height: 60px;
+            resize: vertical;
+        }
+        
+        .share-input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .share-message {
+            font-size: 0.65rem;
+            color: var(--color-text-subtle);
+            margin-top: 0.3rem;
+            text-align: center;
+            height: 1.3em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .share-message.visible {
+            opacity: 1;
+        }
+        
         /* Shortcut editor styles */
         .shortcut-editor {
             display: none;
@@ -1094,70 +1180,6 @@
         
         .shortcut-form-input:focus {
             border-color: var(--color-accent);
-            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
-        }
-        
-        .shortcut-form-key {
-            width: 3ch;
-            text-align: center;
-        }
-        
-        .shortcut-form-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-        }
-        
-        .shortcut-form-button {
-            font-family: var(--font-family);
-            font-size: 0.7rem;
-            font-weight: var(--font-weight-bold);
-            color: var(--color-text-subtle);
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            padding: 5px 10px;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-        }
-        
-        .shortcut-form-button:hover {
-            background-color: rgba(0, 0, 0, 0.03);
-        }
-        
-        .shortcut-form-button.primary {
-            background-color: var(--color-accent);
-            color: white;
-            border-color: transparent;
-        }
-        
-        .shortcut-form-button.primary:hover {
-            opacity: 0.9;
-        }
-        
-        .shortcut-form-button.danger {
-            color: #e53935;
-            border-color: rgba(229, 57, 53, 0.3);
-        }
-        
-        .shortcut-form-button.danger:hover {
-            background-color: rgba(229, 57, 53, 0.1);
-        }
-        
-        .new-shortcut-button {
-            display: block;
-            width: 100%;
-            font-family: var(--font-family);
-            font-size: 0.75rem;
-            font-weight: var(--font-weight-bold);
-            color: var(--color-text-subtle);
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 1px dashed rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            padding: 0.5rem;
-            margin-top: 1rem;
-            cursor: pointer;
-            transition: all var(--transition-speed);
             text-align: center;
         }
         
@@ -1190,6 +1212,17 @@
                 <option value="glass">Glass Modern</option>
                 <option value="ocean">Ocean</option>
             </select>
+        </div>
+        
+        <!-- Share Settings Section -->
+        <div class="share-settings">
+            <div class="share-title">Share Settings</div>
+            <div class="share-buttons">
+                <button type="button" class="share-button" id="export-settings">Export</button>
+                <button type="button" class="share-button import" id="import-settings">Import</button>
+            </div>
+            <textarea class="share-input" id="share-data" placeholder="Paste settings data here to import, or click Export to generate shareable data."></textarea>
+            <div class="share-message" id="share-message"></div>
         </div>
         
         <button type="button" class="new-shortcut-button" id="new-shortcut">+ Add New Shortcut</button>
@@ -1241,6 +1274,12 @@
         #shortcutSave;
         #newShortcut;
         #editingKey = null;
+        
+        // Share settings elements
+        #exportButton;
+        #importButton;
+        #shareData;
+        #shareMessage;
         
         // Theme definitions
         #themes = {
@@ -1434,6 +1473,12 @@
             this.#shortcutSave = this.shadowRoot.querySelector('#shortcut-save');
             this.#newShortcut = this.shadowRoot.querySelector('#new-shortcut');
             
+            // Get share settings elements
+            this.#exportButton = this.shadowRoot.querySelector('#export-settings');
+            this.#importButton = this.shadowRoot.querySelector('#import-settings');
+            this.#shareData = this.shadowRoot.querySelector('#share-data');
+            this.#shareMessage = this.shadowRoot.querySelector('#share-message');
+            
             // Initialize settings from the existing CONFIG
             this.#newTabSetting.checked = CONFIG.openLinksInNewTab;
             
@@ -1450,6 +1495,10 @@
             this.#shortcutCancel.addEventListener('click', this.#onShortcutCancel);
             this.#shortcutDelete.addEventListener('click', this.#onShortcutDelete);
             this.#newShortcut.addEventListener('click', this.#onNewShortcut);
+            
+            // Add share settings event listeners
+            this.#exportButton.addEventListener('click', this.#onExportSettings);
+            this.#importButton.addEventListener('click', this.#onImportSettings);
             
             // Close panel when clicking outside
             document.addEventListener('click', this.#onDocumentClick);
@@ -2201,6 +2250,119 @@
                 commandsMenu.classList.remove('editable');
             }
         }
+        
+        // Method to display temporary messages in the share section
+        #showMessage(message, isError = false) {
+            this.#shareMessage.textContent = message;
+            this.#shareMessage.classList.add('visible');
+            
+            if (isError) {
+                this.#shareMessage.style.color = '#e53935';
+            } else {
+                this.#shareMessage.style.color = '';
+            }
+            
+            // Hide the message after 3 seconds
+            setTimeout(() => {
+                this.#shareMessage.classList.remove('visible');
+            }, 3000);
+        }
+        
+        // Export settings and commands to a shareable string
+        #onExportSettings = () => {
+            try {
+                // Gather all settings and commands
+                const exportData = {
+                    version: 1,
+                    settings: {
+                        openLinksInNewTab: this.#newTabSetting.checked,
+                        darkMode: this.#darkModeSetting.checked,
+                        theme: this.#currentTheme
+                    },
+                    commands: Array.from(COMMANDS.entries())
+                };
+                
+                // Convert to JSON and then to Base64 for sharing
+                const jsonData = JSON.stringify(exportData);
+                const base64Data = btoa(jsonData);
+                
+                // Display in the textarea
+                this.#shareData.value = base64Data;
+                
+                // Select the text for easy copying
+                this.#shareData.select();
+                document.execCommand('copy');
+                
+                this.#showMessage('Settings copied to clipboard!');
+            } catch (e) {
+                console.error('Error exporting settings:', e);
+                this.#showMessage('Error exporting settings', true);
+            }
+        };
+        
+        // Import settings and commands from a shared string
+        #onImportSettings = () => {
+            try {
+                const base64Data = this.#shareData.value.trim();
+                
+                if (!base64Data) {
+                    this.#showMessage('Please paste settings data first', true);
+                    return;
+                }
+                
+                // Decode the Base64 string to JSON
+                const jsonData = atob(base64Data);
+                const importData = JSON.parse(jsonData);
+                
+                // Check version compatibility
+                if (!importData.version || importData.version !== 1) {
+                    this.#showMessage('Incompatible settings format', true);
+                    return;
+                }
+                
+                // Apply settings
+                if (importData.settings) {
+                    this.#newTabSetting.checked = importData.settings.openLinksInNewTab || false;
+                    this.#darkModeSetting.checked = importData.settings.darkMode || false;
+                    this.#themeSelect.value = importData.settings.theme || 'default';
+                    this.#currentTheme = importData.settings.theme || 'default';
+                    
+                    // Save to localStorage
+                    this.#saveSettings();
+                    
+                    // Apply theme
+                    this.#applyTheme(this.#currentTheme, this.#darkModeSetting.checked);
+                    
+                    // Update CONFIG
+                    CONFIG.openLinksInNewTab = this.#newTabSetting.checked;
+                }
+                
+                // Import commands
+                if (importData.commands && Array.isArray(importData.commands)) {
+                    // Clear existing commands
+                    COMMANDS.clear();
+                    
+                    // Add imported commands
+                    for (const [key, value] of importData.commands) {
+                        COMMANDS.set(key, value);
+                    }
+                    
+                    // Save to localStorage
+                    this.#saveCommands();
+                    
+                    // Update UI
+                    document.querySelector('commands-component').initialize();
+                }
+                
+                this.#showMessage('Settings imported successfully!');
+                
+                // Clear the textarea
+                this.#shareData.value = '';
+            } catch (e) {
+                console.error('Error importing settings:', e);
+                this.#showMessage('Invalid settings data format', true);
+            }
+        };
     }
 
     customElements.define('settings-widget', SettingsWidget);
