@@ -884,6 +884,35 @@
         background-color: var(--color-accent);
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
     }
+    
+    /* Responsive styles for various screen sizes */
+    @media (max-width: 768px) {
+        main {
+            padding: calc(var(--space) * 3) var(--space);
+            align-items: flex-start;
+            padding-top: 4rem;
+        }
+        
+        .corner-text {
+            padding: 1.5rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        main {
+            padding: calc(var(--space) * 2) var(--space);
+            align-items: flex-start;
+            padding-top: 3.5rem;
+        }
+        
+        .corner-text {
+            padding: 1rem;
+        }
+        
+        .settings-dot {
+            bottom: 0.5rem;
+        }
+    }
 </style>
 
 <script>
@@ -2203,8 +2232,9 @@
                                     padding: 1.5rem !important;
                                     justify-content: center !important;
                                     align-items: start !important;
-                                    width: 100% !important;
-                                    max-width: calc(100vw - 4rem) !important;
+                                    width: auto !important;
+                                    max-width: 42rem !important;
+                                    margin: 0 auto !important;
                                 }
                                 
                                 .command {
@@ -2215,15 +2245,31 @@
                                     border-left: 2px solid transparent !important;
                                     padding-left: 0.5rem !important;
                                     transition: all 0.2s ease !important;
+                                    margin-bottom: 0.5rem !important;
                                 }
                                 
                                 .command:hover {
                                     border-left-color: ${colors.accent} !important;
                                 }
                                 
-                                @media (max-width: 600px) {
+                                @media (max-width: 768px) {
                                     .commands {
-                                        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+                                        grid-template-columns: repeat(3, minmax(100px, 1fr)) !important;
+                                        grid-gap: 1rem !important;
+                                        padding: 1rem !important;
+                                        max-width: 32rem !important;
+                                    }
+                                    
+                                    .command {
+                                        margin-bottom: 0.25rem !important;
+                                    }
+                                }
+                                
+                                @media (max-width: 480px) {
+                                    .commands {
+                                        grid-template-columns: repeat(2, minmax(90px, 1fr)) !important;
+                                        max-width: 22rem !important;
+                                        padding: 0.8rem !important;
                                     }
                                 }
                             `;
@@ -2250,7 +2296,7 @@
                             name.style.opacity = '0.9';
                         });
                         
-                        // Add Swiss-specific hover effect
+                        // Add Swiss-specific hover effect and responsive styles
                         const nameHoverStyle = document.createElement('style');
                         nameHoverStyle.className = 'swiss-name-hover-style';
                         nameHoverStyle.textContent = `
@@ -2260,6 +2306,27 @@
                             
                             .name::after {
                                 display: none !important;
+                            }
+                            
+                            @media (max-width: 768px) {
+                                .key {
+                                    font-size: 1em !important;
+                                }
+                                
+                                .name {
+                                    font-size: 0.75em !important;
+                                }
+                            }
+                            
+                            @media (max-width: 480px) {
+                                .key {
+                                    font-size: 0.9em !important;
+                                }
+                                
+                                .name {
+                                    font-size: 0.7em !important;
+                                    letter-spacing: 0.03em !important;
+                                }
                             }
                         `;
                         commandsEl.shadowRoot.appendChild(nameHoverStyle);
@@ -2275,6 +2342,33 @@
                     el.style.fontSize = colors.cornerTextSize || '0.65rem';
                     el.style.opacity = '0.8';
                 });
+                
+                // Additional responsive style for corner texts
+                const cornerTextStyle = document.createElement('style');
+                cornerTextStyle.textContent = `
+                    @media (max-width: 768px) {
+                        .corner-text {
+                            padding: 1rem !important;
+                            max-width: 150px !important;
+                        }
+                        
+                        .top-left, .top-right, .bottom-left, .bottom-right {
+                            font-size: 0.6rem !important;
+                        }
+                    }
+                    
+                    @media (max-width: 480px) {
+                        .top-left, .bottom-right {
+                            display: none !important;
+                        }
+                        
+                        .top-right, .bottom-left {
+                            padding: 0.75rem !important;
+                            font-size: 0.55rem !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(cornerTextStyle);
                 
                 // Style the settings dot
                 const dot = document.querySelector('.settings-dot');
@@ -2297,6 +2391,37 @@
                         panel.style.boxShadow = 'none';
                         panel.style.borderRadius = '0';
                         panel.style.borderLeft = `2px solid ${colors.accent}`;
+                        
+                        // Add responsive settings for smaller screens
+                        const responsiveSettingsStyle = document.createElement('style');
+                        responsiveSettingsStyle.textContent = `
+                            @media (max-width: 480px) {
+                                .settings-panel {
+                                    width: 240px !important;
+                                    max-width: 90vw !important;
+                                    font-size: 0.9em !important;
+                                }
+                                
+                                .settings-option-label {
+                                    font-size: 0.7rem !important;
+                                }
+                                
+                                .settings-select {
+                                    width: 100px !important;
+                                    font-size: 0.7rem !important;
+                                }
+                                
+                                .share-button {
+                                    padding: 4px 8px !important;
+                                    font-size: 0.65rem !important;
+                                }
+                                
+                                .shortcut-form-input {
+                                    padding: 4px 6px !important;
+                                }
+                            }
+                        `;
+                        settingsEl.shadowRoot.appendChild(responsiveSettingsStyle);
                     }
                     
                     // Style buttons in the Swiss theme
@@ -2327,15 +2452,34 @@
                         input.style.fontFamily = colors.fontFamily;
                         input.style.letterSpacing = colors.letterSpacing;
                         
-                        // Style suggestions with Swiss design principles
-                        const suggestionsStyle = document.createElement('style');
-                        suggestionsStyle.textContent = `
+                        // Add responsive styles for search
+                        const responsiveSearchStyle = document.createElement('style');
+                        responsiveSearchStyle.className = 'swiss-search-style';
+                        responsiveSearchStyle.textContent = `
+                            .input {
+                                width: 90% !important;
+                                max-width: 400px !important;
+                                margin: 0 auto !important;
+                            }
+                            
+                            @media (max-width: 480px) {
+                                .input {
+                                    font-size: 1rem !important;
+                                    padding: 0.4rem 0.8rem !important;
+                                }
+                                
+                                .suggestion {
+                                    font-size: 0.8rem !important;
+                                    padding: 0.4rem !important;
+                                }
+                            }
+                            
                             .suggestion::before {
                                 background-color: ${colors.accent} !important;
                                 border-radius: 0 !important;
                             }
                         `;
-                        searchEl.shadowRoot.appendChild(suggestionsStyle);
+                        searchEl.shadowRoot.appendChild(responsiveSearchStyle);
                     }
                 }
             } else {
@@ -2418,12 +2562,12 @@
             }
             
             // Remove any theme-specific styles
-            const commandsEl = document.querySelector('commands-component');
-            if (commandsEl && commandsEl.shadowRoot) {
-                const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
+            const allCommandsEl = document.querySelector('commands-component');
+            if (allCommandsEl && allCommandsEl.shadowRoot) {
+                const commandsMenu = allCommandsEl.shadowRoot.querySelector('.commands');
                 if (commandsMenu) {
                     // Remove any theme-specific styles that aren't needed for the current theme
-                    const themeStyles = commandsEl.shadowRoot.querySelectorAll('.ocean-columns-style, .ocean-name-style, .ocean-animation-style, .swiss-grid-style, .swiss-name-hover-style');
+                    const themeStyles = allCommandsEl.shadowRoot.querySelectorAll('.ocean-columns-style, .ocean-name-style, .ocean-animation-style, .swiss-grid-style, .swiss-name-hover-style, .swiss-search-style');
                     themeStyles.forEach(style => {
                         // Only remove styles not relevant to current theme
                         if ((themeName !== 'ocean' && style.className.includes('ocean')) || 
@@ -2596,9 +2740,15 @@
                             gridStyle.textContent = `
                                 .commands {
                                     display: grid !important;
-                                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+                                    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
                                     grid-gap: 1.5rem !important;
                                     columns: unset !important;
+                                    padding: 1.5rem !important;
+                                    justify-content: center !important;
+                                    align-items: start !important;
+                                    width: auto !important;
+                                    max-width: 42rem !important;
+                                    margin: 0 auto !important;
                                 }
                                 
                                 .command {
@@ -2609,15 +2759,31 @@
                                     border-left: 2px solid transparent !important;
                                     padding-left: 0.5rem !important;
                                     transition: all 0.2s ease !important;
+                                    margin-bottom: 0.5rem !important;
                                 }
                                 
                                 .command:hover {
                                     border-left-color: ${colors.accent} !important;
                                 }
                                 
-                                @media (max-width: 600px) {
+                                @media (max-width: 768px) {
                                     .commands {
-                                        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+                                        grid-template-columns: repeat(3, minmax(100px, 1fr)) !important;
+                                        grid-gap: 1rem !important;
+                                        padding: 1rem !important;
+                                        max-width: 32rem !important;
+                                    }
+                                    
+                                    .command {
+                                        margin-bottom: 0.25rem !important;
+                                    }
+                                }
+                                
+                                @media (max-width: 480px) {
+                                    .commands {
+                                        grid-template-columns: repeat(2, minmax(90px, 1fr)) !important;
+                                        max-width: 22rem !important;
+                                        padding: 0.8rem !important;
                                     }
                                 }
                             `;
@@ -2644,7 +2810,7 @@
                             name.style.opacity = '0.9';
                         });
                         
-                        // Add Swiss-specific hover effect
+                        // Add Swiss-specific hover effect and responsive styles
                         const nameHoverStyle = document.createElement('style');
                         nameHoverStyle.className = 'swiss-name-hover-style';
                         nameHoverStyle.textContent = `
@@ -2654,6 +2820,27 @@
                             
                             .name::after {
                                 display: none !important;
+                            }
+                            
+                            @media (max-width: 768px) {
+                                .key {
+                                    font-size: 1em !important;
+                                }
+                                
+                                .name {
+                                    font-size: 0.75em !important;
+                                }
+                            }
+                            
+                            @media (max-width: 480px) {
+                                .key {
+                                    font-size: 0.9em !important;
+                                }
+                                
+                                .name {
+                                    font-size: 0.7em !important;
+                                    letter-spacing: 0.03em !important;
+                                }
                             }
                         `;
                         commandsEl.shadowRoot.appendChild(nameHoverStyle);
@@ -2669,6 +2856,33 @@
                     el.style.fontSize = colors.cornerTextSize || '0.65rem';
                     el.style.opacity = '0.8';
                 });
+                
+                // Additional responsive style for corner texts
+                const cornerTextStyle = document.createElement('style');
+                cornerTextStyle.textContent = `
+                    @media (max-width: 768px) {
+                        .corner-text {
+                            padding: 1rem !important;
+                            max-width: 150px !important;
+                        }
+                        
+                        .top-left, .top-right, .bottom-left, .bottom-right {
+                            font-size: 0.6rem !important;
+                        }
+                    }
+                    
+                    @media (max-width: 480px) {
+                        .top-left, .bottom-right {
+                            display: none !important;
+                        }
+                        
+                        .top-right, .bottom-left {
+                            padding: 0.75rem !important;
+                            font-size: 0.55rem !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(cornerTextStyle);
                 
                 // Style the settings dot
                 const dot = document.querySelector('.settings-dot');
@@ -2691,6 +2905,37 @@
                         panel.style.boxShadow = 'none';
                         panel.style.borderRadius = '0';
                         panel.style.borderLeft = `2px solid ${colors.accent}`;
+                        
+                        // Add responsive settings for smaller screens
+                        const responsiveSettingsStyle = document.createElement('style');
+                        responsiveSettingsStyle.textContent = `
+                            @media (max-width: 480px) {
+                                .settings-panel {
+                                    width: 240px !important;
+                                    max-width: 90vw !important;
+                                    font-size: 0.9em !important;
+                                }
+                                
+                                .settings-option-label {
+                                    font-size: 0.7rem !important;
+                                }
+                                
+                                .settings-select {
+                                    width: 100px !important;
+                                    font-size: 0.7rem !important;
+                                }
+                                
+                                .share-button {
+                                    padding: 4px 8px !important;
+                                    font-size: 0.65rem !important;
+                                }
+                                
+                                .shortcut-form-input {
+                                    padding: 4px 6px !important;
+                                }
+                            }
+                        `;
+                        settingsEl.shadowRoot.appendChild(responsiveSettingsStyle);
                     }
                     
                     // Style buttons in the Swiss theme
@@ -2721,15 +2966,34 @@
                         input.style.fontFamily = colors.fontFamily;
                         input.style.letterSpacing = colors.letterSpacing;
                         
-                        // Style suggestions with Swiss design principles
-                        const suggestionsStyle = document.createElement('style');
-                        suggestionsStyle.textContent = `
+                        // Add responsive styles for search
+                        const responsiveSearchStyle = document.createElement('style');
+                        responsiveSearchStyle.className = 'swiss-search-style';
+                        responsiveSearchStyle.textContent = `
+                            .input {
+                                width: 90% !important;
+                                max-width: 400px !important;
+                                margin: 0 auto !important;
+                            }
+                            
+                            @media (max-width: 480px) {
+                                .input {
+                                    font-size: 1rem !important;
+                                    padding: 0.4rem 0.8rem !important;
+                                }
+                                
+                                .suggestion {
+                                    font-size: 0.8rem !important;
+                                    padding: 0.4rem !important;
+                                }
+                            }
+                            
                             .suggestion::before {
                                 background-color: ${colors.accent} !important;
                                 border-radius: 0 !important;
                             }
                         `;
-                        searchEl.shadowRoot.appendChild(suggestionsStyle);
+                        searchEl.shadowRoot.appendChild(responsiveSearchStyle);
                     }
                 }
             } else {
@@ -2807,6 +3071,30 @@
                         input.style.backgroundColor = '';
                         input.style.border = '';
                         input.style.boxShadow = '';
+                    }
+                }
+            }
+            
+            // Remove any theme-specific styles
+            const allCommandsEl = document.querySelector('commands-component');
+            if (allCommandsEl && allCommandsEl.shadowRoot) {
+                const commandsMenu = allCommandsEl.shadowRoot.querySelector('.commands');
+                if (commandsMenu) {
+                    // Remove any theme-specific styles that aren't needed for the current theme
+                    const themeStyles = allCommandsEl.shadowRoot.querySelectorAll('.ocean-columns-style, .ocean-name-style, .ocean-animation-style, .swiss-grid-style, .swiss-name-hover-style, .swiss-search-style');
+                    themeStyles.forEach(style => {
+                        // Only remove styles not relevant to current theme
+                        if ((themeName !== 'ocean' && style.className.includes('ocean')) || 
+                            (themeName !== 'swiss' && style.className.includes('swiss'))) {
+                            style.remove();
+                        }
+                    });
+                
+                    // If settings panel is open, make sure the editable class is added
+                    if (this.#panel.classList.contains('open')) {
+                        commandsMenu.classList.add('editable');
+                    } else {
+                        commandsMenu.classList.remove('editable');
                     }
                 }
             }
