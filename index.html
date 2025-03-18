@@ -922,6 +922,24 @@
         input:checked + .settings-slider:before {
             transform: translateX(14px);
         }
+        
+        .settings-select {
+            font-family: var(--font-family);
+            font-size: 0.75rem;
+            color: var(--color-text);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            padding: 3px 6px;
+            width: 120px;
+            outline: none;
+            transition: all var(--transition-speed);
+        }
+        
+        .settings-select:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
     </style>
     <div class="settings-panel">
         <div class="settings-title">Settings</div>
@@ -939,6 +957,15 @@
                 <span class="settings-slider"></span>
             </label>
         </div>
+        <div class="settings-option">
+            <span class="settings-option-label">Theme</span>
+            <select id="theme-select" class="settings-select">
+                <option value="default">Default</option>
+                <option value="minimal">Minimal</option>
+                <option value="glass">Glass Modern</option>
+                <option value="ocean">Ocean</option>
+            </select>
+        </div>
     </div>
 </template>
 
@@ -947,6 +974,176 @@
         #panel;
         #newTabSetting;
         #darkModeSetting;
+        #themeSelect;
+        #currentTheme = 'default';
+        
+        // Theme definitions
+        #themes = {
+            default: {
+                light: {
+                    background: '#f8f5e6',
+                    gradient: 'linear-gradient(135deg, #f8f5e6, #f2edd0)',
+                    text: '#222222',
+                    textSubtle: '#666666',
+                    accent: '#333333',
+                    hover: '#444444',
+                    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.03)'
+                },
+                dark: {
+                    background: '#1a1a1a',
+                    gradient: 'linear-gradient(135deg, #222, #333)',
+                    text: '#e0e0e0',
+                    textSubtle: '#a0a0a0',
+                    accent: '#505050',
+                    hover: '#707070',
+                    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.2)'
+                }
+            },
+            minimal: {
+                light: {
+                    background: '#ffffff',
+                    gradient: 'none',
+                    text: '#000000',
+                    textSubtle: '#999999',
+                    accent: '#cccccc',
+                    hover: '#eeeeee',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '\"Courier New\", monospace',
+                    fontSize: '12px',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '70rem',
+                    keyColor: '#666666'
+                },
+                dark: {
+                    background: '#000000',
+                    gradient: 'none',
+                    text: '#ffffff',
+                    textSubtle: '#777777',
+                    accent: '#333333',
+                    hover: '#222222',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '\"Courier New\", monospace',
+                    fontSize: '12px',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '70rem',
+                    keyColor: '#999999'
+                }
+            },
+            glass: {
+                light: {
+                    background: 'rgba(255, 255, 255, 0.7)',
+                    gradient: 'linear-gradient(135deg, #f5f7fa, #c3cfe2)',
+                    text: '#334155',
+                    textSubtle: '#64748b',
+                    accent: '#3b82f6',
+                    hover: '#60a5fa',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+                    borderRadius: '16px',
+                    commandsBackground: 'rgba(255, 255, 255, 0.6)',
+                    commandsBorder: '1px solid rgba(255, 255, 255, 0.2)',
+                    commandsBoxShadow: '0 8px 32px rgba(0, 0, 0, 0.07)',
+                    fontFamily: '\"Inter\", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#3b82f6',
+                    commandMaxWidth: '60rem',
+                    backdropFilter: 'blur(10px)',
+                    cornerTextStyle: 'text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.6rem; font-weight: 500;',
+                    dotSize: '6px',
+                    dotOpacity: '0.7',
+                    nameAfterHeight: '2px'
+                },
+                dark: {
+                    background: 'rgba(15, 23, 42, 0.7)',
+                    gradient: 'linear-gradient(135deg, #0f172a, #1e293b)',
+                    text: '#e2e8f0',
+                    textSubtle: '#94a3b8',
+                    accent: '#38bdf8',
+                    hover: '#7dd3fc',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+                    borderRadius: '16px',
+                    commandsBackground: 'rgba(30, 41, 59, 0.5)',
+                    commandsBorder: '1px solid rgba(255, 255, 255, 0.1)',
+                    commandsBoxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                    fontFamily: '\"Inter\", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#38bdf8',
+                    commandMaxWidth: '60rem',
+                    backdropFilter: 'blur(10px)',
+                    cornerTextStyle: 'text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.6rem; font-weight: 500;',
+                    dotSize: '6px',
+                    dotOpacity: '0.7',
+                    nameAfterHeight: '2px'
+                }
+            },
+            ocean: {
+                light: {
+                    background: '#e0f7fa',
+                    gradient: 'linear-gradient(135deg, #e0f7fa, #80deea 50%, #4dd0e1)',
+                    text: '#006064',
+                    textSubtle: '#0097a7',
+                    accent: '#00838f',
+                    hover: '#006064',
+                    boxShadow: '0 4px 14px rgba(0, 131, 143, 0.15)',
+                    borderRadius: '12px',
+                    commandsBackground: 'rgba(224, 247, 250, 0.8)',
+                    commandsBorder: '1px solid rgba(129, 212, 250, 0.4)',
+                    commandsBoxShadow: '0 6px 24px rgba(0, 131, 143, 0.1)',
+                    fontFamily: '\"Inter\", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#00acc1',
+                    commandMaxWidth: '55rem',
+                    backdropFilter: 'blur(8px)',
+                    cornerTextStyle: 'font-style: italic; letter-spacing: 0.05em; font-size: 0.7rem;',
+                    dotSize: '8px',
+                    dotOpacity: '0.8',
+                    nameAfterHeight: '2px',
+                    nameFont: '500',
+                    commandsColumns: '3',
+                    inputBackground: 'rgba(224, 247, 250, 0.9)',
+                    inputBorder: '1px solid rgba(129, 212, 250, 0.5)',
+                    inputShadow: '0 2px 10px rgba(0, 131, 143, 0.1)',
+                    uiAnimation: 'true',
+                    cornerTextOpacity: '0.85'
+                },
+                dark: {
+                    background: '#002f35',
+                    gradient: 'linear-gradient(135deg, #002f35, #00363a 50%, #004d40)',
+                    text: '#e0f7fa',
+                    textSubtle: '#80deea',
+                    accent: '#26c6da',
+                    hover: '#4dd0e1',
+                    boxShadow: '0 4px 14px rgba(0, 172, 193, 0.2)',
+                    borderRadius: '12px',
+                    commandsBackground: 'rgba(0, 59, 66, 0.7)',
+                    commandsBorder: '1px solid rgba(38, 198, 218, 0.2)',
+                    commandsBoxShadow: '0 6px 24px rgba(0, 172, 193, 0.15)',
+                    fontFamily: '\"Inter\", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#26c6da',
+                    commandMaxWidth: '55rem',
+                    backdropFilter: 'blur(8px)',
+                    cornerTextStyle: 'font-style: italic; letter-spacing: 0.05em; font-size: 0.7rem;',
+                    dotSize: '8px',
+                    dotOpacity: '0.8',
+                    nameAfterHeight: '2px',
+                    nameFont: '500',
+                    commandsColumns: '3',
+                    inputBackground: 'rgba(0, 59, 66, 0.8)',
+                    inputBorder: '1px solid rgba(38, 198, 218, 0.3)',
+                    inputShadow: '0 2px 10px rgba(0, 172, 193, 0.15)',
+                    uiAnimation: 'true',
+                    cornerTextOpacity: '0.85'
+                }
+            }
+        };
         
         constructor() {
             super();
@@ -956,16 +1153,21 @@
             this.#panel = clone.querySelector('.settings-panel');
             this.shadowRoot.append(clone);
             
-            // Get checkbox elements
+            // Get settings elements
             this.#newTabSetting = this.shadowRoot.querySelector('#new-tab-setting');
             this.#darkModeSetting = this.shadowRoot.querySelector('#dark-mode-setting');
+            this.#themeSelect = this.shadowRoot.querySelector('#theme-select');
             
             // Initialize settings from the existing CONFIG
             this.#newTabSetting.checked = CONFIG.openLinksInNewTab;
             
+            // Try to load user settings from localStorage
+            this.#loadSettings();
+            
             // Add event listeners
             this.#newTabSetting.addEventListener('change', this.#onNewTabChange);
             this.#darkModeSetting.addEventListener('change', this.#onDarkModeChange);
+            this.#themeSelect.addEventListener('change', this.#onThemeChange);
             
             // Close panel when clicking outside
             document.addEventListener('click', this.#onDocumentClick);
@@ -975,31 +1177,447 @@
             this.#panel.classList.toggle('open');
         }
         
+        #loadSettings() {
+            try {
+                // Try to load settings from localStorage
+                const savedSettings = localStorage.getItem('homeSettings');
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    
+                    // Apply saved settings
+                    this.#newTabSetting.checked = settings.openLinksInNewTab || false;
+                    this.#darkModeSetting.checked = settings.darkMode || false;
+                    this.#themeSelect.value = settings.theme || 'default';
+                    this.#currentTheme = settings.theme || 'default';
+                    
+                    // Apply theme and mode
+                    this.#applyTheme(this.#currentTheme, this.#darkModeSetting.checked);
+                    
+                    // Update CONFIG
+                    CONFIG.openLinksInNewTab = this.#newTabSetting.checked;
+                }
+            } catch (e) {
+                console.error('Error loading settings:', e);
+            }
+        }
+        
+        #saveSettings() {
+            try {
+                const settings = {
+                    openLinksInNewTab: this.#newTabSetting.checked,
+                    darkMode: this.#darkModeSetting.checked,
+                    theme: this.#currentTheme
+                };
+                localStorage.setItem('homeSettings', JSON.stringify(settings));
+            } catch (e) {
+                console.error('Error saving settings:', e);
+            }
+        }
+        
         #onNewTabChange = (e) => {
             CONFIG.openLinksInNewTab = e.target.checked;
             // Re-initialize commands component to apply setting
             document.querySelector('commands-component').initialize();
+            this.#saveSettings();
         };
         
         #onDarkModeChange = (e) => {
-            if (e.target.checked) {
-                document.documentElement.style.setProperty('--color-background', '#1a1a1a');
-                document.documentElement.style.setProperty('--color-text', '#e0e0e0');
-                document.documentElement.style.setProperty('--color-text-subtle', '#a0a0a0');
-                document.documentElement.style.setProperty('--color-accent', '#505050');
-                document.documentElement.style.setProperty('--color-hover', '#707070');
-                document.documentElement.style.setProperty('--box-shadow', '0 1px 4px rgba(0, 0, 0, 0.2)');
-                document.documentElement.style.backgroundImage = 'linear-gradient(135deg, #222, #333)';
-            } else {
-                document.documentElement.style.setProperty('--color-background', '#f8f5e6');
-                document.documentElement.style.setProperty('--color-text', '#222222');
-                document.documentElement.style.setProperty('--color-text-subtle', '#666666');
-                document.documentElement.style.setProperty('--color-accent', '#333333');
-                document.documentElement.style.setProperty('--color-hover', '#444444');
-                document.documentElement.style.setProperty('--box-shadow', '0 1px 4px rgba(0, 0, 0, 0.03)');
-                document.documentElement.style.backgroundImage = 'linear-gradient(135deg, #f8f5e6, #f2edd0)';
-            }
+            this.#applyTheme(this.#currentTheme, e.target.checked);
+            this.#saveSettings();
         };
+        
+        #onThemeChange = (e) => {
+            this.#currentTheme = e.target.value;
+            this.#applyTheme(this.#currentTheme, this.#darkModeSetting.checked);
+            this.#saveSettings();
+        };
+        
+        #applyTheme(themeName, isDark) {
+            const theme = this.#themes[themeName] || this.#themes.default;
+            const colors = isDark ? theme.dark : theme.light;
+            
+            document.documentElement.style.setProperty('--color-background', colors.background);
+            document.documentElement.style.setProperty('--color-text', colors.text);
+            document.documentElement.style.setProperty('--color-text-subtle', colors.textSubtle);
+            document.documentElement.style.setProperty('--color-accent', colors.accent);
+            document.documentElement.style.setProperty('--color-hover', colors.hover);
+            document.documentElement.style.setProperty('--box-shadow', colors.boxShadow);
+            
+            // Apply gradient
+            if (colors.gradient && colors.gradient !== 'none') {
+                document.documentElement.style.backgroundImage = colors.gradient;
+            } else {
+                document.documentElement.style.backgroundImage = 'none';
+            }
+            
+            // Handle special minimal theme properties
+            if (themeName === 'minimal') {
+                // Adjust border radius
+                document.documentElement.style.setProperty('--border-radius', colors.borderRadius || '8px');
+                
+                // Adjust font
+                if (colors.fontFamily) {
+                    document.documentElement.style.fontFamily = colors.fontFamily;
+                }
+                
+                if (colors.fontSize) {
+                    document.documentElement.style.fontSize = colors.fontSize;
+                }
+                
+                // Modify commands component style
+                const commandsEl = document.querySelector('commands-component');
+                if (commandsEl && commandsEl.shadowRoot) {
+                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
+                    if (commandsMenu) {
+                        commandsMenu.style.backgroundColor = colors.commandsBackground || '';
+                        commandsMenu.style.border = colors.commandsBorder || '';
+                        commandsMenu.style.boxShadow = colors.commandsBoxShadow || '';
+                        commandsMenu.style.maxWidth = colors.commandMaxWidth || '';
+                        
+                        // Update key colors
+                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
+                        keys.forEach(key => {
+                            key.style.color = colors.keyColor || '';
+                        });
+                    }
+                }
+                
+                // Hide corner texts for minimal theme
+                const cornerTexts = document.querySelectorAll('.corner-text');
+                cornerTexts.forEach(el => {
+                    el.style.opacity = '0';
+                });
+                
+                // Make dot smaller and more subtle
+                const dot = document.querySelector('.settings-dot');
+                if (dot) {
+                    dot.style.width = '3px';
+                    dot.style.height = '3px';
+                    dot.style.opacity = '0.3';
+                }
+            } else if (themeName === 'glass') {
+                // Apply glass theme properties
+                document.documentElement.style.setProperty('--border-radius', colors.borderRadius || '16px');
+                
+                // Apply backdrop filter to html
+                document.documentElement.style.backdropFilter = colors.backdropFilter || 'blur(10px)';
+                
+                // Set font properties
+                if (colors.fontFamily) {
+                    document.documentElement.style.fontFamily = colors.fontFamily;
+                }
+                
+                if (colors.fontSize) {
+                    document.documentElement.style.fontSize = colors.fontSize;
+                }
+                
+                // Modify commands component style to be glassy
+                const commandsEl = document.querySelector('commands-component');
+                if (commandsEl && commandsEl.shadowRoot) {
+                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
+                    if (commandsMenu) {
+                        commandsMenu.style.backgroundColor = colors.commandsBackground || '';
+                        commandsMenu.style.border = colors.commandsBorder || '';
+                        commandsMenu.style.boxShadow = colors.commandsBoxShadow || '';
+                        commandsMenu.style.backdropFilter = colors.backdropFilter || '';
+                        commandsMenu.style.maxWidth = colors.commandMaxWidth || '';
+                        
+                        // Update key colors and make them more prominent
+                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
+                        keys.forEach(key => {
+                            key.style.color = colors.keyColor || '';
+                            key.style.opacity = '1';
+                            key.style.fontWeight = '600';
+                        });
+
+                        // Update name underline style
+                        const names = commandsEl.shadowRoot.querySelectorAll('.name');
+                        names.forEach(name => {
+                            const after = name.querySelector('::after') || name;
+                            name.style.letterSpacing = '0.02em';
+                            if (colors.nameAfterHeight) {
+                                const style = document.createElement('style');
+                                style.textContent = `.name::after { height: ${colors.nameAfterHeight} !important; }`;
+                                commandsEl.shadowRoot.appendChild(style);
+                            }
+                        });
+                    }
+                }
+                
+                // Style corner texts for glass theme
+                const cornerTexts = document.querySelectorAll('.corner-text');
+                cornerTexts.forEach(el => {
+                    el.style.cssText = colors.cornerTextStyle || '';
+                    el.style.opacity = '0.8';
+                });
+                
+                // Style the settings dot
+                const dot = document.querySelector('.settings-dot');
+                if (dot) {
+                    dot.style.width = colors.dotSize || '6px';
+                    dot.style.height = colors.dotSize || '6px';
+                    dot.style.opacity = colors.dotOpacity || '0.7';
+                    dot.style.backgroundColor = colors.accent;
+                    dot.style.boxShadow = '0 0 10px ' + colors.accent;
+                }
+                
+                // Update settings panel to glass style
+                const settingsEl = document.querySelector('settings-widget');
+                if (settingsEl && settingsEl.shadowRoot) {
+                    const panel = settingsEl.shadowRoot.querySelector('.settings-panel');
+                    if (panel) {
+                        panel.style.backgroundColor = colors.commandsBackground;
+                        panel.style.backdropFilter = colors.backdropFilter;
+                        panel.style.border = colors.commandsBorder;
+                        panel.style.boxShadow = colors.commandsBoxShadow;
+                        panel.style.borderRadius = colors.borderRadius;
+                    }
+                }
+                
+                // Apply search component styles
+                const searchEl = document.querySelector('search-component');
+                if (searchEl && searchEl.shadowRoot) {
+                    const dialog = searchEl.shadowRoot.querySelector('.dialog');
+                    const input = searchEl.shadowRoot.querySelector('.input');
+                    if (dialog && input) {
+                        dialog.style.backdropFilter = colors.backdropFilter;
+                        input.style.backdropFilter = colors.backdropFilter;
+                        input.style.backgroundColor = colors.commandsBackground;
+                        input.style.border = colors.commandsBorder;
+                        input.style.boxShadow = colors.commandsBoxShadow;
+                    }
+                }
+            } else if (themeName === 'ocean') {
+                // Apply Ocean theme properties
+                document.documentElement.style.setProperty('--border-radius', colors.borderRadius || '12px');
+                
+                // Apply backdrop filter to html
+                document.documentElement.style.backdropFilter = colors.backdropFilter || 'blur(8px)';
+                
+                // Set font properties
+                if (colors.fontFamily) {
+                    document.documentElement.style.fontFamily = colors.fontFamily;
+                }
+                
+                if (colors.fontSize) {
+                    document.documentElement.style.fontSize = colors.fontSize;
+                }
+                
+                // Modify commands component style for Ocean theme
+                const commandsEl = document.querySelector('commands-component');
+                if (commandsEl && commandsEl.shadowRoot) {
+                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
+                    if (commandsMenu) {
+                        commandsMenu.style.backgroundColor = colors.commandsBackground || '';
+                        commandsMenu.style.border = colors.commandsBorder || '';
+                        commandsMenu.style.boxShadow = colors.commandsBoxShadow || '';
+                        commandsMenu.style.backdropFilter = colors.backdropFilter || '';
+                        commandsMenu.style.maxWidth = colors.commandMaxWidth || '';
+                        
+                        // Set columns for the commands menu if specified
+                        if (colors.commandsColumns) {
+                            const style = document.createElement('style');
+                            style.textContent = `
+                                @media (min-width: 500px) {
+                                    .commands {
+                                        columns: ${colors.commandsColumns} !important;
+                                    }
+                                }
+                            `;
+                            commandsEl.shadowRoot.appendChild(style);
+                        }
+                        
+                        // Update key colors with Ocean theme styling
+                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
+                        keys.forEach(key => {
+                            key.style.color = colors.keyColor || '';
+                            key.style.opacity = '1';
+                            key.style.fontWeight = '600';
+                            key.style.fontSize = '1em';
+                        });
+
+                        // Update name styles with Ocean theme styling
+                        const names = commandsEl.shadowRoot.querySelectorAll('.name');
+                        names.forEach(name => {
+                            name.style.letterSpacing = '0.03em';
+                            name.style.fontWeight = colors.nameFont || '400';
+                            
+                            if (colors.nameAfterHeight) {
+                                const style = document.createElement('style');
+                                style.textContent = `.name::after { 
+                                    height: ${colors.nameAfterHeight} !important; 
+                                    background-color: ${colors.accent} !important;
+                                }`;
+                                commandsEl.shadowRoot.appendChild(style);
+                            }
+                        });
+                        
+                        // Add subtle animation if enabled
+                        if (colors.uiAnimation === 'true') {
+                            const style = document.createElement('style');
+                            style.textContent = `
+                                .command {
+                                    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+                                }
+                                .command:hover {
+                                    transform: translateY(-2px) !important;
+                                    box-shadow: 0 4px 12px rgba(0, 131, 143, 0.15) !important;
+                                }
+                            `;
+                            commandsEl.shadowRoot.appendChild(style);
+                        }
+                    }
+                }
+                
+                // Style corner texts for Ocean theme
+                const cornerTexts = document.querySelectorAll('.corner-text');
+                cornerTexts.forEach(el => {
+                    el.style.cssText = colors.cornerTextStyle || '';
+                    el.style.opacity = colors.cornerTextOpacity || '0.85';
+                });
+                
+                // Style the settings dot for Ocean theme
+                const dot = document.querySelector('.settings-dot');
+                if (dot) {
+                    dot.style.width = colors.dotSize || '8px';
+                    dot.style.height = colors.dotSize || '8px';
+                    dot.style.opacity = colors.dotOpacity || '0.8';
+                    dot.style.backgroundColor = colors.accent;
+                    dot.style.boxShadow = '0 0 12px ' + colors.accent;
+                    
+                    // Add pulse animation to the dot
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        @keyframes pulse {
+                            0% { transform: translateX(-50%) scale(1); }
+                            50% { transform: translateX(-50%) scale(1.2); }
+                            100% { transform: translateX(-50%) scale(1); }
+                        }
+                        .settings-dot:hover {
+                            animation: pulse 1.5s infinite ease-in-out;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+                
+                // Update settings panel for Ocean theme
+                const settingsEl = document.querySelector('settings-widget');
+                if (settingsEl && settingsEl.shadowRoot) {
+                    const panel = settingsEl.shadowRoot.querySelector('.settings-panel');
+                    if (panel) {
+                        panel.style.backgroundColor = colors.commandsBackground;
+                        panel.style.backdropFilter = colors.backdropFilter;
+                        panel.style.border = colors.commandsBorder;
+                        panel.style.boxShadow = colors.commandsBoxShadow;
+                        panel.style.borderRadius = colors.borderRadius;
+                    }
+                }
+                
+                // Apply search component styles for Ocean theme
+                const searchEl = document.querySelector('search-component');
+                if (searchEl && searchEl.shadowRoot) {
+                    const dialog = searchEl.shadowRoot.querySelector('.dialog');
+                    const input = searchEl.shadowRoot.querySelector('.input');
+                    const suggestions = searchEl.shadowRoot.querySelector('.suggestions');
+                    
+                    if (dialog && input) {
+                        dialog.style.backdropFilter = colors.backdropFilter;
+                        input.style.backgroundColor = colors.inputBackground || colors.commandsBackground;
+                        input.style.border = colors.inputBorder || colors.commandsBorder;
+                        input.style.boxShadow = colors.inputShadow || colors.commandsBoxShadow;
+                        input.style.borderRadius = colors.borderRadius;
+                        
+                        // Style the suggestions for Ocean theme
+                        if (suggestions) {
+                            const style = document.createElement('style');
+                            style.textContent = `
+                                .suggestion::before {
+                                    background-color: ${colors.accent} !important;
+                                }
+                            `;
+                            searchEl.shadowRoot.appendChild(style);
+                        }
+                    }
+                }
+            } else {
+                // Reset to default styles for other themes
+                document.documentElement.style.setProperty('--border-radius', '8px');
+                document.documentElement.style.fontFamily = 'var(--font-family)';
+                document.documentElement.style.fontSize = 'var(--font-size)';
+                document.documentElement.style.backdropFilter = 'none';
+                
+                // Reset commands component style
+                const commandsEl = document.querySelector('commands-component');
+                if (commandsEl && commandsEl.shadowRoot) {
+                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
+                    if (commandsMenu) {
+                        commandsMenu.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+                        commandsMenu.style.border = '1px solid rgba(0, 0, 0, 0.02)';
+                        commandsMenu.style.boxShadow = 'var(--box-shadow)';
+                        commandsMenu.style.backdropFilter = '';
+                        commandsMenu.style.maxWidth = '';
+                        
+                        // Reset key colors
+                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
+                        keys.forEach(key => {
+                            key.style.color = '';
+                            key.style.opacity = '';
+                            key.style.fontWeight = '';
+                        });
+                        
+                        // Reset name styles
+                        const names = commandsEl.shadowRoot.querySelectorAll('.name');
+                        names.forEach(name => {
+                            name.style.letterSpacing = '';
+                        });
+                    }
+                }
+                
+                // Show corner texts for other themes
+                const cornerTexts = document.querySelectorAll('.corner-text');
+                cornerTexts.forEach(el => {
+                    el.style.cssText = '';
+                    el.style.opacity = '';
+                });
+                
+                // Reset dot size
+                const dot = document.querySelector('.settings-dot');
+                if (dot) {
+                    dot.style.width = '5px';
+                    dot.style.height = '5px';
+                    dot.style.opacity = '0.5';
+                    dot.style.backgroundColor = '';
+                    dot.style.boxShadow = '';
+                }
+                
+                // Reset settings panel
+                const settingsEl = document.querySelector('settings-widget');
+                if (settingsEl && settingsEl.shadowRoot) {
+                    const panel = settingsEl.shadowRoot.querySelector('.settings-panel');
+                    if (panel) {
+                        panel.style.backgroundColor = '';
+                        panel.style.backdropFilter = '';
+                        panel.style.border = '';
+                        panel.style.boxShadow = '';
+                        panel.style.borderRadius = '';
+                    }
+                }
+                
+                // Reset search component styles
+                const searchEl = document.querySelector('search-component');
+                if (searchEl && searchEl.shadowRoot) {
+                    const dialog = searchEl.shadowRoot.querySelector('.dialog');
+                    const input = searchEl.shadowRoot.querySelector('.input');
+                    if (dialog && input) {
+                        dialog.style.backdropFilter = '';
+                        input.style.backdropFilter = '';
+                        input.style.backgroundColor = '';
+                        input.style.border = '';
+                        input.style.boxShadow = '';
+                    }
+                }
+            }
+        }
         
         #onDocumentClick = (e) => {
             // Don't close if clicking inside the settings panel or the dot
