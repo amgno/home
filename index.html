@@ -154,7 +154,28 @@
             
             commands.innerHTML = ''; // Clear existing commands
             
-            for (const [key, { name, url }] of COMMANDS.entries()) {
+            // Use an array to keep the original order consistent
+            const commandEntries = Array.from(COMMANDS.entries());
+            
+            // Store the original order of keys for reference
+            if (!window.originalCommandOrder) {
+                window.originalCommandOrder = commandEntries.map(([key]) => key);
+            }
+            
+            // Get current theme
+            const currentTheme = document.documentElement.dataset.theme || 'default';
+            
+            // If Swiss theme is active, ensure we preserve the original order
+            if (currentTheme === 'swiss' && window.originalCommandOrder) {
+                // Sort command entries using the original order
+                commandEntries.sort((a, b) => {
+                    const indexA = window.originalCommandOrder.indexOf(a[0]);
+                    const indexB = window.originalCommandOrder.indexOf(b[0]);
+                    return indexA - indexB;
+                });
+            }
+            
+            for (const [key, { name, url }] of commandEntries) {
                 if (!name || !url) continue;
                 const clone = commandTemplate.content.cloneNode(true);
                 const command = clone.querySelector('.command');
@@ -1896,6 +1917,7 @@
             }
             
             // Call separate method for commands component styling to avoid code duplication
+            // Do NOT reinitialize the commands component, just apply styling
             this.#applyThemeToCommandsComponent(themeName, isDark);
             
             // Handle special minimal theme properties
@@ -2207,281 +2229,8 @@
                     document.documentElement.style.letterSpacing = colors.letterSpacing;
                 }
                 
-                // Modify commands component style for Swiss theme
-                const commandsEl = document.querySelector('commands-component');
-                if (commandsEl && commandsEl.shadowRoot) {
-                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
-                    if (commandsMenu) {
-                        commandsMenu.style.backgroundColor = 'transparent';
-                        commandsMenu.style.border = 'none';
-                        commandsMenu.style.boxShadow = 'none';
-                        commandsMenu.style.maxWidth = colors.commandMaxWidth || '80rem';
-                        commandsMenu.style.paddingTop = '3rem';
-                        
-                        // Set grid layout if specified
-                        if (colors.gridLayout === 'true') {
-                            // Create grid layout style
-                            const gridStyle = document.createElement('style');
-                            gridStyle.className = 'swiss-grid-style';
-                            gridStyle.textContent = `
-                                .commands {
-                                    display: grid !important;
-                                    grid-template-columns: repeat(4, 1fr) !important;
-                                    grid-gap: 1.5rem !important;
-                                    columns: unset !important;
-                                    padding: 1.5rem !important;
-                                    justify-content: center !important;
-                                    align-items: start !important;
-                                    width: auto !important;
-                                    max-width: 52rem !important;
-                                    margin: 0 auto !important;
-                                }
-                                
-                                .command {
-                                    display: flex !important;
-                                    flex-direction: column !important;
-                                    align-items: flex-start !important;
-                                    gap: 0.5rem !important;
-                                    border-left: 2px solid transparent !important;
-                                    padding-left: 0.5rem !important;
-                                    transition: all 0.2s ease !important;
-                                    margin-bottom: 0.5rem !important;
-                                }
-                                
-                                .command:hover {
-                                    border-left-color: ${colors.accent} !important;
-                                }
-                                
-                                @media (max-width: 768px) {
-                                    .commands {
-                                        grid-template-columns: repeat(4, minmax(90px, 1fr)) !important;
-                                        grid-gap: 1rem !important;
-                                        padding: 1rem !important;
-                                        max-width: 42rem !important;
-                                    }
-                                    
-                                    .command {
-                                        margin-bottom: 0.25rem !important;
-                                    }
-                                }
-                                
-                                @media (max-width: 480px) {
-                                    .commands {
-                                        grid-template-columns: repeat(2, minmax(90px, 1fr)) !important;
-                                        max-width: 22rem !important;
-                                        padding: 0.8rem !important;
-                                    }
-                                }
-                            `;
-                            commandsEl.shadowRoot.appendChild(gridStyle);
-                        }
-                        
-                        // Update key styling with Swiss typography principles
-                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
-                        keys.forEach(key => {
-                            key.style.color = colors.keyColor || '#ff3b30';
-                            key.style.opacity = '1';
-                            key.style.fontWeight = colors.keyWeight || '700';
-                            key.style.fontSize = colors.keyFontSize || '1.1em';
-                            key.style.width = 'auto';
-                            key.style.textAlign = 'left';
-                        });
-
-                        // Update name styles with Swiss typography
-                        const names = commandsEl.shadowRoot.querySelectorAll('.name');
-                        names.forEach(name => {
-                            name.style.letterSpacing = colors.nameSpacing || '0.05em';
-                            name.style.textTransform = 'uppercase';
-                            name.style.fontSize = '0.8em';
-                            name.style.opacity = '0.9';
-                        });
-                        
-                        // Add Swiss-specific hover effect and responsive styles
-                        const nameHoverStyle = document.createElement('style');
-                        nameHoverStyle.className = 'swiss-name-hover-style';
-                        nameHoverStyle.textContent = `
-                            .command:hover .name {
-                                color: ${colors.nameHoverColor || colors.accent} !important;
-                            }
-                            
-                            .name::after {
-                                display: none !important;
-                            }
-                            
-                            @media (max-width: 768px) {
-                                .key {
-                                    font-size: 1em !important;
-                                }
-                                
-                                .name {
-                                    font-size: 0.75em !important;
-                                }
-                            }
-                            
-                            @media (max-width: 480px) {
-                                .key {
-                                    font-size: 0.9em !important;
-                                }
-                                
-                                .name {
-                                    font-size: 0.7em !important;
-                                    letter-spacing: 0.03em !important;
-                                }
-                            }
-                        `;
-                        commandsEl.shadowRoot.appendChild(nameHoverStyle);
-                    }
-                }
-                
-                // Style corner texts for Swiss theme
-                const cornerTexts = document.querySelectorAll('.corner-text');
-                cornerTexts.forEach(el => {
-                    el.style.textTransform = colors.cornerTextTransform || 'uppercase';
-                    el.style.letterSpacing = colors.cornerTextSpacing || '0.1em';
-                    el.style.fontWeight = colors.cornerTextWeight || '400';
-                    el.style.fontSize = colors.cornerTextSize || '0.65rem';
-                    el.style.opacity = '0.8';
-                });
-                
-                // Additional responsive style for corner texts
-                const cornerTextStyle = document.createElement('style');
-                cornerTextStyle.textContent = `
-                    @media (max-width: 768px) {
-                        .corner-text {
-                            padding: 1rem !important;
-                            max-width: 150px !important;
-                        }
-                        
-                        .top-left, .top-right, .bottom-left, .bottom-right {
-                            font-size: 0.6rem !important;
-                        }
-                    }
-                    
-                    @media (max-width: 480px) {
-                        .top-left, .bottom-right {
-                            display: none !important;
-                        }
-                        
-                        .top-right, .bottom-left {
-                            padding: 0.75rem !important;
-                            font-size: 0.55rem !important;
-                        }
-                    }
-                `;
-                document.head.appendChild(cornerTextStyle);
-                
-                // Style the settings dot
-                const dot = document.querySelector('.settings-dot');
-                if (dot) {
-                    dot.style.width = '4px';
-                    dot.style.height = '4px';
-                    dot.style.opacity = '0.7';
-                    dot.style.backgroundColor = colors.accent;
-                    dot.style.boxShadow = 'none';
-                }
-                
-                // Update settings panel with Swiss theme
-                const settingsEl = document.querySelector('settings-widget');
-                if (settingsEl && settingsEl.shadowRoot) {
-                    const panel = settingsEl.shadowRoot.querySelector('.settings-panel');
-                    if (panel) {
-                        panel.style.backgroundColor = isDark ? 'rgba(20, 20, 20, 0.95)' : 'rgba(255, 255, 255, 0.95)';
-                        panel.style.backdropFilter = 'blur(0)';
-                        panel.style.border = 'none';
-                        panel.style.boxShadow = 'none';
-                        panel.style.borderRadius = '0';
-                        panel.style.borderLeft = `2px solid ${colors.accent}`;
-                        
-                        // Add responsive settings for smaller screens
-                        const responsiveSettingsStyle = document.createElement('style');
-                        responsiveSettingsStyle.textContent = `
-                            @media (max-width: 480px) {
-                                .settings-panel {
-                                    width: 240px !important;
-                                    max-width: 90vw !important;
-                                    font-size: 0.9em !important;
-                                }
-                                
-                                .settings-option-label {
-                                    font-size: 0.7rem !important;
-                                }
-                                
-                                .settings-select {
-                                    width: 100px !important;
-                                    font-size: 0.7rem !important;
-                                }
-                                
-                                .share-button {
-                                    padding: 4px 8px !important;
-                                    font-size: 0.65rem !important;
-                                }
-                                
-                                .shortcut-form-input {
-                                    padding: 4px 6px !important;
-                                }
-                            }
-                        `;
-                        settingsEl.shadowRoot.appendChild(responsiveSettingsStyle);
-                    }
-                    
-                    // Style buttons in the Swiss theme
-                    const buttons = settingsEl.shadowRoot.querySelectorAll('button');
-                    buttons.forEach(button => {
-                        if (button.classList.contains('primary') || button.classList.contains('import')) {
-                            button.style.backgroundColor = colors.accent;
-                            button.style.borderRadius = '0';
-                        } else {
-                            button.style.borderRadius = '0';
-                        }
-                    });
-                }
-                
-                // Apply search component styles for Swiss theme
-                const searchEl = document.querySelector('search-component');
-                if (searchEl && searchEl.shadowRoot) {
-                    const dialog = searchEl.shadowRoot.querySelector('.dialog');
-                    const input = searchEl.shadowRoot.querySelector('.input');
-                    
-                    if (dialog && input) {
-                        dialog.style.backdropFilter = 'none';
-                        input.style.backgroundColor = 'transparent';
-                        input.style.border = 'none';
-                        input.style.borderBottom = `1px solid ${colors.accent}`;
-                        input.style.borderRadius = '0';
-                        input.style.boxShadow = 'none';
-                        input.style.fontFamily = colors.fontFamily;
-                        input.style.letterSpacing = colors.letterSpacing;
-                        
-                        // Add responsive styles for search
-                        const responsiveSearchStyle = document.createElement('style');
-                        responsiveSearchStyle.className = 'swiss-search-style';
-                        responsiveSearchStyle.textContent = `
-                            .input {
-                                width: 90% !important;
-                                max-width: 400px !important;
-                                margin: 0 auto !important;
-                            }
-                            
-                            @media (max-width: 480px) {
-                                .input {
-                                    font-size: 1rem !important;
-                                    padding: 0.4rem 0.8rem !important;
-                                }
-                                
-                                .suggestion {
-                                    font-size: 0.8rem !important;
-                                    padding: 0.4rem !important;
-                                }
-                            }
-                            
-                            .suggestion::before {
-                                background-color: ${colors.accent} !important;
-                                border-radius: 0 !important;
-                            }
-                        `;
-                        searchEl.shadowRoot.appendChild(responsiveSearchStyle);
-                    }
-                }
+                // Commands component styling is now handled exclusively by the #applyThemeToCommandsComponent method
+                // to avoid duplicate styling operations
             } else {
                 // Reset to default styles for other themes
                 document.documentElement.style.setProperty('--border-radius', '8px');
@@ -2614,6 +2363,15 @@
             
             const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
             if (!commandsMenu) return;
+
+            // Clean up any existing theme styles to prevent buildup
+            const existingStyles = commandsEl.shadowRoot.querySelectorAll('.swiss-grid-style, .swiss-name-hover-style, .swiss-search-style, .ocean-columns-style, .ocean-name-style, .ocean-animation-style');
+            existingStyles.forEach(style => {
+                if ((themeName !== 'ocean' && style.className.includes('ocean')) || 
+                    (themeName !== 'swiss' && style.className.includes('swiss'))) {
+                    style.remove();
+                }
+            });
             
             if (themeName === 'minimal') {
                 // Apply minimal theme to commands
@@ -2734,6 +2492,19 @@
                         
                         // Set grid layout if specified
                         if (colors.gridLayout === 'true') {
+                            // Remove any existing grid styles first
+                            const existingGridStyle = commandsEl.shadowRoot.querySelector('.swiss-grid-style');
+                            if (existingGridStyle) {
+                                existingGridStyle.remove();
+                            }
+                            
+                            // Get all commands and explicitly set their order based on their position
+                            const commandElements = commandsEl.shadowRoot.querySelectorAll('.command');
+                            commandElements.forEach((cmd, index) => {
+                                // Set an explicit order to maintain the original sequence
+                                cmd.style.order = index;
+                            });
+                            
                             // Create grid layout style
                             const gridStyle = document.createElement('style');
                             gridStyle.className = 'swiss-grid-style';
@@ -2741,7 +2512,9 @@
                                 .commands {
                                     display: grid !important;
                                     grid-template-columns: repeat(4, 1fr) !important;
+                                    grid-template-rows: repeat(3, auto) !important;
                                     grid-gap: 1.5rem !important;
+                                    grid-auto-flow: column !important; /* Change to column flow - items will fill columns first */
                                     columns: unset !important;
                                     padding: 1.5rem !important;
                                     justify-content: center !important;
@@ -2788,6 +2561,8 @@
                                 }
                             `;
                             commandsEl.shadowRoot.appendChild(gridStyle);
+                            
+                            // We're no longer manipulating the DOM order, just applying styles
                         }
                         
                         // Update key styling with Swiss typography principles
