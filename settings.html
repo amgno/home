@@ -631,10 +631,247 @@
         html.dark-mode .modal-btn-save:hover {
             background-color: #707070;
         }
+
+        /* Data management section */
+        .data-management-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .data-btn {
+            padding: 0.6rem 1rem;
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .data-btn:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .data-btn:before {
+            margin-right: 0.5rem;
+            font-size: 1.1em;
+        }
+
+        .export-btn:before {
+            content: "↓";
+        }
+
+        .import-btn:before {
+            content: "↑";
+        }
+
+        html.dark-mode .data-btn {
+            background-color: rgba(40, 40, 40, 0.5);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        html.dark-mode .data-btn:hover {
+            background-color: rgba(60, 60, 60, 0.7);
+        }
+
+        /* Import input styling */
+        .import-input {
+            display: none;
+        }
+
+        /* Import file modal */
+        .import-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-speed);
+        }
+
+        .import-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .import-modal-content {
+            background-color: var(--color-background);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(20px);
+            transition: transform var(--transition-speed);
+        }
+
+        html.dark-mode .import-modal-content {
+            background-color: #222;
+        }
+
+        .import-modal-overlay.active .import-modal-content {
+            transform: translateY(0);
+        }
+
+        .import-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .import-modal-title {
+            font-size: 1.2rem;
+            font-weight: var(--font-weight-bold);
+            margin: 0;
+        }
+
+        .import-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--color-text-subtle);
+        }
+
+        .import-text-area {
+            width: 100%;
+            min-height: 150px;
+            padding: 0.8rem;
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            background-color: rgba(255, 255, 255, 0.7);
+            color: var(--color-text);
+            box-sizing: border-box;
+            margin-bottom: 1rem;
+            resize: vertical;
+        }
+
+        html.dark-mode .import-text-area {
+            background-color: rgba(40, 40, 40, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        .import-text-area:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+
+        .import-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .import-error {
+            color: #e53935;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .import-error.active {
+            display: block;
+        }
+
+        /* Import file container styling */
+        .import-file-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .import-file-input {
+            display: none;
+        }
+
+        .import-file-label {
+            padding: 0.5rem 1rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            color: var(--color-text);
+            transition: all var(--transition-speed);
+        }
+
+        .import-file-label:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        html.dark-mode .import-file-label {
+            background-color: rgba(40, 40, 40, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        html.dark-mode .import-file-label:hover {
+            background-color: rgba(60, 60, 60, 0.9);
+        }
+
+        .import-file-name {
+            margin-left: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--color-text-subtle);
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Import divider styling */
+        .import-divider {
+            text-align: center;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .import-divider:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: rgba(0, 0, 0, 0.1);
+            z-index: 0;
+        }
+
+        html.dark-mode .import-divider:before {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .import-divider span {
+            position: relative;
+            padding: 0 1rem;
+            background-color: var(--color-background);
+            color: var(--color-text-subtle);
+            font-size: 0.85rem;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
-    <a href="/" class="back-link">Back to Home</a>
+    <a href="/home" class="back-link">Back to Home</a>
     
     <div class="settings-container">
         <div class="settings-header">
@@ -698,6 +935,17 @@
             <button type="button" id="add-shortcut" class="shortcut-add-btn">+ Add New Shortcut</button>
         </div>
 
+        <!-- Data Management Section -->
+        <div class="settings-section">
+            <h2 class="settings-section-title">Data Management</h2>
+            <p class="settings-option-description" style="margin-bottom: 1rem;">Export or import your settings and shortcuts</p>
+            
+            <div class="data-management-buttons">
+                <button type="button" id="export-settings" class="data-btn export-btn">Export Settings</button>
+                <button type="button" id="import-settings" class="data-btn import-btn">Import Settings</button>
+            </div>
+        </div>
+
         <button type="button" id="save-settings" class="save-button">Save Settings</button>
     </div>
 
@@ -726,6 +974,36 @@
                     <button type="submit" class="modal-btn modal-btn-save">Save</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Import Settings Modal -->
+    <div class="import-modal-overlay" id="import-modal">
+        <div class="import-modal-content">
+            <div class="import-modal-header">
+                <h3 class="import-modal-title">Import Settings</h3>
+                <button type="button" class="import-modal-close" id="import-modal-close">&times;</button>
+            </div>
+            <div>
+                <p class="settings-option-description" style="margin-bottom: 1rem;">Upload your settings file or paste the JSON data below</p>
+                
+                <div class="import-file-container">
+                    <input type="file" id="import-file-input" class="import-file-input" accept=".json">
+                    <label for="import-file-input" class="import-file-label">Select JSON File</label>
+                    <span id="import-file-name" class="import-file-name"></span>
+                </div>
+                
+                <div class="import-divider">
+                    <span>or</span>
+                </div>
+                
+                <textarea id="import-data" class="import-text-area" placeholder="Paste JSON settings data here..."></textarea>
+                <div id="import-error" class="import-error">Invalid data format. Please use a valid settings JSON file.</div>
+            </div>
+            <div class="import-modal-actions">
+                <button type="button" class="modal-btn modal-btn-cancel" id="import-modal-cancel">Cancel</button>
+                <button type="button" class="modal-btn modal-btn-save" id="import-modal-apply">Apply</button>
+            </div>
         </div>
     </div>
 
@@ -984,6 +1262,18 @@
         const shortcutNameInput = document.getElementById('shortcut-name');
         const shortcutUrlInput = document.getElementById('shortcut-url');
 
+        // Import/Export Elements
+        const exportBtn = document.getElementById('export-settings');
+        const importBtn = document.getElementById('import-settings');
+        const importModal = document.getElementById('import-modal');
+        const importModalClose = document.getElementById('import-modal-close');
+        const importModalCancel = document.getElementById('import-modal-cancel');
+        const importModalApply = document.getElementById('import-modal-apply');
+        const importDataTextarea = document.getElementById('import-data');
+        const importError = document.getElementById('import-error');
+        const importFileInput = document.getElementById('import-file-input');
+        const importFileName = document.getElementById('import-file-name');
+
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
             loadSettings();
@@ -1004,6 +1294,14 @@
             modalCloseButton.addEventListener('click', closeModal);
             modalCancelButton.addEventListener('click', closeModal);
             shortcutForm.addEventListener('submit', onShortcutSave);
+            
+            // Export/Import event listeners
+            exportBtn.addEventListener('click', exportSettings);
+            importBtn.addEventListener('click', openImportModal);
+            importModalClose.addEventListener('click', closeImportModal);
+            importModalCancel.addEventListener('click', closeImportModal);
+            importModalApply.addEventListener('click', importSettings);
+            importFileInput.addEventListener('change', handleFileSelect);
         });
 
         // Load settings from localStorage
@@ -1431,6 +1729,167 @@
             if (confirm(`Delete the shortcut "${key}" - ${command.name}?`)) {
                 commands.delete(key);
                 renderShortcuts();
+            }
+        }
+
+        // Export settings and commands
+        function exportSettings() {
+            try {
+                // Create an object with all settings and commands
+                const exportData = {
+                    settings: currentSettings,
+                    commands: Array.from(commands.entries())
+                };
+                
+                // Convert to JSON string
+                const exportString = JSON.stringify(exportData, null, 2);
+                
+                // Create a Blob with the data
+                const blob = new Blob([exportString], { type: 'application/json' });
+                
+                // Create a download link
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'home_settings_' + new Date().toISOString().slice(0, 10) + '.json';
+                
+                // Trigger the download
+                document.body.appendChild(a);
+                a.click();
+                
+                // Clean up
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+            } catch (e) {
+                console.error('Error exporting settings:', e);
+                alert('There was an error exporting your settings. Please try again.');
+            }
+        }
+        
+        // Open import modal
+        function openImportModal() {
+            importDataTextarea.value = '';
+            importError.classList.remove('active');
+            importFileName.textContent = '';
+            importFileInput.value = ''; // Clear any previously selected file
+            importModal.classList.add('active');
+        }
+        
+        // Close import modal
+        function closeImportModal() {
+            importModal.classList.remove('active');
+        }
+        
+        // Handle file selection
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) {
+                importFileName.textContent = '';
+                return;
+            }
+            
+            // Display the selected filename
+            importFileName.textContent = file.name;
+            
+            // Clear the textarea since we'll use the file
+            importDataTextarea.value = '';
+            
+            // Clear any previous error
+            importError.classList.remove('active');
+        }
+        
+        // Import settings and commands
+        function importSettings() {
+            try {
+                // Check if we have a file selected
+                if (importFileInput.files.length > 0) {
+                    const file = importFileInput.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        try {
+                            const fileContents = event.target.result;
+                            processImportData(fileContents);
+                        } catch (e) {
+                            console.error('Error processing imported file:', e);
+                            importError.textContent = 'Invalid file format. Please provide a valid JSON file.';
+                            importError.classList.add('active');
+                        }
+                    };
+                    
+                    reader.onerror = function() {
+                        importError.textContent = 'Error reading file. Please try again.';
+                        importError.classList.add('active');
+                    };
+                    
+                    reader.readAsText(file);
+                } else {
+                    // No file selected, try to use textarea content
+                    const importString = importDataTextarea.value.trim();
+                    
+                    if (!importString) {
+                        importError.textContent = 'Please select a file or paste your settings data.';
+                        importError.classList.add('active');
+                        return;
+                    }
+                    
+                    processImportData(importString);
+                }
+            } catch (e) {
+                console.error('Error importing settings:', e);
+                importError.textContent = 'An error occurred during import. Please try again.';
+                importError.classList.add('active');
+            }
+        }
+        
+        // Process the imported data
+        function processImportData(dataString) {
+            try {
+                // Parse the JSON data
+                const importData = JSON.parse(dataString);
+                
+                // Validate the imported data format
+                if (!importData.settings || !importData.commands) {
+                    importError.textContent = 'Invalid data format. The file is missing required data.';
+                    importError.classList.add('active');
+                    return;
+                }
+                
+                // Update current settings
+                currentSettings = {
+                    openLinksInNewTab: importData.settings.openLinksInNewTab || false,
+                    darkMode: importData.settings.darkMode || false,
+                    theme: importData.settings.theme || 'default'
+                };
+                
+                // Update UI to reflect imported settings
+                darkModeSetting.checked = currentSettings.darkMode;
+                themeSelect.value = currentSettings.theme;
+                newTabSetting.checked = currentSettings.openLinksInNewTab;
+                
+                // Update commands
+                commands = new Map(importData.commands);
+                
+                // Re-render shortcuts
+                renderShortcuts();
+                
+                // Apply the imported theme
+                applyTheme(currentSettings.theme, currentSettings.darkMode);
+                
+                // Save the imported settings to localStorage
+                saveSettings();
+                
+                // Close the import modal
+                closeImportModal();
+                
+                // Show success message
+                alert('Settings imported successfully!');
+            } catch (e) {
+                console.error('Error processing import data:', e);
+                importError.textContent = 'Invalid data format. Please provide a valid JSON file.';
+                importError.classList.add('active');
             }
         }
     </script>
