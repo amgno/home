@@ -662,7 +662,93 @@
         constructor() {
             super();
             this.attachShadow({ mode: 'open' });
+            
+            // Apply theme styling immediately in constructor before rendering
+            // to prevent any flash of unstyled content
+            this._preStyleShadowRoot();
+            
             this.initialize();
+        }
+        
+        // Pre-style the shadow root with theme-specific styles before content is added
+        _preStyleShadowRoot() {
+            try {
+                // Get current theme from document
+                const themeName = document.documentElement.dataset.theme || 'default';
+                const isDarkMode = document.documentElement.dataset.darkMode === 'true';
+                
+                // Create a style element for basic container styling
+                const style = document.createElement('style');
+                
+                // Get theme-specific properties based on current theme
+                let backgroundColor = 'transparent';
+                let border = '1px solid rgba(0, 0, 0, 0.02)';
+                let boxShadow = 'var(--box-shadow)';
+                let maxWidth = '52rem';
+                let backdropFilter = 'none';
+                
+                if (themeName === 'minimal') {
+                    backgroundColor = 'transparent';
+                    border = 'none';
+                    boxShadow = 'none';
+                    maxWidth = '70rem';
+                } else if (themeName === 'glass') {
+                    backgroundColor = isDarkMode ? 'rgba(30, 41, 59, 0.5)' : 'rgba(255, 255, 255, 0.6)';
+                    border = isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.2)';
+                    boxShadow = isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.2)' : '0 8px 32px rgba(0, 0, 0, 0.07)';
+                    backdropFilter = 'blur(10px)';
+                    maxWidth = '60rem';
+                } else if (themeName === 'ocean') {
+                    backgroundColor = isDarkMode ? 'rgba(0, 59, 66, 0.7)' : 'rgba(224, 247, 250, 0.8)';
+                    border = isDarkMode ? '1px solid rgba(38, 198, 218, 0.2)' : '1px solid rgba(129, 212, 250, 0.4)';
+                    boxShadow = isDarkMode ? '0 6px 24px rgba(0, 172, 193, 0.15)' : '0 6px 24px rgba(0, 131, 143, 0.1)';
+                    backdropFilter = 'blur(8px)';
+                    maxWidth = '55rem';
+                } else if (themeName === 'swiss') {
+                    backgroundColor = 'transparent';
+                    border = 'none';
+                    boxShadow = 'none';
+                    maxWidth = '80rem';
+                }
+                
+                // Create basic CSS for the commands container
+                style.textContent = `
+                    .commands {
+                        border-radius: var(--border-radius);
+                        column-gap: 2.5rem;
+                        columns: 1;
+                        list-style: none;
+                        margin: 0 auto;
+                        overflow: hidden;
+                        padding: 2rem;
+                        width: 100vw;
+                        background-color: ${backgroundColor};
+                        border: ${border};
+                        box-shadow: ${boxShadow};
+                        max-width: ${maxWidth};
+                        backdrop-filter: ${backdropFilter};
+                    }
+                    
+                    @media (min-width: 500px) {
+                        .commands {
+                            columns: 2;
+                            max-width: ${themeName === 'minimal' ? '30rem' : '30rem'};
+                        }
+                    }
+
+                    @media (min-width: 900px) {
+                        .commands {
+                            columns: ${themeName === 'ocean' ? '3' : '4'};
+                            max-width: ${maxWidth};
+                        }
+                    }
+                `;
+                
+                // Add the style to shadow root
+                this.shadowRoot.appendChild(style);
+            } catch (e) {
+                console.error('Error pre-styling commands component:', e);
+            }
         }
         
         initialize() {
@@ -716,7 +802,8 @@
                 commands.append(clone);
             }
             
-            this.shadowRoot.innerHTML = '';  // Clear the shadow DOM before appending
+            // Clear any pre-styles we added before appending the template content
+            this.shadowRoot.innerHTML = '';
             this.shadowRoot.append(clone);
             
             // Apply theme-specific styling to commands
@@ -1293,6 +1380,10 @@
         constructor() {
             super();
             this.attachShadow({ mode: 'open' });
+            
+            // Apply initial theme styling before content is loaded to prevent flashing
+            this._preStyleShadowRoot();
+            
             const template = document.getElementById('search-template');
             const clone = template.content.cloneNode(true);
             this.#dialog = clone.querySelector('.dialog');
@@ -1303,10 +1394,11 @@
             this.#input.addEventListener('input', this.#onInput);
             this.#suggestions.addEventListener('click', this.#onSuggestionClick);
             document.addEventListener('keydown', this.#onKeydown);
-            this.shadowRoot.append(clone);
             
-            // Apply theme styling when created
-            this.applyThemeStyling();
+            // Apply theme styling to the clone before appending
+            this._applyThemeToClone(clone);
+            
+            this.shadowRoot.append(clone);
             
             // Listen for theme changes
             document.addEventListener('themeChanged', () => {
@@ -1314,7 +1406,115 @@
             });
         }
         
-        // Method to apply theme styling
+        // Pre-style the shadow root with theme-specific styles before content is added
+        _preStyleShadowRoot() {
+            try {
+                // Get current theme from document
+                const themeName = document.documentElement.dataset.theme || 'default';
+                const isDarkMode = document.documentElement.dataset.darkMode === 'true';
+                
+                // Create a style element for basic styling
+                const style = document.createElement('style');
+                
+                // Set basic styles based on theme
+                let dialogBackground = isDarkMode ? '#1a1a1a' : '#f8f5e6';
+                let inputBackground = isDarkMode ? 'rgba(30, 30, 30, 0.5)' : 'rgba(255, 255, 255, 0.7)';
+                let inputBorder = isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)';
+                let inputBorderRadius = '8px';
+                let backdropFilter = 'none';
+                
+                // Adjust based on theme
+                if (themeName === 'minimal') {
+                    inputBackground = 'transparent';
+                    inputBorder = isDarkMode ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.2)';
+                    inputBorderRadius = '0';
+                } else if (themeName === 'glass') {
+                    dialogBackground = 'transparent';
+                    backdropFilter = 'blur(10px)';
+                    inputBackground = isDarkMode ? 'rgba(30, 41, 59, 0.5)' : 'rgba(255, 255, 255, 0.6)';
+                    inputBorder = isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.2)';
+                    inputBorderRadius = '16px';
+                } else if (themeName === 'ocean') {
+                    dialogBackground = 'transparent';
+                    backdropFilter = 'blur(8px)';
+                    inputBackground = isDarkMode ? 'rgba(0, 59, 66, 0.8)' : 'rgba(224, 247, 250, 0.9)';
+                    inputBorder = isDarkMode ? '1px solid rgba(38, 198, 218, 0.3)' : '1px solid rgba(129, 212, 250, 0.5)';
+                    inputBorderRadius = '12px';
+                } else if (themeName === 'swiss') {
+                    inputBackground = 'transparent';
+                    inputBorder = 'none';
+                    inputBorderRadius = '0';
+                    inputBorder = isDarkMode ? '1px solid #ff3b30' : '1px solid #ff3b30';
+                }
+                
+                // Create basic CSS for the search elements
+                style.textContent = `
+                    .dialog {
+                        background-color: ${dialogBackground};
+                        backdrop-filter: ${backdropFilter};
+                    }
+                    
+                    .input {
+                        background-color: ${inputBackground};
+                        border: none;
+                        border-bottom: ${inputBorder};
+                        border-radius: ${inputBorderRadius};
+                    }
+                `;
+                
+                // Add the style to shadow root
+                this.shadowRoot.appendChild(style);
+            } catch (e) {
+                console.error('Error pre-styling search component:', e);
+            }
+        }
+        
+        // Apply theme styling to the cloned template before appending
+        _applyThemeToClone(clone) {
+            try {
+                const themeName = document.documentElement.dataset.theme || 'default';
+                const isDarkMode = document.documentElement.dataset.darkMode === 'true';
+                
+                const dialog = clone.querySelector('.dialog');
+                const input = clone.querySelector('.input');
+                
+                // Apply theme-specific styling from existing applyThemeStyling method
+                if (themeName === 'minimal') {
+                    input.style.backgroundColor = 'transparent';
+                    input.style.border = 'none';
+                    input.style.borderBottom = '1px solid ' + (isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)');
+                    input.style.borderRadius = '0';
+                    input.style.boxShadow = 'none';
+                    input.style.fontFamily = '"Courier New", monospace';
+                } else if (themeName === 'glass') {
+                    dialog.style.backdropFilter = 'blur(10px)';
+                    input.style.backdropFilter = 'blur(5px)';
+                    input.style.backgroundColor = isDarkMode ? 'rgba(30, 41, 59, 0.5)' : 'rgba(255, 255, 255, 0.6)';
+                    input.style.border = isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.2)';
+                    input.style.boxShadow = isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.2)' : '0 8px 32px rgba(0, 0, 0, 0.07)';
+                    input.style.borderRadius = '16px';
+                } else if (themeName === 'ocean') {
+                    dialog.style.backdropFilter = 'blur(8px)';
+                    input.style.backgroundColor = isDarkMode ? 'rgba(0, 59, 66, 0.8)' : 'rgba(224, 247, 250, 0.9)';
+                    input.style.border = isDarkMode ? '1px solid rgba(38, 198, 218, 0.3)' : '1px solid rgba(129, 212, 250, 0.5)';
+                    input.style.boxShadow = isDarkMode ? '0 2px 10px rgba(0, 172, 193, 0.15)' : '0 2px 10px rgba(0, 131, 143, 0.1)';
+                    input.style.borderRadius = '12px';
+                } else if (themeName === 'swiss') {
+                    dialog.style.backdropFilter = 'none';
+                    input.style.backgroundColor = 'transparent';
+                    input.style.border = 'none';
+                    input.style.borderBottom = '1px solid #ff3b30';
+                    input.style.borderRadius = '0';
+                    input.style.boxShadow = 'none';
+                    input.style.fontFamily = '"Helvetica Neue", Arial, sans-serif';
+                    input.style.letterSpacing = '0.03em';
+                }
+            } catch (e) {
+                console.error('Error applying theme styling to clone:', e);
+            }
+        }
+        
+        // Method to apply theme styling when themes change
         applyThemeStyling() {
             const themeName = document.documentElement.dataset.theme || 'default';
             const isDarkMode = document.documentElement.dataset.darkMode === 'true';
@@ -1330,8 +1530,6 @@
             this.#input.style.border = '';
             this.#input.style.boxShadow = '';
             this.#input.style.borderRadius = '';
-            this.#input.style.fontFamily = '';
-            this.#input.style.letterSpacing = '';
             
             // Apply theme-specific styles based on current theme
             if (themeName === 'minimal') {
