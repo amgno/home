@@ -34,15 +34,469 @@
             const savedSettings = localStorage.getItem('homeSettings');
             if (savedSettings) {
                 const settings = JSON.parse(savedSettings);
+                
+                // Apply dark mode class
                 document.documentElement.classList.toggle('dark-mode', settings.darkMode || false);
+                
                 // Store theme data in a data attribute for commands component to access
-                document.documentElement.dataset.theme = settings.theme || 'default';
-                document.documentElement.dataset.darkMode = settings.darkMode || false;
+                const themeName = settings.theme || 'default';
+                const isDarkMode = settings.darkMode || false;
+                document.documentElement.dataset.theme = themeName;
+                document.documentElement.dataset.darkMode = isDarkMode;
+                
+                // Update CONFIG with openLinksInNewTab setting
+                CONFIG.openLinksInNewTab = settings.openLinksInNewTab || false;
+                
+                // Apply theme styling based on the theme name
+                applyTheme(themeName, isDarkMode);
             }
         } catch (e) {
             console.error('Error pre-loading theme settings:', e);
         }
     });
+
+    // Function to apply theme styling
+    function applyTheme(themeName, isDarkMode) {
+        // Define themes - must match settings.html themes
+        const THEMES = {
+            default: {
+                light: {
+                    background: '#f8f5e6',
+                    gradient: 'linear-gradient(135deg, #f8f5e6, #f2edd0)',
+                    text: '#222222',
+                    textSubtle: '#666666',
+                    accent: '#333333',
+                    hover: '#444444',
+                    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.03)'
+                },
+                dark: {
+                    background: '#1a1a1a',
+                    gradient: 'linear-gradient(135deg, #222, #333)',
+                    text: '#e0e0e0',
+                    textSubtle: '#a0a0a0',
+                    accent: '#505050',
+                    hover: '#707070',
+                    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.2)'
+                }
+            },
+            minimal: {
+                light: {
+                    background: '#ffffff',
+                    gradient: 'none',
+                    text: '#000000',
+                    textSubtle: '#999999',
+                    accent: '#cccccc',
+                    hover: '#eeeeee',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '"Courier New", monospace',
+                    fontSize: '12px',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '70rem',
+                    keyColor: '#666666'
+                },
+                dark: {
+                    background: '#000000',
+                    gradient: 'none',
+                    text: '#ffffff',
+                    textSubtle: '#777777',
+                    accent: '#333333',
+                    hover: '#222222',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '"Courier New", monospace',
+                    fontSize: '12px',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '70rem',
+                    keyColor: '#999999'
+                }
+            },
+            swiss: {
+                light: {
+                    background: '#ffffff',
+                    gradient: 'none',
+                    text: '#111111',
+                    textSubtle: '#666666',
+                    accent: '#ff3b30',
+                    hover: '#ff6651',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '"Helvetica Neue", Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: '300',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '80rem',
+                    keyColor: '#ff3b30',
+                    nameSpacing: '0.05em',
+                    gridLayout: 'true',
+                    letterSpacing: '0.03em',
+                    keyFontSize: '1.1em',
+                    keyWeight: '700',
+                    nameAfterHeight: '0',
+                    nameHoverColor: '#ff3b30'
+                },
+                dark: {
+                    background: '#000000',
+                    gradient: 'none',
+                    text: '#ffffff',
+                    textSubtle: '#999999',
+                    accent: '#ff3b30',
+                    hover: '#ff6651',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '"Helvetica Neue", Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: '300',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '80rem',
+                    keyColor: '#ff3b30',
+                    nameSpacing: '0.05em',
+                    gridLayout: 'true',
+                    letterSpacing: '0.03em',
+                    keyFontSize: '1.1em',
+                    keyWeight: '700',
+                    nameAfterHeight: '0',
+                    nameHoverColor: '#ff3b30',
+                    cornerTextTransform: 'uppercase',
+                    cornerTextSpacing: '0.1em',
+                    cornerTextWeight: '400',
+                    cornerTextSize: '0.65rem'
+                }
+            },
+            glass: {
+                light: {
+                    background: 'rgba(255, 255, 255, 0.7)',
+                    gradient: 'linear-gradient(135deg, #f5f7fa, #c3cfe2)',
+                    text: '#334155',
+                    textSubtle: '#64748b',
+                    accent: '#3b82f6',
+                    hover: '#60a5fa',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+                    borderRadius: '16px',
+                    commandsBackground: 'rgba(255, 255, 255, 0.6)',
+                    commandsBorder: '1px solid rgba(255, 255, 255, 0.2)',
+                    commandsBoxShadow: '0 8px 32px rgba(0, 0, 0, 0.07)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#3b82f6',
+                    commandMaxWidth: '60rem',
+                    backdropFilter: 'blur(10px)',
+                    cornerTextStyle: 'text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.6rem; font-weight: 500;',
+                    dotSize: '6px',
+                    dotOpacity: '0.7',
+                    nameAfterHeight: '2px'
+                },
+                dark: {
+                    background: 'rgba(15, 23, 42, 0.7)',
+                    gradient: 'linear-gradient(135deg, #0f172a, #1e293b)',
+                    text: '#e2e8f0',
+                    textSubtle: '#94a3b8',
+                    accent: '#38bdf8',
+                    hover: '#7dd3fc',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+                    borderRadius: '16px',
+                    commandsBackground: 'rgba(30, 41, 59, 0.5)',
+                    commandsBorder: '1px solid rgba(255, 255, 255, 0.1)',
+                    commandsBoxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#38bdf8',
+                    commandMaxWidth: '60rem',
+                    backdropFilter: 'blur(10px)',
+                    cornerTextStyle: 'text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.6rem; font-weight: 500;',
+                    dotSize: '6px',
+                    dotOpacity: '0.7',
+                    nameAfterHeight: '2px'
+                }
+            },
+            ocean: {
+                light: {
+                    background: '#e0f7fa',
+                    gradient: 'linear-gradient(135deg, #e0f7fa, #80deea 50%, #4dd0e1)',
+                    text: '#006064',
+                    textSubtle: '#0097a7',
+                    accent: '#00838f',
+                    hover: '#006064',
+                    boxShadow: '0 4px 14px rgba(0, 131, 143, 0.15)',
+                    borderRadius: '12px',
+                    commandsBackground: 'rgba(224, 247, 250, 0.8)',
+                    commandsBorder: '1px solid rgba(129, 212, 250, 0.4)',
+                    commandsBoxShadow: '0 6px 24px rgba(0, 131, 143, 0.1)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#00acc1',
+                    commandMaxWidth: '55rem',
+                    backdropFilter: 'blur(8px)',
+                    cornerTextStyle: 'font-style: italic; letter-spacing: 0.05em; font-size: 0.7rem;',
+                    dotSize: '8px',
+                    dotOpacity: '0.8',
+                    nameAfterHeight: '2px',
+                    nameFont: '500',
+                    commandsColumns: '3',
+                    inputBackground: 'rgba(224, 247, 250, 0.9)',
+                    inputBorder: '1px solid rgba(129, 212, 250, 0.5)',
+                    inputShadow: '0 2px 10px rgba(0, 131, 143, 0.1)',
+                    uiAnimation: 'true',
+                    cornerTextOpacity: '0.85'
+                },
+                dark: {
+                    background: '#002f35',
+                    gradient: 'linear-gradient(135deg, #002f35, #00363a 50%, #004d40)',
+                    text: '#e0f7fa',
+                    textSubtle: '#80deea',
+                    accent: '#26c6da',
+                    hover: '#4dd0e1',
+                    boxShadow: '0 4px 14px rgba(0, 172, 193, 0.2)',
+                    borderRadius: '12px',
+                    commandsBackground: 'rgba(0, 59, 66, 0.7)',
+                    commandsBorder: '1px solid rgba(38, 198, 218, 0.2)',
+                    commandsBoxShadow: '0 6px 24px rgba(0, 172, 193, 0.15)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#26c6da',
+                    commandMaxWidth: '55rem',
+                    backdropFilter: 'blur(8px)',
+                    cornerTextStyle: 'font-style: italic; letter-spacing: 0.05em; font-size: 0.7rem;',
+                    dotSize: '8px',
+                    dotOpacity: '0.8',
+                    nameAfterHeight: '2px',
+                    nameFont: '500',
+                    commandsColumns: '3',
+                    inputBackground: 'rgba(0, 59, 66, 0.8)',
+                    inputBorder: '1px solid rgba(38, 198, 218, 0.3)',
+                    inputShadow: '0 2px 10px rgba(0, 172, 193, 0.15)',
+                    uiAnimation: 'true',
+                    cornerTextOpacity: '0.85'
+                }
+            }
+        };
+        
+        // Get theme and colors
+        const theme = THEMES[themeName] || THEMES.default;
+        const colors = isDarkMode ? theme.dark : theme.light;
+        
+        // Apply basic colors
+        document.documentElement.style.setProperty('--color-background', colors.background);
+        document.documentElement.style.setProperty('--color-text', colors.text);
+        document.documentElement.style.setProperty('--color-text-subtle', colors.textSubtle);
+        document.documentElement.style.setProperty('--color-accent', colors.accent);
+        document.documentElement.style.setProperty('--color-hover', colors.hover);
+        document.documentElement.style.setProperty('--box-shadow', colors.boxShadow);
+        
+        // Apply gradient
+        if (colors.gradient && colors.gradient !== 'none') {
+            document.documentElement.style.backgroundImage = colors.gradient;
+        } else {
+            document.documentElement.style.backgroundImage = 'none';
+        }
+        
+        // Apply additional theme-specific styles
+        if (colors.borderRadius) {
+            document.documentElement.style.setProperty('--border-radius', colors.borderRadius);
+        } else {
+            document.documentElement.style.setProperty('--border-radius', '8px');
+        }
+        
+        if (colors.fontFamily) {
+            document.documentElement.style.fontFamily = colors.fontFamily;
+        } else {
+            document.documentElement.style.fontFamily = 'var(--font-family)';
+        }
+        
+        if (colors.fontSize) {
+            document.documentElement.style.fontSize = colors.fontSize;
+        } else {
+            document.documentElement.style.fontSize = 'var(--font-size)';
+        }
+        
+        // Handle special theme properties
+        if (themeName === 'minimal') {
+            // Set minimal styles for corner texts
+            document.querySelectorAll('.corner-text').forEach(el => {
+                el.style.opacity = '0';
+            });
+            
+            // Style settings dot for minimal theme
+            const settingsDot = document.querySelector('.settings-dot');
+            if (settingsDot) {
+                settingsDot.style.width = '3px';
+                settingsDot.style.height = '3px';
+                settingsDot.style.opacity = '0.3';
+            }
+            
+        } else if (themeName === 'glass') {
+            // Apply glass theme properties
+            document.documentElement.style.backdropFilter = colors.backdropFilter || 'blur(10px)';
+            
+            // Style corner texts for glass theme
+            document.querySelectorAll('.corner-text').forEach(el => {
+                el.style.cssText = colors.cornerTextStyle || '';
+                el.style.opacity = '0.8';
+            });
+            
+            // Style the settings dot
+            const settingsDot = document.querySelector('.settings-dot');
+            if (settingsDot) {
+                settingsDot.style.width = colors.dotSize || '6px';
+                settingsDot.style.height = colors.dotSize || '6px';
+                settingsDot.style.opacity = colors.dotOpacity || '0.7';
+                settingsDot.style.backgroundColor = colors.accent;
+                settingsDot.style.boxShadow = '0 0 10px ' + colors.accent;
+            }
+            
+        } else if (themeName === 'ocean') {
+            // Apply Ocean theme properties
+            document.documentElement.style.backdropFilter = colors.backdropFilter || 'blur(8px)';
+            
+            // Style corner texts for Ocean theme
+            document.querySelectorAll('.corner-text').forEach(el => {
+                el.style.cssText = colors.cornerTextStyle || '';
+                el.style.opacity = colors.cornerTextOpacity || '0.85';
+            });
+            
+            // Style the settings dot for Ocean theme
+            const settingsDot = document.querySelector('.settings-dot');
+            if (settingsDot) {
+                settingsDot.style.width = colors.dotSize || '8px';
+                settingsDot.style.height = colors.dotSize || '8px';
+                settingsDot.style.opacity = colors.dotOpacity || '0.8';
+                settingsDot.style.backgroundColor = colors.accent;
+                settingsDot.style.boxShadow = '0 0 12px ' + colors.accent;
+            }
+            
+            // Add animations if enabled
+            if (colors.uiAnimation === 'true') {
+                // Add pulse animation to the dot
+                const styleElement = document.getElementById('ocean-animations');
+                if (!styleElement) {
+                    const style = document.createElement('style');
+                    style.id = 'ocean-animations';
+                    style.textContent = `
+                        @keyframes pulse {
+                            0% { transform: translateX(-50%) scale(1); }
+                            50% { transform: translateX(-50%) scale(1.2); }
+                            100% { transform: translateX(-50%) scale(1); }
+                        }
+                        .settings-dot:hover {
+                            animation: pulse 1.5s infinite ease-in-out;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            } else {
+                const styleElement = document.getElementById('ocean-animations');
+                if (styleElement) {
+                    styleElement.remove();
+                }
+            }
+            
+        } else if (themeName === 'swiss') {
+            // Apply Swiss theme properties for typography
+            if (colors.letterSpacing) {
+                document.documentElement.style.letterSpacing = colors.letterSpacing;
+            }
+            
+            if (colors.fontWeight) {
+                document.documentElement.style.fontWeight = colors.fontWeight;
+            }
+            
+            // Style corner texts for Swiss theme
+            document.querySelectorAll('.corner-text').forEach(el => {
+                el.style.textTransform = colors.cornerTextTransform || 'uppercase';
+                el.style.letterSpacing = colors.cornerTextSpacing || '0.1em';
+                el.style.fontWeight = colors.cornerTextWeight || '400';
+                el.style.fontSize = colors.cornerTextSize || '0.65rem';
+                el.style.opacity = '0.8';
+            });
+            
+            // Style the settings dot
+            const settingsDot = document.querySelector('.settings-dot');
+            if (settingsDot) {
+                settingsDot.style.width = '4px';
+                settingsDot.style.height = '4px';
+                settingsDot.style.opacity = '0.7';
+                settingsDot.style.backgroundColor = colors.accent;
+                settingsDot.style.boxShadow = 'none';
+            }
+            
+            // Add responsive styles for Swiss theme
+            const styleElement = document.getElementById('swiss-style');
+            if (!styleElement) {
+                const swissStyle = document.createElement('style');
+                swissStyle.id = 'swiss-style';
+                swissStyle.textContent = `
+                    @media (max-width: 768px) {
+                        .corner-text {
+                            padding: 1rem !important;
+                            max-width: 150px !important;
+                        }
+                        
+                        .top-left, .top-right, .bottom-left, .bottom-right {
+                            font-size: 0.6rem !important;
+                        }
+                    }
+                    
+                    @media (max-width: 480px) {
+                        .top-left, .bottom-right {
+                            display: none !important;
+                        }
+                        
+                        .top-right, .bottom-left {
+                            padding: 0.75rem !important;
+                            font-size: 0.55rem !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(swissStyle);
+            }
+            
+        } else {
+            // Reset to default styles for default theme
+            document.documentElement.style.backdropFilter = 'none';
+            document.documentElement.style.letterSpacing = '';
+            document.documentElement.style.fontWeight = '';
+            
+            // Remove theme-specific style elements
+            const oceanStyles = document.getElementById('ocean-animations');
+            if (oceanStyles) oceanStyles.remove();
+            
+            const swissStyles = document.getElementById('swiss-style');
+            if (swissStyles) swissStyles.remove();
+            
+            // Show corner texts for default theme
+            document.querySelectorAll('.corner-text').forEach(el => {
+                el.style.cssText = '';
+                el.style.opacity = '';
+            });
+            
+            // Reset dot size
+            const settingsDot = document.querySelector('.settings-dot');
+            if (settingsDot) {
+                settingsDot.style.width = '4px';
+                settingsDot.style.height = '4px';
+                settingsDot.style.opacity = '0.5';
+                settingsDot.style.backgroundColor = '';
+                settingsDot.style.boxShadow = '';
+            }
+        }
+        
+        // Dispatch theme changed event for other components
+        document.dispatchEvent(new CustomEvent('themeChanged', {
+            detail: { theme: themeName, darkMode: isDarkMode }
+        }));
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         function updateLinks(isLocal) {
@@ -93,17 +547,11 @@
         }
 
         isLocalNetwork();
-
-        // Create settings dot and widget
-        const settingsWidget = document.createElement('settings-widget');
-        document.body.appendChild(settingsWidget);
         
-        const settingsDot = document.createElement('div');
+        // Create settings dot that links to settings.html
+        const settingsDot = document.createElement('a');
         settingsDot.className = 'settings-dot';
-        settingsDot.addEventListener('click', () => {
-            const settingsEl = document.querySelector('settings-widget');
-            settingsEl.toggle();
-        });
+        settingsDot.href = 'settings.html';
         document.body.appendChild(settingsDot);
         
         // Existing event listeners
@@ -116,34 +564,6 @@
             super();
             this.attachShadow({ mode: 'open' });
             this.initialize();
-            
-            // Add click event listener for handling shortcut editing
-            this.shadowRoot.addEventListener('click', (e) => {
-                // Check if we're in edit mode (settings panel is open)
-                const settingsPanel = document.querySelector('settings-widget')?.shadowRoot?.querySelector('.settings-panel');
-                const isEditMode = settingsPanel?.classList?.contains('open');
-                
-                if (!isEditMode) return; // Only handle edits when settings panel is open
-                
-                const command = e.target.closest('.command');
-                if (!command) return;
-                
-                // We're in edit mode and clicked on a command, prevent navigation
-                e.preventDefault();
-                e.stopPropagation();
-                
-                // Get the key from the data attribute or key element text
-                const key = command.dataset.key || command.querySelector('.key')?.textContent;
-                console.log('Edit shortcut with key:', key);
-                
-                // Trigger the edit in the settings widget
-                const settingsWidget = document.querySelector('settings-widget');
-                if (settingsWidget && typeof settingsWidget.editShortcut === 'function') {
-                    settingsWidget.editShortcut(key);
-                } else {
-                    console.error('Could not access settings widget or edit function');
-                }
-            });
         }
         
         initialize() {
@@ -164,6 +584,7 @@
             
             // Get current theme
             const currentTheme = document.documentElement.dataset.theme || 'default';
+            const isDarkMode = document.documentElement.dataset.darkMode === 'true';
             
             // If Swiss theme is active, ensure we preserve the original order
             if (currentTheme === 'swiss' && window.originalCommandOrder) {
@@ -199,21 +620,251 @@
             this.shadowRoot.innerHTML = '';  // Clear the shadow DOM before appending
             this.shadowRoot.append(clone);
             
-            // Apply theme to the commands after initialization
-            const theme = document.documentElement.dataset.theme || 'default';
-            const isDarkMode = document.documentElement.dataset.darkMode === 'true';
-            setTimeout(() => {
-                const settingsWidget = document.querySelector('settings-widget');
-                if (settingsWidget && typeof settingsWidget.synchronizeCommands === 'function') {
-                    settingsWidget.synchronizeCommands();
-                }
-            }, 0);
+            // Apply theme-specific styling to commands
+            this.applyThemeStyling(currentTheme, isDarkMode);
+        }
+        
+        // Method to apply theme-specific styling to commands
+        applyThemeStyling(themeName, isDarkMode) {
+            // Get the commands container
+            const commandsMenu = this.shadowRoot.querySelector('.commands');
+            if (!commandsMenu) return;
+            
+            // Reset any previously applied styles
+            commandsMenu.style.backgroundColor = '';
+            commandsMenu.style.border = '';
+            commandsMenu.style.boxShadow = '';
+            commandsMenu.style.backdropFilter = '';
+            commandsMenu.style.maxWidth = '';
+            commandsMenu.style.paddingTop = '';
+            
+            // Get all keys and names for styling
+            const keys = this.shadowRoot.querySelectorAll('.key');
+            keys.forEach(key => {
+                key.style.color = '';
+                key.style.opacity = '';
+                key.style.fontWeight = '';
+                key.style.fontSize = '';
+                key.style.width = '';
+                key.style.textAlign = '';
+            });
+            
+            const names = this.shadowRoot.querySelectorAll('.name');
+            names.forEach(name => {
+                name.style.letterSpacing = '';
+                name.style.textTransform = '';
+                name.style.fontSize = '';
+                name.style.opacity = '';
+            });
+            
+            // Remove any theme-specific styles
+            const themeStyles = this.shadowRoot.querySelectorAll('.theme-style');
+            themeStyles.forEach(style => style.remove());
+            
+            // Apply theme-specific styles based on current theme
+            if (themeName === 'minimal') {
+                // Apply minimal theme to commands
+                commandsMenu.style.backgroundColor = 'transparent';
+                commandsMenu.style.border = 'none';
+                commandsMenu.style.boxShadow = 'none';
+                commandsMenu.style.maxWidth = '70rem';
+                
+                // Update key colors with minimal theme styling
+                keys.forEach(key => {
+                    key.style.color = isDarkMode ? '#999999' : '#666666';
+                });
+                
+            } else if (themeName === 'glass') {
+                // Apply glass theme to commands
+                commandsMenu.style.backgroundColor = isDarkMode ? 'rgba(30, 41, 59, 0.5)' : 'rgba(255, 255, 255, 0.6)';
+                commandsMenu.style.border = isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.2)';
+                commandsMenu.style.boxShadow = isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.2)' : '0 8px 32px rgba(0, 0, 0, 0.07)';
+                commandsMenu.style.backdropFilter = 'blur(10px)';
+                commandsMenu.style.maxWidth = '60rem';
+                
+                // Update key colors and make them more prominent
+                keys.forEach(key => {
+                    key.style.color = isDarkMode ? '#38bdf8' : '#3b82f6';
+                    key.style.opacity = '1';
+                    key.style.fontWeight = '600';
+                });
+                
+                // Update name underline style
+                names.forEach(name => {
+                    name.style.letterSpacing = '0.02em';
+                });
+                
+                // Add style for name underline
+                const style = document.createElement('style');
+                style.className = 'theme-style';
+                style.textContent = `.name::after { height: 2px !important; }`;
+                this.shadowRoot.appendChild(style);
+                
+            } else if (themeName === 'ocean') {
+                // Apply Ocean theme to commands
+                commandsMenu.style.backgroundColor = isDarkMode ? 'rgba(0, 59, 66, 0.7)' : 'rgba(224, 247, 250, 0.8)';
+                commandsMenu.style.border = isDarkMode ? '1px solid rgba(38, 198, 218, 0.2)' : '1px solid rgba(129, 212, 250, 0.4)';
+                commandsMenu.style.boxShadow = isDarkMode ? '0 6px 24px rgba(0, 172, 193, 0.15)' : '0 6px 24px rgba(0, 131, 143, 0.1)';
+                commandsMenu.style.backdropFilter = 'blur(8px)';
+                commandsMenu.style.maxWidth = '55rem';
+                
+                // Update key colors with Ocean theme styling
+                keys.forEach(key => {
+                    key.style.color = isDarkMode ? '#26c6da' : '#00acc1';
+                    key.style.opacity = '1';
+                    key.style.fontWeight = '600';
+                });
+                
+                // Update name styles with Ocean theme styling
+                names.forEach(name => {
+                    name.style.letterSpacing = '0.03em';
+                    name.style.fontWeight = '500';
+                });
+                
+                // Set columns for the commands menu
+                const style = document.createElement('style');
+                style.className = 'theme-style';
+                style.textContent = `
+                    @media (min-width: 500px) {
+                        .commands {
+                            columns: 3 !important;
+                        }
+                    }
+                    
+                    .name::after { 
+                        height: 2px !important; 
+                        background-color: ${isDarkMode ? '#26c6da' : '#00838f'} !important;
+                    }
+                    
+                    .command {
+                        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+                    }
+                    .command:hover {
+                        transform: translateY(-2px) !important;
+                        box-shadow: 0 4px 12px ${isDarkMode ? 'rgba(0, 172, 193, 0.15)' : 'rgba(0, 131, 143, 0.15)'} !important;
+                    }
+                `;
+                this.shadowRoot.appendChild(style);
+                
+            } else if (themeName === 'swiss') {
+                // Apply Swiss theme properties - minimal, typography focused, red accent
+                commandsMenu.style.backgroundColor = 'transparent';
+                commandsMenu.style.border = 'none';
+                commandsMenu.style.boxShadow = 'none';
+                commandsMenu.style.maxWidth = '80rem';
+                commandsMenu.style.paddingTop = '3rem';
+                
+                // Update key styling with Swiss typography principles
+                keys.forEach(key => {
+                    key.style.color = '#ff3b30';
+                    key.style.opacity = '1';
+                    key.style.fontWeight = '700';
+                    key.style.fontSize = '1.1em';
+                    key.style.width = 'auto';
+                    key.style.textAlign = 'left';
+                });
+                
+                // Update name styles with Swiss typography
+                names.forEach(name => {
+                    name.style.letterSpacing = '0.05em';
+                    name.style.textTransform = 'uppercase';
+                    name.style.fontSize = '0.8em';
+                    name.style.opacity = '0.9';
+                });
+                
+                // Add grid layout for Swiss theme
+                const style = document.createElement('style');
+                style.className = 'theme-style';
+                style.textContent = `
+                    .commands {
+                        display: grid !important;
+                        grid-template-columns: repeat(4, 1fr) !important;
+                        grid-template-rows: repeat(3, auto) !important;
+                        grid-gap: 1.5rem !important;
+                        grid-auto-flow: column !important;
+                        columns: unset !important;
+                        padding: 1.5rem !important;
+                        justify-content: center !important;
+                        align-items: start !important;
+                        width: auto !important;
+                        max-width: 52rem !important;
+                        margin: 0 auto !important;
+                    }
+                    
+                    .command {
+                        display: flex !important;
+                        flex-direction: column !important;
+                        align-items: flex-start !important;
+                        gap: 0.5rem !important;
+                        border-left: 2px solid transparent !important;
+                        padding-left: 0.5rem !important;
+                        transition: all 0.2s ease !important;
+                        margin-bottom: 0.5rem !important;
+                    }
+                    
+                    .command:hover {
+                        border-left-color: #ff3b30 !important;
+                    }
+                    
+                    .command:hover .name {
+                        color: #ff3b30 !important;
+                    }
+                    
+                    .name::after {
+                        display: none !important;
+                    }
+                    
+                    @media (max-width: 768px) {
+                        .commands {
+                            grid-template-columns: repeat(4, minmax(90px, 1fr)) !important;
+                            grid-gap: 1rem !important;
+                            padding: 1rem !important;
+                            max-width: 42rem !important;
+                        }
+                        
+                        .command {
+                            margin-bottom: 0.25rem !important;
+                        }
+                        
+                        .key {
+                            font-size: 1em !important;
+                        }
+                        
+                        .name {
+                            font-size: 0.75em !important;
+                        }
+                    }
+                    
+                    @media (max-width: 480px) {
+                        .commands {
+                            grid-template-columns: repeat(2, minmax(90px, 1fr)) !important;
+                            max-width: 22rem !important;
+                            padding: 0.8rem !important;
+                        }
+                        
+                        .key {
+                            font-size: 0.9em !important;
+                        }
+                        
+                        .name {
+                            font-size: 0.7em !important;
+                            letter-spacing: 0.03em !important;
+                        }
+                    }
+                `;
+                this.shadowRoot.appendChild(style);
+                
+            } else {
+                // Default theme styling
+                //commandsMenu.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+                commandsMenu.style.border = '1px solid rgba(0, 0, 0, 0.02)';
+                commandsMenu.style.boxShadow = 'var(--box-shadow)';
+            }
         }
     }
 
     customElements.define('commands-component', Commands);
 </script>
-
 
 <style>
     :root {
@@ -285,7 +936,7 @@
             overflow: hidden;
             padding: 2rem;
             width: 100vw;
-            background-color: rgba(255, 255, 255, 0.7);
+            /*background-color: rgba(255, 255, 255, 0.7);*/
             border: 1px solid rgba(0, 0, 0, 0.02);
             box-shadow: var(--box-shadow);
         }
@@ -554,6 +1205,141 @@
             this.#suggestions.addEventListener('click', this.#onSuggestionClick);
             document.addEventListener('keydown', this.#onKeydown);
             this.shadowRoot.append(clone);
+            
+            // Apply theme styling when created
+            this.applyThemeStyling();
+            
+            // Listen for theme changes
+            document.addEventListener('themeChanged', () => {
+                this.applyThemeStyling();
+            });
+        }
+        
+        // Method to apply theme styling
+        applyThemeStyling() {
+            const themeName = document.documentElement.dataset.theme || 'default';
+            const isDarkMode = document.documentElement.dataset.darkMode === 'true';
+            
+            // Remove any theme-specific styles
+            const themeStyles = this.shadowRoot.querySelectorAll('.theme-style');
+            themeStyles.forEach(style => style.remove());
+            
+            // Reset styles
+            this.#dialog.style.backdropFilter = '';
+            this.#input.style.backdropFilter = '';
+            this.#input.style.backgroundColor = '';
+            this.#input.style.border = '';
+            this.#input.style.boxShadow = '';
+            this.#input.style.borderRadius = '';
+            this.#input.style.fontFamily = '';
+            this.#input.style.letterSpacing = '';
+            
+            // Apply theme-specific styles based on current theme
+            if (themeName === 'minimal') {
+                // Minimal theme style
+                this.#input.style.backgroundColor = 'transparent';
+                this.#input.style.border = 'none';
+                this.#input.style.borderBottom = '1px solid ' + (isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)');
+                this.#input.style.borderRadius = '0';
+                this.#input.style.boxShadow = 'none';
+                this.#input.style.fontFamily = '"Courier New", monospace';
+                
+                // Add minimal style for suggestions
+                const style = document.createElement('style');
+                style.className = 'theme-style';
+                style.textContent = `
+                    .suggestion::before {
+                        border-radius: 0 !important;
+                        background-color: ${isDarkMode ? '#333333' : '#cccccc'} !important;
+                    }
+                `;
+                this.shadowRoot.appendChild(style);
+                
+            } else if (themeName === 'glass') {
+                // Glass theme style
+                this.#dialog.style.backdropFilter = 'blur(10px)';
+                this.#input.style.backdropFilter = 'blur(5px)';
+                this.#input.style.backgroundColor = isDarkMode ? 'rgba(30, 41, 59, 0.5)' : 'rgba(255, 255, 255, 0.6)';
+                this.#input.style.border = isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.2)';
+                this.#input.style.boxShadow = isDarkMode ? '0 8px 32px rgba(0, 0, 0, 0.2)' : '0 8px 32px rgba(0, 0, 0, 0.07)';
+                this.#input.style.borderRadius = '16px';
+                
+                // Add glass style for suggestions
+                const style = document.createElement('style');
+                style.className = 'theme-style';
+                style.textContent = `
+                    .suggestion::before {
+                        background-color: ${isDarkMode ? '#38bdf8' : '#3b82f6'} !important;
+                        border-radius: 8px !important;
+                    }
+                `;
+                this.shadowRoot.appendChild(style);
+                
+            } else if (themeName === 'ocean') {
+                // Ocean theme style
+                this.#dialog.style.backdropFilter = 'blur(8px)';
+                this.#input.style.backgroundColor = isDarkMode ? 'rgba(0, 59, 66, 0.8)' : 'rgba(224, 247, 250, 0.9)';
+                this.#input.style.border = isDarkMode ? '1px solid rgba(38, 198, 218, 0.3)' : '1px solid rgba(129, 212, 250, 0.5)';
+                this.#input.style.boxShadow = isDarkMode ? '0 2px 10px rgba(0, 172, 193, 0.15)' : '0 2px 10px rgba(0, 131, 143, 0.1)';
+                this.#input.style.borderRadius = '12px';
+                
+                // Add ocean style for suggestions
+                const style = document.createElement('style');
+                style.className = 'theme-style';
+                style.textContent = `
+                    .suggestion::before {
+                        background-color: ${isDarkMode ? '#26c6da' : '#00838f'} !important;
+                        border-radius: 6px !important;
+                    }
+                    .suggestion {
+                        transition: transform 0.3s ease !important;
+                    }
+                    .suggestion:hover {
+                        transform: translateY(-2px) !important;
+                    }
+                `;
+                this.shadowRoot.appendChild(style);
+                
+            } else if (themeName === 'swiss') {
+                // Swiss theme style
+                this.#dialog.style.backdropFilter = 'none';
+                this.#input.style.backgroundColor = 'transparent';
+                this.#input.style.border = 'none';
+                this.#input.style.borderBottom = '1px solid #ff3b30';
+                this.#input.style.borderRadius = '0';
+                this.#input.style.boxShadow = 'none';
+                this.#input.style.fontFamily = '"Helvetica Neue", Arial, sans-serif';
+                this.#input.style.letterSpacing = '0.03em';
+                
+                // Add Swiss style for the search
+                const style = document.createElement('style');
+                style.className = 'theme-style';
+                style.textContent = `
+                    .input {
+                        width: 90% !important;
+                        max-width: 400px !important;
+                        margin: 0 auto !important;
+                    }
+                    
+                    .suggestion::before {
+                        background-color: #ff3b30 !important;
+                        border-radius: 0 !important;
+                    }
+                    
+                    @media (max-width: 480px) {
+                        .input {
+                            font-size: 1rem !important;
+                            padding: 0.4rem 0.8rem !important;
+                        }
+                        
+                        .suggestion {
+                            font-size: 0.8rem !important;
+                            padding: 0.4rem !important;
+                        }
+                    }
+                `;
+                this.shadowRoot.appendChild(style);
+            }
         }
 
         static #attachSearchPrefix(array, { key, splitBy }) {
@@ -897,6 +1683,8 @@
         box-sizing: content-box;
         /* Add subtle shadow to make it more visible */
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        display: block;
     }
 
     .settings-dot:hover {
@@ -992,2002 +1780,3 @@
 <div class="corner-text bottom-right">
     A. Magno
 </div>
-
-<template id="settings-widget-template">
-    <style>
-        .settings-panel {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            width: 280px;
-            max-width: 90vw;
-            z-index: 9;
-            display: none;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .settings-panel.open {
-            display: block;
-            animation: fadeIn 0.2s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
-        .settings-title {
-            font-size: 0.8rem;
-            font-weight: var(--font-weight-bold);
-            color: var(--color-text);
-            margin-bottom: 0.8rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            padding-bottom: 0.5rem;
-        }
-
-        .settings-option {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.8rem;
-        }
-
-        .settings-option-label {
-            font-size: 0.75rem;
-            color: var(--color-text-subtle);
-        }
-
-        .settings-checkbox {
-            position: relative;
-            width: 30px;
-            height: 16px;
-        }
-
-        .settings-checkbox input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .settings-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .3s;
-            border-radius: 34px;
-        }
-
-        .settings-slider:before {
-            position: absolute;
-            content: "";
-            height: 12px;
-            width: 12px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-        }
-
-        input:checked + .settings-slider {
-            background-color: var(--color-accent);
-        }
-
-        input:checked + .settings-slider:before {
-            transform: translateX(14px);
-        }
-        
-        .settings-select {
-            font-family: var(--font-family);
-            font-size: 0.75rem;
-            color: var(--color-text);
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            padding: 3px 6px;
-            width: 120px;
-            outline: none;
-            transition: all var(--transition-speed);
-        }
-        
-        .settings-select:focus {
-            border-color: var(--color-accent);
-            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
-        }
-        
-        /* Share Settings Section */
-        .share-settings {
-            margin-top: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            padding-top: 1rem;
-        }
-        
-        .share-title {
-            font-size: 0.75rem;
-            font-weight: var(--font-weight-bold);
-            margin-bottom: 0.8rem;
-            color: var(--color-text-subtle);
-        }
-        
-        .share-buttons {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.8rem;
-        }
-        
-        .share-button {
-            font-family: var(--font-family);
-            font-size: 0.7rem;
-            font-weight: var(--font-weight-bold);
-            color: var(--color-text-subtle);
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            padding: 5px 10px;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .share-button:hover {
-            background-color: rgba(0, 0, 0, 0.03);
-        }
-        
-        .share-button.import {
-            background-color: var(--color-accent);
-            color: white;
-            border-color: transparent;
-        }
-        
-        .share-button.import:hover {
-            opacity: 0.9;
-        }
-        
-        .share-input {
-            width: 100%;
-            font-family: var(--font-family);
-            font-size: 0.75rem;
-            color: var(--color-text);
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            padding: 5px 8px;
-            outline: none;
-            transition: all var(--transition-speed);
-            margin-bottom: 0.5rem;
-            min-height: 60px;
-            max-height: 120px;
-            resize: vertical;
-            box-sizing: border-box;
-            overflow-wrap: break-word;
-        }
-        
-        .share-input:focus {
-            border-color: var(--color-accent);
-            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
-        }
-        
-        .share-message {
-            font-size: 0.65rem;
-            color: var(--color-text-subtle);
-            margin-top: 0.3rem;
-            text-align: center;
-            height: 1.3em;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .share-message.visible {
-            opacity: 1;
-        }
-        
-        /* Shortcut editor styles */
-        .shortcut-editor {
-            display: none;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        .shortcut-editor.active {
-            display: block;
-            animation: fadeIn 0.2s ease-out;
-        }
-        
-        .shortcut-editor-title {
-            font-size: 0.75rem;
-            font-weight: var(--font-weight-bold);
-            margin-bottom: 0.8rem;
-            color: var(--color-text-subtle);
-        }
-        
-        .shortcut-form-group {
-            margin-bottom: 0.8rem;
-        }
-        
-        .shortcut-form-label {
-            display: block;
-            font-size: 0.7rem;
-            margin-bottom: 0.3rem;
-            color: var(--color-text-subtle);
-        }
-        
-        .shortcut-form-input {
-            width: 100%;
-            font-family: var(--font-family);
-            font-size: 0.75rem;
-            color: var(--color-text);
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            padding: 5px 8px;
-            outline: none;
-            transition: all var(--transition-speed);
-            box-sizing: border-box;
-        }
-        
-        .shortcut-form-input:focus {
-            border-color: var(--color-accent);
-            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
-        }
-        
-        .shortcut-form-key {
-            width: 3ch;
-            text-align: center;
-        }
-        
-        .new-shortcut-button {
-            display: block;
-            width: 100%;
-            font-family: var(--font-family);
-            font-size: 0.75rem;
-            font-weight: var(--font-weight-bold);
-            color: var(--color-text-subtle);
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 1px dashed rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            padding: 0.5rem;
-            margin-top: 1rem;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            text-align: center;
-            box-sizing: border-box;
-        }
-        
-        .new-shortcut-button:hover {
-            background-color: rgba(0, 0, 0, 0.03);
-            color: var(--color-text);
-        }
-
-        .shortcut-form-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-        }
-
-        .shortcut-form-button {
-            font-family: var(--font-family);
-            font-size: 0.7rem;
-            font-weight: var(--font-weight-bold);
-            color: var(--color-text-subtle);
-            background-color: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            padding: 5px 10px;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-        }
-
-        .shortcut-form-button:hover {
-            background-color: rgba(0, 0, 0, 0.03);
-        }
-
-        .shortcut-form-button.primary {
-            background-color: var(--color-accent);
-            color: white;
-            border-color: transparent;
-        }
-
-        .shortcut-form-button.primary:hover {
-            opacity: 0.9;
-        }
-
-        .shortcut-form-button.danger {
-            color: #e53935;
-            border-color: rgba(229, 57, 53, 0.3);
-        }
-
-        .shortcut-form-button.danger:hover {
-            background-color: rgba(229, 57, 53, 0.1);
-        }
-    </style>
-    <div class="settings-panel">
-        <div class="settings-title">Settings</div>
-        <div class="settings-option">
-            <span class="settings-option-label">Open links in new tab</span>
-            <label class="settings-checkbox">
-                <input type="checkbox" id="new-tab-setting">
-                <span class="settings-slider"></span>
-            </label>
-        </div>
-        <div class="settings-option">
-            <span class="settings-option-label">Dark mode</span>
-            <label class="settings-checkbox">
-                <input type="checkbox" id="dark-mode-setting">
-                <span class="settings-slider"></span>
-            </label>
-        </div>
-        <div class="settings-option">
-            <span class="settings-option-label">Theme</span>
-            <select id="theme-select" class="settings-select">
-                <option value="default">Default</option>
-                <option value="minimal">Minimal</option>
-                <option value="glass">Glass Modern</option>
-                <option value="ocean">Ocean</option>
-                <option value="swiss">Swiss</option>
-            </select>
-        </div>
-        
-        <!-- Share Settings Section -->
-        <div class="share-settings">
-            <div class="share-title">Share Settings</div>
-            <div class="share-buttons">
-                <button type="button" class="share-button" id="export-settings">Export</button>
-                <button type="button" class="share-button import" id="import-settings">Import</button>
-            </div>
-            <textarea class="share-input" id="share-data" placeholder="Paste settings data here to import, or click Export to generate shareable data."></textarea>
-            <div class="share-message" id="share-message"></div>
-        </div>
-        
-        <button type="button" class="new-shortcut-button" id="new-shortcut">+ Add New Shortcut</button>
-        
-        <!-- Shortcut Editor Form -->
-        <div class="shortcut-editor" id="shortcut-editor">
-            <div class="shortcut-editor-title">Edit Shortcut</div>
-            <form id="shortcut-form">
-                <div class="shortcut-form-group">
-                    <label class="shortcut-form-label">Key</label>
-                    <input type="text" class="shortcut-form-input shortcut-form-key" id="shortcut-key" maxlength="1">
-                </div>
-                <div class="shortcut-form-group">
-                    <label class="shortcut-form-label">Name</label>
-                    <input type="text" class="shortcut-form-input" id="shortcut-name">
-                </div>
-                <div class="shortcut-form-group">
-                    <label class="shortcut-form-label">URL</label>
-                    <input type="text" class="shortcut-form-input" id="shortcut-url">
-                </div>
-                <div class="shortcut-form-buttons">
-                    <button type="button" class="shortcut-form-button danger" id="shortcut-delete">Delete</button>
-                    <div>
-                        <button type="button" class="shortcut-form-button" id="shortcut-cancel">Cancel</button>
-                        <button type="submit" class="shortcut-form-button primary" id="shortcut-save">Save</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</template>
-
-<script type="module">
-    class SettingsWidget extends HTMLElement {
-        #panel;
-        #newTabSetting;
-        #darkModeSetting;
-        #themeSelect;
-        #currentTheme = 'default';
-        
-        // Shortcut editor elements
-        #shortcutEditor;
-        #shortcutForm;
-        #shortcutKey;
-        #shortcutName;
-        #shortcutUrl;
-        #shortcutDelete;
-        #shortcutCancel;
-        #shortcutSave;
-        #newShortcut;
-        #editingKey = null;
-        
-        // Share settings elements
-        #exportButton;
-        #importButton;
-        #shareData;
-        #shareMessage;
-        
-        // Theme definitions
-        #themes = {
-            default: {
-                light: {
-                    background: '#f8f5e6',
-                    gradient: 'linear-gradient(135deg, #f8f5e6, #f2edd0)',
-                    text: '#222222',
-                    textSubtle: '#666666',
-                    accent: '#333333',
-                    hover: '#444444',
-                    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.03)'
-                },
-                dark: {
-                    background: '#1a1a1a',
-                    gradient: 'linear-gradient(135deg, #222, #333)',
-                    text: '#e0e0e0',
-                    textSubtle: '#a0a0a0',
-                    accent: '#505050',
-                    hover: '#707070',
-                    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.2)'
-                }
-            },
-            minimal: {
-                light: {
-                    background: '#ffffff',
-                    gradient: 'none',
-                    text: '#000000',
-                    textSubtle: '#999999',
-                    accent: '#cccccc',
-                    hover: '#eeeeee',
-                    boxShadow: 'none',
-                    borderRadius: '0',
-                    borderWidth: '0',
-                    fontFamily: '\"Courier New\", monospace',
-                    fontSize: '12px',
-                    commandsBackground: 'transparent',
-                    commandsBorder: 'none',
-                    commandsBoxShadow: 'none',
-                    commandMaxWidth: '70rem',
-                    keyColor: '#666666'
-                },
-                dark: {
-                    background: '#000000',
-                    gradient: 'none',
-                    text: '#ffffff',
-                    textSubtle: '#777777',
-                    accent: '#333333',
-                    hover: '#222222',
-                    boxShadow: 'none',
-                    borderRadius: '0',
-                    borderWidth: '0',
-                    fontFamily: '\"Courier New\", monospace',
-                    fontSize: '12px',
-                    commandsBackground: 'transparent',
-                    commandsBorder: 'none',
-                    commandsBoxShadow: 'none',
-                    commandMaxWidth: '70rem',
-                    keyColor: '#999999'
-                }
-            },
-            swiss: {
-                light: {
-                    background: '#ffffff',
-                    gradient: 'none',
-                    text: '#111111',
-                    textSubtle: '#666666',
-                    accent: '#ff3b30',
-                    hover: '#ff6651',
-                    boxShadow: 'none',
-                    borderRadius: '0',
-                    borderWidth: '0',
-                    fontFamily: '\"Helvetica Neue\", Arial, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: '300',
-                    commandsBackground: 'transparent',
-                    commandsBorder: 'none',
-                    commandsBoxShadow: 'none',
-                    commandMaxWidth: '80rem',
-                    keyColor: '#ff3b30',
-                    nameSpacing: '0.05em',
-                    gridLayout: 'true',
-                    letterSpacing: '0.03em',
-                    keyFontSize: '1.1em',
-                    keyWeight: '700',
-                    nameAfterHeight: '0',
-                    nameHoverColor: '#ff3b30'
-                },
-                dark: {
-                    background: '#000000',
-                    gradient: 'none',
-                    text: '#ffffff',
-                    textSubtle: '#999999',
-                    accent: '#ff3b30',
-                    hover: '#ff6651',
-                    boxShadow: 'none',
-                    borderRadius: '0',
-                    borderWidth: '0',
-                    fontFamily: '\"Helvetica Neue\", Arial, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: '300',
-                    commandsBackground: 'transparent',
-                    commandsBorder: 'none',
-                    commandsBoxShadow: 'none',
-                    commandMaxWidth: '80rem',
-                    keyColor: '#ff3b30',
-                    nameSpacing: '0.05em',
-                    gridLayout: 'true',
-                    letterSpacing: '0.03em',
-                    keyFontSize: '1.1em',
-                    keyWeight: '700',
-                    nameAfterHeight: '0',
-                    nameHoverColor: '#ff3b30',
-                    cornerTextTransform: 'uppercase',
-                    cornerTextSpacing: '0.1em',
-                    cornerTextWeight: '400',
-                    cornerTextSize: '0.65rem'
-                }
-            },
-            glass: {
-                light: {
-                    background: 'rgba(255, 255, 255, 0.7)',
-                    gradient: 'linear-gradient(135deg, #f5f7fa, #c3cfe2)',
-                    text: '#334155',
-                    textSubtle: '#64748b',
-                    accent: '#3b82f6',
-                    hover: '#60a5fa',
-                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
-                    borderRadius: '16px',
-                    commandsBackground: 'rgba(255, 255, 255, 0.6)',
-                    commandsBorder: '1px solid rgba(255, 255, 255, 0.2)',
-                    commandsBoxShadow: '0 8px 32px rgba(0, 0, 0, 0.07)',
-                    fontFamily: '\"Inter\", -apple-system, BlinkMacSystemFont, sans-serif',
-                    fontSize: '14px',
-                    keyColor: '#3b82f6',
-                    commandMaxWidth: '60rem',
-                    backdropFilter: 'blur(10px)',
-                    cornerTextStyle: 'text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.6rem; font-weight: 500;',
-                    dotSize: '6px',
-                    dotOpacity: '0.7',
-                    nameAfterHeight: '2px'
-                },
-                dark: {
-                    background: 'rgba(15, 23, 42, 0.7)',
-                    gradient: 'linear-gradient(135deg, #0f172a, #1e293b)',
-                    text: '#e2e8f0',
-                    textSubtle: '#94a3b8',
-                    accent: '#38bdf8',
-                    hover: '#7dd3fc',
-                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-                    borderRadius: '16px',
-                    commandsBackground: 'rgba(30, 41, 59, 0.5)',
-                    commandsBorder: '1px solid rgba(255, 255, 255, 0.1)',
-                    commandsBoxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-                    fontFamily: '\"Inter\", -apple-system, BlinkMacSystemFont, sans-serif',
-                    fontSize: '14px',
-                    keyColor: '#38bdf8',
-                    commandMaxWidth: '60rem',
-                    backdropFilter: 'blur(10px)',
-                    cornerTextStyle: 'text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.6rem; font-weight: 500;',
-                    dotSize: '6px',
-                    dotOpacity: '0.7',
-                    nameAfterHeight: '2px'
-                }
-            },
-            ocean: {
-                light: {
-                    background: '#e0f7fa',
-                    gradient: 'linear-gradient(135deg, #e0f7fa, #80deea 50%, #4dd0e1)',
-                    text: '#006064',
-                    textSubtle: '#0097a7',
-                    accent: '#00838f',
-                    hover: '#006064',
-                    boxShadow: '0 4px 14px rgba(0, 131, 143, 0.15)',
-                    borderRadius: '12px',
-                    commandsBackground: 'rgba(224, 247, 250, 0.8)',
-                    commandsBorder: '1px solid rgba(129, 212, 250, 0.4)',
-                    commandsBoxShadow: '0 6px 24px rgba(0, 131, 143, 0.1)',
-                    fontFamily: '\"Inter\", -apple-system, BlinkMacSystemFont, sans-serif',
-                    fontSize: '14px',
-                    keyColor: '#00acc1',
-                    commandMaxWidth: '55rem',
-                    backdropFilter: 'blur(8px)',
-                    cornerTextStyle: 'font-style: italic; letter-spacing: 0.05em; font-size: 0.7rem;',
-                    dotSize: '8px',
-                    dotOpacity: '0.8',
-                    nameAfterHeight: '2px',
-                    nameFont: '500',
-                    commandsColumns: '3',
-                    inputBackground: 'rgba(224, 247, 250, 0.9)',
-                    inputBorder: '1px solid rgba(129, 212, 250, 0.5)',
-                    inputShadow: '0 2px 10px rgba(0, 131, 143, 0.1)',
-                    uiAnimation: 'true',
-                    cornerTextOpacity: '0.85'
-                },
-                dark: {
-                    background: '#002f35',
-                    gradient: 'linear-gradient(135deg, #002f35, #00363a 50%, #004d40)',
-                    text: '#e0f7fa',
-                    textSubtle: '#80deea',
-                    accent: '#26c6da',
-                    hover: '#4dd0e1',
-                    boxShadow: '0 4px 14px rgba(0, 172, 193, 0.2)',
-                    borderRadius: '12px',
-                    commandsBackground: 'rgba(0, 59, 66, 0.7)',
-                    commandsBorder: '1px solid rgba(38, 198, 218, 0.2)',
-                    commandsBoxShadow: '0 6px 24px rgba(0, 172, 193, 0.15)',
-                    fontFamily: '\"Inter\", -apple-system, BlinkMacSystemFont, sans-serif',
-                    fontSize: '14px',
-                    keyColor: '#26c6da',
-                    commandMaxWidth: '55rem',
-                    backdropFilter: 'blur(8px)',
-                    cornerTextStyle: 'font-style: italic; letter-spacing: 0.05em; font-size: 0.7rem;',
-                    dotSize: '8px',
-                    dotOpacity: '0.8',
-                    nameAfterHeight: '2px',
-                    nameFont: '500',
-                    commandsColumns: '3',
-                    inputBackground: 'rgba(0, 59, 66, 0.8)',
-                    inputBorder: '1px solid rgba(38, 198, 218, 0.3)',
-                    inputShadow: '0 2px 10px rgba(0, 172, 193, 0.15)',
-                    uiAnimation: 'true',
-                    cornerTextOpacity: '0.85'
-                }
-            }
-        };
-        
-        constructor() {
-            super();
-            this.attachShadow({ mode: 'open' });
-            const template = document.getElementById('settings-widget-template');
-            const clone = template.content.cloneNode(true);
-            this.#panel = clone.querySelector('.settings-panel');
-            this.shadowRoot.append(clone);
-            
-            // Get settings elements
-            this.#newTabSetting = this.shadowRoot.querySelector('#new-tab-setting');
-            this.#darkModeSetting = this.shadowRoot.querySelector('#dark-mode-setting');
-            this.#themeSelect = this.shadowRoot.querySelector('#theme-select');
-            
-            // Get shortcut editor elements
-            this.#shortcutEditor = this.shadowRoot.querySelector('#shortcut-editor');
-            this.#shortcutForm = this.shadowRoot.querySelector('#shortcut-form');
-            this.#shortcutKey = this.shadowRoot.querySelector('#shortcut-key');
-            this.#shortcutName = this.shadowRoot.querySelector('#shortcut-name');
-            this.#shortcutUrl = this.shadowRoot.querySelector('#shortcut-url');
-            this.#shortcutDelete = this.shadowRoot.querySelector('#shortcut-delete');
-            this.#shortcutCancel = this.shadowRoot.querySelector('#shortcut-cancel');
-            this.#shortcutSave = this.shadowRoot.querySelector('#shortcut-save');
-            this.#newShortcut = this.shadowRoot.querySelector('#new-shortcut');
-            
-            // Get share settings elements
-            this.#exportButton = this.shadowRoot.querySelector('#export-settings');
-            this.#importButton = this.shadowRoot.querySelector('#import-settings');
-            this.#shareData = this.shadowRoot.querySelector('#share-data');
-            this.#shareMessage = this.shadowRoot.querySelector('#share-message');
-            
-            // Initialize settings from the existing CONFIG
-            this.#newTabSetting.checked = CONFIG.openLinksInNewTab;
-            
-            // Try to load user settings from localStorage
-            this.#loadSettings();
-            
-            // Add event listeners
-            this.#newTabSetting.addEventListener('change', this.#onNewTabChange);
-            this.#darkModeSetting.addEventListener('change', this.#onDarkModeChange);
-            this.#themeSelect.addEventListener('change', this.#onThemeChange);
-            
-            // Add shortcut editor event listeners
-            this.#shortcutForm.addEventListener('submit', this.#onShortcutSave);
-            this.#shortcutCancel.addEventListener('click', this.#onShortcutCancel);
-            this.#shortcutDelete.addEventListener('click', this.#onShortcutDelete);
-            this.#newShortcut.addEventListener('click', this.#onNewShortcut);
-            
-            // Add share settings event listeners
-            this.#exportButton.addEventListener('click', this.#onExportSettings);
-            this.#importButton.addEventListener('click', this.#onImportSettings);
-            
-            // Close panel when clicking outside
-            document.addEventListener('click', this.#onDocumentClick);
-        }
-        
-        toggle() {
-            this.#panel.classList.toggle('open');
-            
-            // Toggle editable class on commands container
-            const commandsEl = document.querySelector('commands-component');
-            if (commandsEl && commandsEl.shadowRoot) {
-                const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
-                if (commandsMenu) {
-                    if (this.#panel.classList.contains('open')) {
-                        commandsMenu.classList.add('editable');
-                    } else {
-                        commandsMenu.classList.remove('editable');
-                    }
-                }
-            }
-            
-            // Hide shortcut editor when toggling panel
-            this.#shortcutEditor.classList.remove('active');
-            this.#editingKey = null;
-        }
-        
-        // Method to edit a shortcut - called from Commands component
-        editShortcut(key) {
-            console.log('SettingsWidget.editShortcut called with key:', key);
-            
-            if (!COMMANDS.has(key)) {
-                console.error(`Command with key "${key}" not found`);
-                return;
-            }
-            
-            const command = COMMANDS.get(key);
-            
-            // Update form fields
-            this.#shortcutKey.value = key;
-            this.#shortcutName.value = command.name || '';
-            this.#shortcutUrl.value = command.url || '';
-            
-            // Store the key being edited
-            this.#editingKey = key;
-            
-            // Show the delete button for existing shortcuts
-            this.#shortcutDelete.style.visibility = 'visible';
-            
-            // Show the editor
-            this.#shortcutEditor.classList.add('active');
-        }
-        
-        #onShortcutSave = (e) => {
-            e.preventDefault();
-            
-            const key = this.#shortcutKey.value.trim();
-            const name = this.#shortcutName.value.trim();
-            const url = this.#shortcutUrl.value.trim();
-            
-            // Validate inputs
-            if (!key || !name || !url) {
-                alert('All fields are required.');
-                return;
-            }
-            
-            // Ensure key is a single character
-            if (key.length !== 1) {
-                alert('Key must be a single character.');
-                return;
-            }
-            
-            // If we're changing the key, check if it's already in use
-            if (key !== this.#editingKey && COMMANDS.has(key)) {
-                alert(`Key "${key}" is already in use. Please choose another.`);
-                return;
-            }
-            
-            // Create or update the command
-            const command = {
-                name,
-                url
-            };
-            
-            // If we're changing the key, remove the old entry
-            if (this.#editingKey && this.#editingKey !== key) {
-                COMMANDS.delete(this.#editingKey);
-            }
-            
-            // Set the new command
-            COMMANDS.set(key, command);
-            
-            // Save commands to localStorage
-            this.#saveCommands();
-            
-            // Update the UI
-            document.querySelector('commands-component').initialize();
-            
-            // Hide the editor
-            this.#shortcutEditor.classList.remove('active');
-            this.#editingKey = null;
-        };
-        
-        #onShortcutCancel = () => {
-            // Hide the editor
-            this.#shortcutEditor.classList.remove('active');
-            this.#editingKey = null;
-        };
-        
-        #onShortcutDelete = () => {
-            if (!this.#editingKey || !COMMANDS.has(this.#editingKey)) {
-                return;
-            }
-            
-            if (confirm(`Delete the shortcut "${this.#editingKey}" - ${COMMANDS.get(this.#editingKey).name}?`)) {
-                // Remove the command
-                COMMANDS.delete(this.#editingKey);
-                
-                // Save commands to localStorage
-                this.#saveCommands();
-                
-                // Update the UI
-                document.querySelector('commands-component').initialize();
-                
-                // Hide the editor
-                this.#shortcutEditor.classList.remove('active');
-                this.#editingKey = null;
-            }
-        };
-        
-        #onNewShortcut = () => {
-            // Reset form fields for a new shortcut
-            this.#shortcutKey.value = '';
-            this.#shortcutName.value = '';
-            this.#shortcutUrl.value = '';
-            
-            // Clear the editing key
-            this.#editingKey = null;
-            
-            // Hide the delete button for new shortcuts
-            this.#shortcutDelete.style.visibility = 'hidden';
-            
-            // Show the editor
-            this.#shortcutEditor.classList.add('active');
-        };
-        
-        #saveCommands() {
-            try {
-                // Convert Map to array of [key, value] pairs then to object
-                const commandsArray = Array.from(COMMANDS.entries());
-                localStorage.setItem('homeCommands', JSON.stringify(commandsArray));
-            } catch (e) {
-                console.error('Error saving commands:', e);
-            }
-        }
-        
-        #saveSettings() {
-            try {
-                const settings = {
-                    openLinksInNewTab: this.#newTabSetting.checked,
-                    darkMode: this.#darkModeSetting.checked,
-                    theme: this.#currentTheme
-                };
-                localStorage.setItem('homeSettings', JSON.stringify(settings));
-            } catch (e) {
-                console.error('Error saving settings:', e);
-            }
-        }
-        
-        #loadSettings() {
-            try {
-                // Try to load settings from localStorage
-                const savedSettings = localStorage.getItem('homeSettings');
-                if (savedSettings) {
-                    const settings = JSON.parse(savedSettings);
-                    
-                    // Apply saved settings
-                    this.#newTabSetting.checked = settings.openLinksInNewTab || false;
-                    this.#darkModeSetting.checked = settings.darkMode || false;
-                    this.#themeSelect.value = settings.theme || 'default';
-                    this.#currentTheme = settings.theme || 'default';
-                    
-                    // Apply theme and mode
-                    this.#applyTheme(this.#currentTheme, this.#darkModeSetting.checked);
-                    
-                    // Update CONFIG
-                    CONFIG.openLinksInNewTab = this.#newTabSetting.checked;
-                }
-            } catch (e) {
-                console.error('Error loading settings:', e);
-            }
-        }
-        
-        #onNewTabChange = (e) => {
-            CONFIG.openLinksInNewTab = e.target.checked;
-            // Re-initialize commands component to apply setting
-            document.querySelector('commands-component').initialize();
-            this.#saveSettings();
-        };
-        
-        #onDarkModeChange = (e) => {
-            this.#applyTheme(this.#currentTheme, e.target.checked);
-            this.#saveSettings();
-        };
-        
-        #onThemeChange = (e) => {
-            this.#currentTheme = e.target.value;
-            this.#applyTheme(this.#currentTheme, this.#darkModeSetting.checked);
-            this.#saveSettings();
-        };
-        
-        #applyTheme(themeName, isDark) {
-            const theme = this.#themes[themeName] || this.#themes.default;
-            const colors = isDark ? theme.dark : theme.light;
-            
-            // Store current theme in document for Commands component to access on initialization
-            document.documentElement.dataset.theme = themeName;
-            document.documentElement.dataset.darkMode = isDark;
-            
-            document.documentElement.style.setProperty('--color-background', colors.background);
-            document.documentElement.style.setProperty('--color-text', colors.text);
-            document.documentElement.style.setProperty('--color-text-subtle', colors.textSubtle);
-            document.documentElement.style.setProperty('--color-accent', colors.accent);
-            document.documentElement.style.setProperty('--color-hover', colors.hover);
-            document.documentElement.style.setProperty('--box-shadow', colors.boxShadow);
-            
-            // Apply gradient
-            if (colors.gradient && colors.gradient !== 'none') {
-                document.documentElement.style.backgroundImage = colors.gradient;
-            } else {
-                document.documentElement.style.backgroundImage = 'none';
-            }
-            
-            // Call separate method for commands component styling to avoid code duplication
-            // Do NOT reinitialize the commands component, just apply styling
-            this.#applyThemeToCommandsComponent(themeName, isDark);
-            
-            // Handle special minimal theme properties
-            if (themeName === 'minimal') {
-                // Adjust border radius
-                document.documentElement.style.setProperty('--border-radius', colors.borderRadius || '8px');
-                
-                // Adjust font
-                if (colors.fontFamily) {
-                    document.documentElement.style.fontFamily = colors.fontFamily;
-                }
-                
-                if (colors.fontSize) {
-                    document.documentElement.style.fontSize = colors.fontSize;
-                }
-                
-                // Modify commands component style
-                const commandsEl = document.querySelector('commands-component');
-                if (commandsEl && commandsEl.shadowRoot) {
-                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
-                    if (commandsMenu) {
-                        commandsMenu.style.backgroundColor = colors.commandsBackground || '';
-                        commandsMenu.style.border = colors.commandsBorder || '';
-                        commandsMenu.style.boxShadow = colors.commandsBoxShadow || '';
-                        commandsMenu.style.maxWidth = colors.commandMaxWidth || '';
-                        
-                        // Update key colors
-                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
-                        keys.forEach(key => {
-                            key.style.color = colors.keyColor || '';
-                        });
-                    }
-                }
-                
-                // Hide corner texts for minimal theme
-                const cornerTexts = document.querySelectorAll('.corner-text');
-                cornerTexts.forEach(el => {
-                    el.style.opacity = '0';
-                });
-                
-                // Make dot smaller and more subtle
-                const dot = document.querySelector('.settings-dot');
-                if (dot) {
-                    dot.style.width = '3px';
-                    dot.style.height = '3px';
-                    dot.style.opacity = '0.3';
-                }
-            } else if (themeName === 'glass') {
-                // Apply glass theme properties
-                document.documentElement.style.setProperty('--border-radius', colors.borderRadius || '16px');
-                
-                // Apply backdrop filter to html
-                document.documentElement.style.backdropFilter = colors.backdropFilter || 'blur(10px)';
-                
-                // Set font properties
-                if (colors.fontFamily) {
-                    document.documentElement.style.fontFamily = colors.fontFamily;
-                }
-                
-                if (colors.fontSize) {
-                    document.documentElement.style.fontSize = colors.fontSize;
-                }
-                
-                // Modify commands component style to be glassy
-                const commandsEl = document.querySelector('commands-component');
-                if (commandsEl && commandsEl.shadowRoot) {
-                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
-                    if (commandsMenu) {
-                        commandsMenu.style.backgroundColor = colors.commandsBackground || '';
-                        commandsMenu.style.border = colors.commandsBorder || '';
-                        commandsMenu.style.boxShadow = colors.commandsBoxShadow || '';
-                        commandsMenu.style.backdropFilter = colors.backdropFilter || '';
-                        commandsMenu.style.maxWidth = colors.commandMaxWidth || '';
-                        
-                        // Update key colors and make them more prominent
-                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
-                        keys.forEach(key => {
-                            key.style.color = colors.keyColor || '';
-                            key.style.opacity = '1';
-                            key.style.fontWeight = '600';
-                        });
-
-                        // Update name underline style
-                        const names = commandsEl.shadowRoot.querySelectorAll('.name');
-                        names.forEach(name => {
-                            const after = name.querySelector('::after') || name;
-                            name.style.letterSpacing = '0.02em';
-                            if (colors.nameAfterHeight) {
-                                const style = document.createElement('style');
-                                style.textContent = `.name::after { height: ${colors.nameAfterHeight} !important; }`;
-                                commandsEl.shadowRoot.appendChild(style);
-                            }
-                        });
-                    }
-                }
-                
-                // Style corner texts for glass theme
-                const cornerTexts = document.querySelectorAll('.corner-text');
-                cornerTexts.forEach(el => {
-                    el.style.cssText = colors.cornerTextStyle || '';
-                    el.style.opacity = '0.8';
-                });
-                
-                // Style the settings dot
-                const dot = document.querySelector('.settings-dot');
-                if (dot) {
-                    dot.style.width = colors.dotSize || '6px';
-                    dot.style.height = colors.dotSize || '6px';
-                    dot.style.opacity = colors.dotOpacity || '0.7';
-                    dot.style.backgroundColor = colors.accent;
-                    dot.style.boxShadow = '0 0 10px ' + colors.accent;
-                }
-                
-                // Update settings panel to glass style
-                const settingsEl = document.querySelector('settings-widget');
-                if (settingsEl && settingsEl.shadowRoot) {
-                    const panel = settingsEl.shadowRoot.querySelector('.settings-panel');
-                    if (panel) {
-                        panel.style.backgroundColor = colors.commandsBackground;
-                        panel.style.backdropFilter = colors.backdropFilter;
-                        panel.style.border = colors.commandsBorder;
-                        panel.style.boxShadow = colors.commandsBoxShadow;
-                        panel.style.borderRadius = colors.borderRadius;
-                    }
-                }
-                
-                // Apply search component styles
-                const searchEl = document.querySelector('search-component');
-                if (searchEl && searchEl.shadowRoot) {
-                    const dialog = searchEl.shadowRoot.querySelector('.dialog');
-                    const input = searchEl.shadowRoot.querySelector('.input');
-                    if (dialog && input) {
-                        dialog.style.backdropFilter = colors.backdropFilter;
-                        input.style.backdropFilter = colors.backdropFilter;
-                        input.style.backgroundColor = colors.commandsBackground;
-                        input.style.border = colors.commandsBorder;
-                        input.style.boxShadow = colors.commandsBoxShadow;
-                    }
-                }
-            } else if (themeName === 'ocean') {
-                // Apply Ocean theme properties
-                document.documentElement.style.setProperty('--border-radius', colors.borderRadius || '12px');
-                
-                // Apply backdrop filter to html
-                document.documentElement.style.backdropFilter = colors.backdropFilter || 'blur(8px)';
-                
-                // Set font properties
-                if (colors.fontFamily) {
-                    document.documentElement.style.fontFamily = colors.fontFamily;
-                }
-                
-                if (colors.fontSize) {
-                    document.documentElement.style.fontSize = colors.fontSize;
-                }
-                
-                // Modify commands component style for Ocean theme
-                const commandsEl = document.querySelector('commands-component');
-                if (commandsEl && commandsEl.shadowRoot) {
-                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
-                    if (commandsMenu) {
-                        commandsMenu.style.backgroundColor = colors.commandsBackground || '';
-                        commandsMenu.style.border = colors.commandsBorder || '';
-                        commandsMenu.style.boxShadow = colors.commandsBoxShadow || '';
-                        commandsMenu.style.backdropFilter = colors.backdropFilter || '';
-                        commandsMenu.style.maxWidth = colors.commandMaxWidth || '';
-                        
-                        // Set columns for the commands menu if specified
-                        if (colors.commandsColumns) {
-                            const style = document.createElement('style');
-                            style.textContent = `
-                                @media (min-width: 500px) {
-                                    .commands {
-                                        columns: ${colors.commandsColumns} !important;
-                                    }
-                                }
-                            `;
-                            commandsEl.shadowRoot.appendChild(style);
-                        }
-                        
-                        // Update key colors with Ocean theme styling
-                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
-                        keys.forEach(key => {
-                            key.style.color = colors.keyColor || '';
-                            key.style.opacity = '1';
-                            key.style.fontWeight = '600';
-                        });
-
-                        // Update name styles with Ocean theme styling
-                        const names = commandsEl.shadowRoot.querySelectorAll('.name');
-                        names.forEach(name => {
-                            name.style.letterSpacing = '0.03em';
-                            name.style.fontWeight = colors.nameFont || '400';
-                            
-                            if (colors.nameAfterHeight) {
-                                const style = document.createElement('style');
-                                style.textContent = `.name::after { 
-                                    height: ${colors.nameAfterHeight} !important; 
-                                    background-color: ${colors.accent} !important;
-                                }`;
-                                commandsEl.shadowRoot.appendChild(style);
-                            }
-                        });
-                        
-                        // Add subtle animation if enabled
-                        if (colors.uiAnimation === 'true') {
-                            const style = document.createElement('style');
-                            style.textContent = `
-                                .command {
-                                    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-                                }
-                                .command:hover {
-                                    transform: translateY(-2px) !important;
-                                    box-shadow: 0 4px 12px rgba(0, 131, 143, 0.15) !important;
-                                }
-                            `;
-                            commandsEl.shadowRoot.appendChild(style);
-                        }
-                    }
-                }
-                
-                // Style corner texts for Ocean theme
-                const cornerTexts = document.querySelectorAll('.corner-text');
-                cornerTexts.forEach(el => {
-                    el.style.cssText = colors.cornerTextStyle || '';
-                    el.style.opacity = colors.cornerTextOpacity || '0.85';
-                });
-                
-                // Style the settings dot for Ocean theme
-                const dot = document.querySelector('.settings-dot');
-                if (dot) {
-                    dot.style.width = colors.dotSize || '8px';
-                    dot.style.height = colors.dotSize || '8px';
-                    dot.style.opacity = colors.dotOpacity || '0.8';
-                    dot.style.backgroundColor = colors.accent;
-                    dot.style.boxShadow = '0 0 12px ' + colors.accent;
-                    
-                    // Add pulse animation to the dot
-                    const style = document.createElement('style');
-                    style.textContent = `
-                        @keyframes pulse {
-                            0% { transform: translateX(-50%) scale(1); }
-                            50% { transform: translateX(-50%) scale(1.2); }
-                            100% { transform: translateX(-50%) scale(1); }
-                        }
-                        .settings-dot:hover {
-                            animation: pulse 1.5s infinite ease-in-out;
-                        }
-                    `;
-                    document.head.appendChild(style);
-                }
-                
-                // Update settings panel for Ocean theme
-                const settingsEl = document.querySelector('settings-widget');
-                if (settingsEl && settingsEl.shadowRoot) {
-                    const panel = settingsEl.shadowRoot.querySelector('.settings-panel');
-                    if (panel) {
-                        panel.style.backgroundColor = colors.commandsBackground;
-                        panel.style.backdropFilter = colors.backdropFilter;
-                        panel.style.border = colors.commandsBorder;
-                        panel.style.boxShadow = colors.commandsBoxShadow;
-                        panel.style.borderRadius = colors.borderRadius;
-                    }
-                }
-                
-                // Apply search component styles for Ocean theme
-                const searchEl = document.querySelector('search-component');
-                if (searchEl && searchEl.shadowRoot) {
-                    const dialog = searchEl.shadowRoot.querySelector('.dialog');
-                    const input = searchEl.shadowRoot.querySelector('.input');
-                    const suggestions = searchEl.shadowRoot.querySelector('.suggestions');
-                    
-                    if (dialog && input) {
-                        dialog.style.backdropFilter = colors.backdropFilter;
-                        input.style.backgroundColor = colors.inputBackground || colors.commandsBackground;
-                        input.style.border = colors.inputBorder || colors.commandsBorder;
-                        input.style.boxShadow = colors.inputShadow || colors.commandsBoxShadow;
-                        input.style.borderRadius = colors.borderRadius;
-                        
-                        // Style the suggestions for Ocean theme
-                        if (suggestions) {
-                            const style = document.createElement('style');
-                            style.textContent = `
-                                .suggestion::before {
-                                    background-color: ${colors.accent} !important;
-                                }
-                            `;
-                            searchEl.shadowRoot.appendChild(style);
-                        }
-                    }
-                }
-            } else if (themeName === 'swiss') {
-                // Apply Swiss theme properties - minimal, typography focused, red accent
-                document.documentElement.style.setProperty('--border-radius', colors.borderRadius || '0');
-                
-                // Set font properties
-                if (colors.fontFamily) {
-                    document.documentElement.style.fontFamily = colors.fontFamily;
-                }
-                
-                if (colors.fontSize) {
-                    document.documentElement.style.fontSize = colors.fontSize;
-                }
-                
-                if (colors.fontWeight) {
-                    document.documentElement.style.fontWeight = colors.fontWeight;
-                }
-                
-                if (colors.letterSpacing) {
-                    document.documentElement.style.letterSpacing = colors.letterSpacing;
-                }
-                
-                // Commands component styling is now handled exclusively by the #applyThemeToCommandsComponent method
-                // to avoid duplicate styling operations
-            } else {
-                // Reset to default styles for other themes
-                document.documentElement.style.setProperty('--border-radius', '8px');
-                document.documentElement.style.fontFamily = 'var(--font-family)';
-                document.documentElement.style.fontSize = 'var(--font-size)';
-                document.documentElement.style.backdropFilter = 'none';
-                
-                // Reset commands component style
-                const commandsEl = document.querySelector('commands-component');
-                if (commandsEl && commandsEl.shadowRoot) {
-                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
-                    if (commandsMenu) {
-                        commandsMenu.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-                        commandsMenu.style.border = '1px solid rgba(0, 0, 0, 0.02)';
-                        commandsMenu.style.boxShadow = 'var(--box-shadow)';
-                        commandsMenu.style.backdropFilter = '';
-                        commandsMenu.style.maxWidth = '';
-                        
-                        // Reset key colors
-                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
-                        keys.forEach(key => {
-                            key.style.color = '';
-                            key.style.opacity = '';
-                            key.style.fontWeight = '';
-                        });
-                        
-                        // Reset name styles
-                        const names = commandsEl.shadowRoot.querySelectorAll('.name');
-                        names.forEach(name => {
-                            name.style.letterSpacing = '';
-                        });
-                    }
-                }
-                
-                // Show corner texts for other themes
-                const cornerTexts = document.querySelectorAll('.corner-text');
-                cornerTexts.forEach(el => {
-                    el.style.cssText = '';
-                    el.style.opacity = '';
-                });
-                
-                // Reset dot size
-                const dot = document.querySelector('.settings-dot');
-                if (dot) {
-                    dot.style.width = '5px';
-                    dot.style.height = '5px';
-                    dot.style.opacity = '0.5';
-                    dot.style.backgroundColor = '';
-                    dot.style.boxShadow = '';
-                }
-                
-                // Reset settings panel
-                const settingsEl = document.querySelector('settings-widget');
-                if (settingsEl && settingsEl.shadowRoot) {
-                    const panel = settingsEl.shadowRoot.querySelector('.settings-panel');
-                    if (panel) {
-                        panel.style.backgroundColor = '';
-                        panel.style.backdropFilter = '';
-                        panel.style.border = '';
-                        panel.style.boxShadow = '';
-                        panel.style.borderRadius = '';
-                    }
-                }
-                
-                // Reset search component styles
-                const searchEl = document.querySelector('search-component');
-                if (searchEl && searchEl.shadowRoot) {
-                    const dialog = searchEl.shadowRoot.querySelector('.dialog');
-                    const input = searchEl.shadowRoot.querySelector('.input');
-                    if (dialog && input) {
-                        dialog.style.backdropFilter = '';
-                        input.style.backdropFilter = '';
-                        input.style.backgroundColor = '';
-                        input.style.border = '';
-                        input.style.boxShadow = '';
-                    }
-                }
-            }
-            
-            // Remove any theme-specific styles
-            const allCommandsEl = document.querySelector('commands-component');
-            if (allCommandsEl && allCommandsEl.shadowRoot) {
-                const commandsMenu = allCommandsEl.shadowRoot.querySelector('.commands');
-                if (commandsMenu) {
-                    // Remove any theme-specific styles that aren't needed for the current theme
-                    const themeStyles = allCommandsEl.shadowRoot.querySelectorAll('.ocean-columns-style, .ocean-name-style, .ocean-animation-style, .swiss-grid-style, .swiss-name-hover-style, .swiss-search-style');
-                    themeStyles.forEach(style => {
-                        // Only remove styles not relevant to current theme
-                        if ((themeName !== 'ocean' && style.className.includes('ocean')) || 
-                            (themeName !== 'swiss' && style.className.includes('swiss'))) {
-                            style.remove();
-                        }
-                    });
-                
-                    // If settings panel is open, make sure the editable class is added
-                    if (this.#panel.classList.contains('open')) {
-                        commandsMenu.classList.add('editable');
-                    } else {
-                        commandsMenu.classList.remove('editable');
-                    }
-                }
-            }
-        }
-        
-        // Method to synchronize theme settings with the commands component
-        synchronizeCommands() {
-            // Apply current theme to commands component
-            const commandsEl = document.querySelector('commands-component');
-            if (commandsEl && commandsEl.shadowRoot) {
-                this.#applyThemeToCommandsComponent(this.#currentTheme, this.#darkModeSetting.checked);
-            }
-        }
-        
-        #onDocumentClick = (e) => {
-            // Don't close if clicking inside the settings panel or the dot
-            if (e.target.closest('.settings-dot') || e.target.closest('settings-widget')) {
-                return;
-            }
-            this.#panel.classList.remove('open');
-        };
-        
-        // Helper method to apply theme specifically to commands component
-        #applyThemeToCommandsComponent(themeName, isDark) {
-            const theme = this.#themes[themeName] || this.#themes.default;
-            const colors = isDark ? theme.dark : theme.light;
-            
-            // Get commands component
-            const commandsEl = document.querySelector('commands-component');
-            if (!commandsEl || !commandsEl.shadowRoot) return;
-            
-            const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
-            if (!commandsMenu) return;
-
-            // Clean up any existing theme styles to prevent buildup
-            const existingStyles = commandsEl.shadowRoot.querySelectorAll('.swiss-grid-style, .swiss-name-hover-style, .swiss-search-style, .ocean-columns-style, .ocean-name-style, .ocean-animation-style');
-            existingStyles.forEach(style => {
-                if ((themeName !== 'ocean' && style.className.includes('ocean')) || 
-                    (themeName !== 'swiss' && style.className.includes('swiss'))) {
-                    style.remove();
-                }
-            });
-            
-            if (themeName === 'minimal') {
-                // Apply minimal theme to commands
-                commandsMenu.style.backgroundColor = 'transparent';
-                commandsMenu.style.border = 'none';
-                commandsMenu.style.boxShadow = 'none';
-                commandsMenu.style.maxWidth = '70rem';
-                
-                // Update key colors with minimal theme styling
-                const keys = commandsEl.shadowRoot.querySelectorAll('.key');
-                keys.forEach(key => {
-                    key.style.color = colors.keyColor || '#666666';
-                });
-            } else if (themeName === 'ocean') {
-                // Apply Ocean theme to commands
-                commandsMenu.style.backgroundColor = colors.commandsBackground || '';
-                commandsMenu.style.border = colors.commandsBorder || '';
-                commandsMenu.style.boxShadow = colors.commandsBoxShadow || '';
-                commandsMenu.style.backdropFilter = colors.backdropFilter || '';
-                commandsMenu.style.maxWidth = colors.commandMaxWidth || '';
-                
-                // Update key colors with Ocean theme styling
-                const keys = commandsEl.shadowRoot.querySelectorAll('.key');
-                keys.forEach(key => {
-                    key.style.color = colors.keyColor || '';
-                    key.style.opacity = '1';
-                    key.style.fontWeight = '600';
-                });
-
-                // Update name styles with Ocean theme styling
-                const names = commandsEl.shadowRoot.querySelectorAll('.name');
-                names.forEach(name => {
-                    name.style.letterSpacing = '0.03em';
-                    name.style.fontWeight = colors.nameFont || '400';
-                });
-                
-                // Set columns for the commands menu if specified
-                if (colors.commandsColumns) {
-                    // Check if style already exists
-                    let style = commandsEl.shadowRoot.querySelector('.ocean-columns-style');
-                    if (!style) {
-                        style = document.createElement('style');
-                        style.className = 'ocean-columns-style';
-                        style.textContent = `
-                            @media (min-width: 500px) {
-                                .commands {
-                                    columns: ${colors.commandsColumns} !important;
-                                }
-                            }
-                        `;
-                        commandsEl.shadowRoot.appendChild(style);
-                    }
-                }
-                
-                // Add nameAfter style if needed
-                if (colors.nameAfterHeight) {
-                    let nameStyle = commandsEl.shadowRoot.querySelector('.ocean-name-style');
-                    if (!nameStyle) {
-                        nameStyle = document.createElement('style');
-                        nameStyle.className = 'ocean-name-style';
-                        nameStyle.textContent = `.name::after { 
-                            height: ${colors.nameAfterHeight} !important; 
-                            background-color: ${colors.accent} !important;
-                        }`;
-                        commandsEl.shadowRoot.appendChild(nameStyle);
-                    }
-                }
-                
-                // Add animations if enabled
-                if (colors.uiAnimation === 'true') {
-                    let animStyle = commandsEl.shadowRoot.querySelector('.ocean-animation-style');
-                    if (!animStyle) {
-                        animStyle = document.createElement('style');
-                        animStyle.className = 'ocean-animation-style';
-                        animStyle.textContent = `
-                            .command {
-                                transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-                            }
-                            .command:hover {
-                                transform: translateY(-2px) !important;
-                                box-shadow: 0 4px 12px rgba(0, 131, 143, 0.15) !important;
-                            }
-                        `;
-                        commandsEl.shadowRoot.appendChild(animStyle);
-                    }
-                }
-            } else if (themeName === 'swiss') {
-                // Apply Swiss theme properties - minimal, typography focused, red accent
-                document.documentElement.style.setProperty('--border-radius', colors.borderRadius || '0');
-                
-                // Set font properties
-                if (colors.fontFamily) {
-                    document.documentElement.style.fontFamily = colors.fontFamily;
-                }
-                
-                if (colors.fontSize) {
-                    document.documentElement.style.fontSize = colors.fontSize;
-                }
-                
-                if (colors.fontWeight) {
-                    document.documentElement.style.fontWeight = colors.fontWeight;
-                }
-                
-                if (colors.letterSpacing) {
-                    document.documentElement.style.letterSpacing = colors.letterSpacing;
-                }
-                
-                // Modify commands component style for Swiss theme
-                const commandsEl = document.querySelector('commands-component');
-                if (commandsEl && commandsEl.shadowRoot) {
-                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
-                    if (commandsMenu) {
-                        commandsMenu.style.backgroundColor = 'transparent';
-                        commandsMenu.style.border = 'none';
-                        commandsMenu.style.boxShadow = 'none';
-                        commandsMenu.style.maxWidth = colors.commandMaxWidth || '80rem';
-                        commandsMenu.style.paddingTop = '3rem';
-                        
-                        // Set grid layout if specified
-                        if (colors.gridLayout === 'true') {
-                            // Remove any existing grid styles first
-                            const existingGridStyle = commandsEl.shadowRoot.querySelector('.swiss-grid-style');
-                            if (existingGridStyle) {
-                                existingGridStyle.remove();
-                            }
-                            
-                            // Get all commands and explicitly set their order based on their position
-                            const commandElements = commandsEl.shadowRoot.querySelectorAll('.command');
-                            commandElements.forEach((cmd, index) => {
-                                // Set an explicit order to maintain the original sequence
-                                cmd.style.order = index;
-                            });
-                            
-                            // Create grid layout style
-                            const gridStyle = document.createElement('style');
-                            gridStyle.className = 'swiss-grid-style';
-                            gridStyle.textContent = `
-                                .commands {
-                                    display: grid !important;
-                                    grid-template-columns: repeat(4, 1fr) !important;
-                                    grid-template-rows: repeat(3, auto) !important;
-                                    grid-gap: 1.5rem !important;
-                                    grid-auto-flow: column !important; /* Change to column flow - items will fill columns first */
-                                    columns: unset !important;
-                                    padding: 1.5rem !important;
-                                    justify-content: center !important;
-                                    align-items: start !important;
-                                    width: auto !important;
-                                    max-width: 52rem !important;
-                                    margin: 0 auto !important;
-                                }
-                                
-                                .command {
-                                    display: flex !important;
-                                    flex-direction: column !important;
-                                    align-items: flex-start !important;
-                                    gap: 0.5rem !important;
-                                    border-left: 2px solid transparent !important;
-                                    padding-left: 0.5rem !important;
-                                    transition: all 0.2s ease !important;
-                                    margin-bottom: 0.5rem !important;
-                                }
-                                
-                                .command:hover {
-                                    border-left-color: ${colors.accent} !important;
-                                }
-                                
-                                @media (max-width: 768px) {
-                                    .commands {
-                                        grid-template-columns: repeat(4, minmax(90px, 1fr)) !important;
-                                        grid-gap: 1rem !important;
-                                        padding: 1rem !important;
-                                        max-width: 42rem !important;
-                                    }
-                                    
-                                    .command {
-                                        margin-bottom: 0.25rem !important;
-                                    }
-                                }
-                                
-                                @media (max-width: 480px) {
-                                    .commands {
-                                        grid-template-columns: repeat(2, minmax(90px, 1fr)) !important;
-                                        max-width: 22rem !important;
-                                        padding: 0.8rem !important;
-                                    }
-                                }
-                            `;
-                            commandsEl.shadowRoot.appendChild(gridStyle);
-                            
-                            // We're no longer manipulating the DOM order, just applying styles
-                        }
-                        
-                        // Update key styling with Swiss typography principles
-                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
-                        keys.forEach(key => {
-                            key.style.color = colors.keyColor || '#ff3b30';
-                            key.style.opacity = '1';
-                            key.style.fontWeight = colors.keyWeight || '700';
-                            key.style.fontSize = colors.keyFontSize || '1.1em';
-                            key.style.width = 'auto';
-                            key.style.textAlign = 'left';
-                        });
-
-                        // Update name styles with Swiss typography
-                        const names = commandsEl.shadowRoot.querySelectorAll('.name');
-                        names.forEach(name => {
-                            name.style.letterSpacing = colors.nameSpacing || '0.05em';
-                            name.style.textTransform = 'uppercase';
-                            name.style.fontSize = '0.8em';
-                            name.style.opacity = '0.9';
-                        });
-                        
-                        // Add Swiss-specific hover effect and responsive styles
-                        const nameHoverStyle = document.createElement('style');
-                        nameHoverStyle.className = 'swiss-name-hover-style';
-                        nameHoverStyle.textContent = `
-                            .command:hover .name {
-                                color: ${colors.nameHoverColor || colors.accent} !important;
-                            }
-                            
-                            .name::after {
-                                display: none !important;
-                            }
-                            
-                            @media (max-width: 768px) {
-                                .key {
-                                    font-size: 1em !important;
-                                }
-                                
-                                .name {
-                                    font-size: 0.75em !important;
-                                }
-                            }
-                            
-                            @media (max-width: 480px) {
-                                .key {
-                                    font-size: 0.9em !important;
-                                }
-                                
-                                .name {
-                                    font-size: 0.7em !important;
-                                    letter-spacing: 0.03em !important;
-                                }
-                            }
-                        `;
-                        commandsEl.shadowRoot.appendChild(nameHoverStyle);
-                    }
-                }
-                
-                // Style corner texts for Swiss theme
-                const cornerTexts = document.querySelectorAll('.corner-text');
-                cornerTexts.forEach(el => {
-                    el.style.textTransform = colors.cornerTextTransform || 'uppercase';
-                    el.style.letterSpacing = colors.cornerTextSpacing || '0.1em';
-                    el.style.fontWeight = colors.cornerTextWeight || '400';
-                    el.style.fontSize = colors.cornerTextSize || '0.65rem';
-                    el.style.opacity = '0.8';
-                });
-                
-                // Additional responsive style for corner texts
-                const cornerTextStyle = document.createElement('style');
-                cornerTextStyle.textContent = `
-                    @media (max-width: 768px) {
-                        .corner-text {
-                            padding: 1rem !important;
-                            max-width: 150px !important;
-                        }
-                        
-                        .top-left, .top-right, .bottom-left, .bottom-right {
-                            font-size: 0.6rem !important;
-                        }
-                    }
-                    
-                    @media (max-width: 480px) {
-                        .top-left, .bottom-right {
-                            display: none !important;
-                        }
-                        
-                        .top-right, .bottom-left {
-                            padding: 0.75rem !important;
-                            font-size: 0.55rem !important;
-                        }
-                    }
-                `;
-                document.head.appendChild(cornerTextStyle);
-                
-                // Style the settings dot
-                const dot = document.querySelector('.settings-dot');
-                if (dot) {
-                    dot.style.width = '4px';
-                    dot.style.height = '4px';
-                    dot.style.opacity = '0.7';
-                    dot.style.backgroundColor = colors.accent;
-                    dot.style.boxShadow = 'none';
-                }
-                
-                // Update settings panel with Swiss theme
-                const settingsEl = document.querySelector('settings-widget');
-                if (settingsEl && settingsEl.shadowRoot) {
-                    const panel = settingsEl.shadowRoot.querySelector('.settings-panel');
-                    if (panel) {
-                        panel.style.backgroundColor = isDark ? 'rgba(20, 20, 20, 0.95)' : 'rgba(255, 255, 255, 0.95)';
-                        panel.style.backdropFilter = 'blur(0)';
-                        panel.style.border = 'none';
-                        panel.style.boxShadow = 'none';
-                        panel.style.borderRadius = '0';
-                        panel.style.borderLeft = `2px solid ${colors.accent}`;
-                        
-                        // Add responsive settings for smaller screens
-                        const responsiveSettingsStyle = document.createElement('style');
-                        responsiveSettingsStyle.textContent = `
-                            @media (max-width: 480px) {
-                                .settings-panel {
-                                    width: 240px !important;
-                                    max-width: 90vw !important;
-                                    font-size: 0.9em !important;
-                                }
-                                
-                                .settings-option-label {
-                                    font-size: 0.7rem !important;
-                                }
-                                
-                                .settings-select {
-                                    width: 100px !important;
-                                    font-size: 0.7rem !important;
-                                }
-                                
-                                .share-button {
-                                    padding: 4px 8px !important;
-                                    font-size: 0.65rem !important;
-                                }
-                                
-                                .shortcut-form-input {
-                                    padding: 4px 6px !important;
-                                }
-                            }
-                        `;
-                        settingsEl.shadowRoot.appendChild(responsiveSettingsStyle);
-                    }
-                    
-                    // Style buttons in the Swiss theme
-                    const buttons = settingsEl.shadowRoot.querySelectorAll('button');
-                    buttons.forEach(button => {
-                        if (button.classList.contains('primary') || button.classList.contains('import')) {
-                            button.style.backgroundColor = colors.accent;
-                            button.style.borderRadius = '0';
-                        } else {
-                            button.style.borderRadius = '0';
-                        }
-                    });
-                }
-                
-                // Apply search component styles for Swiss theme
-                const searchEl = document.querySelector('search-component');
-                if (searchEl && searchEl.shadowRoot) {
-                    const dialog = searchEl.shadowRoot.querySelector('.dialog');
-                    const input = searchEl.shadowRoot.querySelector('.input');
-                    
-                    if (dialog && input) {
-                        dialog.style.backdropFilter = 'none';
-                        input.style.backgroundColor = 'transparent';
-                        input.style.border = 'none';
-                        input.style.borderBottom = `1px solid ${colors.accent}`;
-                        input.style.borderRadius = '0';
-                        input.style.boxShadow = 'none';
-                        input.style.fontFamily = colors.fontFamily;
-                        input.style.letterSpacing = colors.letterSpacing;
-                        
-                        // Add responsive styles for search
-                        const responsiveSearchStyle = document.createElement('style');
-                        responsiveSearchStyle.className = 'swiss-search-style';
-                        responsiveSearchStyle.textContent = `
-                            .input {
-                                width: 90% !important;
-                                max-width: 400px !important;
-                                margin: 0 auto !important;
-                            }
-                            
-                            @media (max-width: 480px) {
-                                .input {
-                                    font-size: 1rem !important;
-                                    padding: 0.4rem 0.8rem !important;
-                                }
-                                
-                                .suggestion {
-                                    font-size: 0.8rem !important;
-                                    padding: 0.4rem !important;
-                                }
-                            }
-                            
-                            .suggestion::before {
-                                background-color: ${colors.accent} !important;
-                                border-radius: 0 !important;
-                            }
-                        `;
-                        searchEl.shadowRoot.appendChild(responsiveSearchStyle);
-                    }
-                }
-            } else {
-                // Reset to default styles for other themes
-                document.documentElement.style.setProperty('--border-radius', '8px');
-                document.documentElement.style.fontFamily = 'var(--font-family)';
-                document.documentElement.style.fontSize = 'var(--font-size)';
-                document.documentElement.style.backdropFilter = 'none';
-                
-                // Reset commands component style
-                const commandsEl = document.querySelector('commands-component');
-                if (commandsEl && commandsEl.shadowRoot) {
-                    const commandsMenu = commandsEl.shadowRoot.querySelector('.commands');
-                    if (commandsMenu) {
-                        commandsMenu.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-                        commandsMenu.style.border = '1px solid rgba(0, 0, 0, 0.02)';
-                        commandsMenu.style.boxShadow = 'var(--box-shadow)';
-                        commandsMenu.style.backdropFilter = '';
-                        commandsMenu.style.maxWidth = '';
-                        
-                        // Reset key colors
-                        const keys = commandsEl.shadowRoot.querySelectorAll('.key');
-                        keys.forEach(key => {
-                            key.style.color = '';
-                            key.style.opacity = '';
-                            key.style.fontWeight = '';
-                        });
-                        
-                        // Reset name styles
-                        const names = commandsEl.shadowRoot.querySelectorAll('.name');
-                        names.forEach(name => {
-                            name.style.letterSpacing = '';
-                        });
-                    }
-                }
-                
-                // Show corner texts for other themes
-                const cornerTexts = document.querySelectorAll('.corner-text');
-                cornerTexts.forEach(el => {
-                    el.style.cssText = '';
-                    el.style.opacity = '';
-                });
-                
-                // Reset dot size
-                const dot = document.querySelector('.settings-dot');
-                if (dot) {
-                    dot.style.width = '5px';
-                    dot.style.height = '5px';
-                    dot.style.opacity = '0.5';
-                    dot.style.backgroundColor = '';
-                    dot.style.boxShadow = '';
-                }
-                
-                // Reset settings panel
-                const settingsEl = document.querySelector('settings-widget');
-                if (settingsEl && settingsEl.shadowRoot) {
-                    const panel = settingsEl.shadowRoot.querySelector('.settings-panel');
-                    if (panel) {
-                        panel.style.backgroundColor = '';
-                        panel.style.backdropFilter = '';
-                        panel.style.border = '';
-                        panel.style.boxShadow = '';
-                        panel.style.borderRadius = '';
-                    }
-                }
-                
-                // Reset search component styles
-                const searchEl = document.querySelector('search-component');
-                if (searchEl && searchEl.shadowRoot) {
-                    const dialog = searchEl.shadowRoot.querySelector('.dialog');
-                    const input = searchEl.shadowRoot.querySelector('.input');
-                    if (dialog && input) {
-                        dialog.style.backdropFilter = '';
-                        input.style.backdropFilter = '';
-                        input.style.backgroundColor = '';
-                        input.style.border = '';
-                        input.style.boxShadow = '';
-                    }
-                }
-            }
-            
-            // Remove any theme-specific styles
-            const allCommandsEl = document.querySelector('commands-component');
-            if (allCommandsEl && allCommandsEl.shadowRoot) {
-                const commandsMenu = allCommandsEl.shadowRoot.querySelector('.commands');
-                if (commandsMenu) {
-                    // Remove any theme-specific styles that aren't needed for the current theme
-                    const themeStyles = allCommandsEl.shadowRoot.querySelectorAll('.ocean-columns-style, .ocean-name-style, .ocean-animation-style, .swiss-grid-style, .swiss-name-hover-style, .swiss-search-style');
-                    themeStyles.forEach(style => {
-                        // Only remove styles not relevant to current theme
-                        if ((themeName !== 'ocean' && style.className.includes('ocean')) || 
-                            (themeName !== 'swiss' && style.className.includes('swiss'))) {
-                            style.remove();
-                        }
-                    });
-                
-                    // If settings panel is open, make sure the editable class is added
-                    if (this.#panel.classList.contains('open')) {
-                        commandsMenu.classList.add('editable');
-                    } else {
-                        commandsMenu.classList.remove('editable');
-                    }
-                }
-            }
-        }
-        
-        // Method to display temporary messages in the share section
-        #showMessage(message, isError = false) {
-            this.#shareMessage.textContent = message;
-            this.#shareMessage.classList.add('visible');
-            
-            if (isError) {
-                this.#shareMessage.style.color = '#e53935';
-            } else {
-                this.#shareMessage.style.color = '';
-            }
-            
-            // Hide the message after 3 seconds
-            setTimeout(() => {
-                this.#shareMessage.classList.remove('visible');
-            }, 3000);
-        }
-        
-        // Export settings and commands to a shareable string
-        #onExportSettings = () => {
-            try {
-                // Gather all settings and commands
-                const exportData = {
-                    version: 1,
-                    settings: {
-                        openLinksInNewTab: this.#newTabSetting.checked,
-                        darkMode: this.#darkModeSetting.checked,
-                        theme: this.#currentTheme
-                    },
-                    commands: Array.from(COMMANDS.entries())
-                };
-                
-                // Convert to JSON and then to Base64 for sharing
-                const jsonData = JSON.stringify(exportData);
-                const base64Data = btoa(jsonData);
-                
-                // Display in the textarea
-                this.#shareData.value = base64Data;
-                
-                // Select the text for easy copying
-                this.#shareData.select();
-                document.execCommand('copy');
-                
-                this.#showMessage('Settings copied to clipboard!');
-            } catch (e) {
-                console.error('Error exporting settings:', e);
-                this.#showMessage('Error exporting settings', true);
-            }
-        };
-        
-        // Import settings and commands from a shared string
-        #onImportSettings = () => {
-            try {
-                const base64Data = this.#shareData.value.trim();
-                
-                if (!base64Data) {
-                    this.#showMessage('Please paste settings data first', true);
-                    return;
-                }
-                
-                // Decode the Base64 string to JSON
-                const jsonData = atob(base64Data);
-                const importData = JSON.parse(jsonData);
-                
-                // Check version compatibility
-                if (!importData.version || importData.version !== 1) {
-                    this.#showMessage('Incompatible settings format', true);
-                    return;
-                }
-                
-                // Apply settings
-                if (importData.settings) {
-                    this.#newTabSetting.checked = importData.settings.openLinksInNewTab || false;
-                    this.#darkModeSetting.checked = importData.settings.darkMode || false;
-                    this.#themeSelect.value = importData.settings.theme || 'default';
-                    this.#currentTheme = importData.settings.theme || 'default';
-                    
-                    // Save to localStorage
-                    this.#saveSettings();
-                    
-                    // Apply theme
-                    this.#applyTheme(this.#currentTheme, this.#darkModeSetting.checked);
-                    
-                    // Update CONFIG
-                    CONFIG.openLinksInNewTab = this.#newTabSetting.checked;
-                }
-                
-                // Import commands
-                if (importData.commands && Array.isArray(importData.commands)) {
-                    // Clear existing commands
-                    COMMANDS.clear();
-                    
-                    // Add imported commands
-                    for (const [key, value] of importData.commands) {
-                        COMMANDS.set(key, value);
-                    }
-                    
-                    // Save to localStorage
-                    this.#saveCommands();
-                    
-                    // Update UI
-                    document.querySelector('commands-component').initialize();
-                }
-                
-                this.#showMessage('Settings imported successfully!');
-                
-                // Clear the textarea
-                this.#shareData.value = '';
-            } catch (e) {
-                console.error('Error importing settings:', e);
-                this.#showMessage('Invalid settings data format', true);
-            }
-        };
-    }
-
-    customElements.define('settings-widget', SettingsWidget);
-</script>

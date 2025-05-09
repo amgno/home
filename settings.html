@@ -1,0 +1,1339 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="color-scheme" content="light" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Settings</title>
+
+    <style>
+        :root {
+            --border-radius: 8px;
+            --color-background: #f8f5e6; /* Vanilla/yellowish background */
+            --color-text-subtle: #666666; /* Subtle gray text */
+            --color-text: #222222; /* Near black text */
+            --color-accent: #333333; /* Accent color */
+            --color-hover: #444444; /* Hover color */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-size: clamp(13px, 1vw, 15px); /* Smaller font size */
+            --font-weight-bold: 500;
+            --font-weight-normal: 400;
+            --space: .5rem;
+            --transition-speed: 200ms;
+            --box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+        }
+
+        html {
+            background-color: var(--color-background);
+            background-image: linear-gradient(135deg, #f8f5e6, #f2edd0);
+            font-family: var(--font-family);
+            font-size: var(--font-size);
+            line-height: 1.4;
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            color: var(--color-text);
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            color: var(--color-text-subtle);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all var(--transition-speed);
+            font-weight: var(--font-weight-bold);
+            font-size: 0.9em;
+        }
+
+        .back-link:hover {
+            color: var(--color-text);
+        }
+
+        .back-link::before {
+            content: "←";
+            margin-right: 0.5rem;
+            font-size: 1.2em;
+        }
+
+        .settings-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem;
+            margin: 0 auto;
+        }
+
+        .settings-header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 1rem;
+        }
+
+        .settings-title {
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-bold);
+            margin: 0 0 0.5rem 0;
+        }
+
+        .settings-description {
+            color: var(--color-text-subtle);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Settings sections styling */
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+
+        .settings-section-title {
+            font-size: 1.1rem;
+            font-weight: var(--font-weight-bold);
+            margin: 0 0 1rem 0;
+            color: var(--color-text);
+        }
+
+        .settings-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .settings-option-label {
+            font-size: 0.9rem;
+            color: var(--color-text);
+        }
+
+        .settings-option-description {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--color-text-subtle);
+            margin-top: 0.3rem;
+        }
+
+        /* Toggle switch styling */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--color-accent);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Select styling */
+        .settings-select {
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            color: var(--color-text);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            min-width: 120px;
+            outline: none;
+            transition: all var(--transition-speed);
+        }
+
+        .settings-select:focus {
+            border-color: var(--color-accent);
+        }
+
+        /* Dark mode style overrides */
+        html.dark-mode {
+            background-color: #1a1a1a;
+            background-image: linear-gradient(135deg, #222, #333);
+            color: #e0e0e0;
+        }
+
+        html.dark-mode .settings-option {
+            background-color: rgba(30, 30, 30, 0.5);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        html.dark-mode .settings-option-label {
+            color: #e0e0e0;
+        }
+
+        html.dark-mode .settings-option-description {
+            color: #a0a0a0;
+        }
+
+        html.dark-mode .settings-select {
+            background-color: rgba(40, 40, 40, 0.7);
+            color: #e0e0e0;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Save button styling */
+        .save-button {
+            display: block;
+            margin: 2rem auto 0;
+            padding: 0.8rem 2rem;
+            background-color: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .save-button:hover {
+            background-color: var(--color-hover);
+        }
+
+        html.dark-mode .save-button {
+            background-color: #505050;
+        }
+
+        html.dark-mode .save-button:hover {
+            background-color: #707070;
+        }
+
+        /* Shortcut management styling */
+        .shortcuts-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.6rem 0.8rem;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        html.dark-mode .shortcut-item {
+            background-color: rgba(30, 30, 30, 0.5);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .shortcut-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .shortcut-key {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            background-color: var(--color-accent);
+            color: white;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: var(--font-weight-bold);
+        }
+
+        .shortcut-name {
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+
+        .shortcut-url {
+            font-size: 0.75rem;
+            color: var(--color-text-subtle);
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        html.dark-mode .shortcut-url {
+            color: #a0a0a0;
+        }
+
+        .shortcut-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .shortcut-edit-btn, .shortcut-delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: opacity var(--transition-speed);
+            color: var(--color-text);
+            padding: 0.3rem;
+        }
+
+        html.dark-mode .shortcut-edit-btn, 
+        html.dark-mode .shortcut-delete-btn {
+            color: #e0e0e0;
+        }
+
+        .shortcut-edit-btn:hover, 
+        .shortcut-delete-btn:hover {
+            opacity: 1;
+        }
+
+        .shortcut-delete-btn {
+            color: #e53935;
+        }
+
+        html.dark-mode .shortcut-delete-btn {
+            color: #f44336;
+        }
+
+        .shortcut-add-btn {
+            display: block;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            width: 100%;
+            border: 1px dashed rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: var(--border-radius);
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            color: var(--color-text-subtle);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            text-align: center;
+        }
+
+        html.dark-mode .shortcut-add-btn {
+            border-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #a0a0a0;
+        }
+
+        .shortcut-add-btn:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+            color: var(--color-text);
+        }
+
+        html.dark-mode .shortcut-add-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        /* Shortcut editor modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-speed);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--color-background);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(20px);
+            transition: transform var(--transition-speed);
+        }
+
+        html.dark-mode .modal-content {
+            background-color: #222;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: var(--font-weight-bold);
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--color-text-subtle);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+            color: var(--color-text);
+        }
+
+        html.dark-mode .form-label {
+            color: #e0e0e0;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem;
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            background-color: rgba(255, 255, 255, 0.7);
+            color: var(--color-text);
+            box-sizing: border-box;
+        }
+
+        html.dark-mode .form-input {
+            background-color: rgba(40, 40, 40, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+
+        .form-input.key-input {
+            width: 3rem;
+            text-align: center;
+            text-transform: lowercase;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            padding: 0.5rem 1rem;
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .modal-btn-cancel {
+            background-color: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--color-text);
+        }
+
+        html.dark-mode .modal-btn-cancel {
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        .modal-btn-cancel:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        html.dark-mode .modal-btn-cancel:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-btn-save {
+            background-color: var(--color-accent);
+            border: none;
+            color: white;
+        }
+
+        html.dark-mode .modal-btn-save {
+            background-color: #505050;
+        }
+
+        .modal-btn-save:hover {
+            background-color: var(--color-hover);
+        }
+
+        html.dark-mode .modal-btn-save:hover {
+            background-color: #707070;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-link">Back to Home</a>
+    
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1 class="settings-title">Settings</h1>
+            <p class="settings-description">Customize your homepage experience</p>
+        </div>
+
+        <!-- Settings content will be added here in subsequent edits -->
+        <div class="settings-section">
+            <h2 class="settings-section-title">Appearance</h2>
+            
+            <div class="settings-option">
+                <div>
+                    <span class="settings-option-label">Dark mode</span>
+                    <span class="settings-option-description">Switch between light and dark theme</span>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="dark-mode-setting">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-option">
+                <div>
+                    <span class="settings-option-label">Theme</span>
+                    <span class="settings-option-description">Choose a design theme for your homepage</span>
+                </div>
+                <select id="theme-select" class="settings-select">
+                    <option value="default">Default</option>
+                    <option value="minimal">Minimal</option>
+                    <option value="glass">Glass Modern</option>
+                    <option value="ocean">Ocean</option>
+                    <option value="swiss">Swiss</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2 class="settings-section-title">Behavior</h2>
+            
+            <div class="settings-option">
+                <div>
+                    <span class="settings-option-label">Open links in new tab</span>
+                    <span class="settings-option-description">Controls whether links open in the same window or a new tab</span>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="new-tab-setting">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h2 class="settings-section-title">Shortcuts</h2>
+            <p class="settings-option-description" style="margin-bottom: 1rem;">Manage your homepage shortcuts</p>
+            
+            <ul class="shortcuts-list" id="shortcuts-list">
+                <!-- Shortcuts will be populated here by JavaScript -->
+            </ul>
+            
+            <button type="button" id="add-shortcut" class="shortcut-add-btn">+ Add New Shortcut</button>
+        </div>
+
+        <button type="button" id="save-settings" class="save-button">Save Settings</button>
+    </div>
+
+    <!-- Shortcut Editor Modal -->
+    <div class="modal-overlay" id="shortcut-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Add Shortcut</h3>
+                <button type="button" class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <form id="shortcut-form">
+                <div class="form-group">
+                    <label for="shortcut-key" class="form-label">Key (single character)</label>
+                    <input type="text" id="shortcut-key" class="form-input key-input" maxlength="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="shortcut-name" class="form-label">Name</label>
+                    <input type="text" id="shortcut-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="shortcut-url" class="form-label">URL</label>
+                    <input type="url" id="shortcut-url" class="form-input" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn modal-btn-cancel" id="modal-cancel">Cancel</button>
+                    <button type="submit" class="modal-btn modal-btn-save">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Theme definitions - same as in the widget to ensure consistency
+        const THEMES = {
+            default: {
+                light: {
+                    background: '#f8f5e6',
+                    gradient: 'linear-gradient(135deg, #f8f5e6, #f2edd0)',
+                    text: '#222222',
+                    textSubtle: '#666666',
+                    accent: '#333333',
+                    hover: '#444444',
+                    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.03)'
+                },
+                dark: {
+                    background: '#1a1a1a',
+                    gradient: 'linear-gradient(135deg, #222, #333)',
+                    text: '#e0e0e0',
+                    textSubtle: '#a0a0a0',
+                    accent: '#505050',
+                    hover: '#707070',
+                    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.2)'
+                }
+            },
+            minimal: {
+                light: {
+                    background: '#ffffff',
+                    gradient: 'none',
+                    text: '#000000',
+                    textSubtle: '#999999',
+                    accent: '#cccccc',
+                    hover: '#eeeeee',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '"Courier New", monospace',
+                    fontSize: '12px',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '70rem',
+                    keyColor: '#666666'
+                },
+                dark: {
+                    background: '#000000',
+                    gradient: 'none',
+                    text: '#ffffff',
+                    textSubtle: '#777777',
+                    accent: '#333333',
+                    hover: '#222222',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '"Courier New", monospace',
+                    fontSize: '12px',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '70rem',
+                    keyColor: '#999999'
+                }
+            },
+            swiss: {
+                light: {
+                    background: '#ffffff',
+                    gradient: 'none',
+                    text: '#111111',
+                    textSubtle: '#666666',
+                    accent: '#ff3b30',
+                    hover: '#ff6651',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '"Helvetica Neue", Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: '300',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '80rem',
+                    keyColor: '#ff3b30',
+                    nameSpacing: '0.05em',
+                    gridLayout: 'true',
+                    letterSpacing: '0.03em',
+                    keyFontSize: '1.1em',
+                    keyWeight: '700',
+                    nameAfterHeight: '0',
+                    nameHoverColor: '#ff3b30'
+                },
+                dark: {
+                    background: '#000000',
+                    gradient: 'none',
+                    text: '#ffffff',
+                    textSubtle: '#999999',
+                    accent: '#ff3b30',
+                    hover: '#ff6651',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    borderWidth: '0',
+                    fontFamily: '"Helvetica Neue", Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: '300',
+                    commandsBackground: 'transparent',
+                    commandsBorder: 'none',
+                    commandsBoxShadow: 'none',
+                    commandMaxWidth: '80rem',
+                    keyColor: '#ff3b30',
+                    nameSpacing: '0.05em',
+                    gridLayout: 'true',
+                    letterSpacing: '0.03em',
+                    keyFontSize: '1.1em',
+                    keyWeight: '700',
+                    nameAfterHeight: '0',
+                    nameHoverColor: '#ff3b30',
+                    cornerTextTransform: 'uppercase',
+                    cornerTextSpacing: '0.1em',
+                    cornerTextWeight: '400',
+                    cornerTextSize: '0.65rem'
+                }
+            },
+            glass: {
+                light: {
+                    background: 'rgba(255, 255, 255, 0.7)',
+                    gradient: 'linear-gradient(135deg, #f5f7fa, #c3cfe2)',
+                    text: '#334155',
+                    textSubtle: '#64748b',
+                    accent: '#3b82f6',
+                    hover: '#60a5fa',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+                    borderRadius: '16px',
+                    commandsBackground: 'rgba(255, 255, 255, 0.6)',
+                    commandsBorder: '1px solid rgba(255, 255, 255, 0.2)',
+                    commandsBoxShadow: '0 8px 32px rgba(0, 0, 0, 0.07)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#3b82f6',
+                    commandMaxWidth: '60rem',
+                    backdropFilter: 'blur(10px)',
+                    cornerTextStyle: 'text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.6rem; font-weight: 500;',
+                    dotSize: '6px',
+                    dotOpacity: '0.7',
+                    nameAfterHeight: '2px'
+                },
+                dark: {
+                    background: 'rgba(15, 23, 42, 0.7)',
+                    gradient: 'linear-gradient(135deg, #0f172a, #1e293b)',
+                    text: '#e2e8f0',
+                    textSubtle: '#94a3b8',
+                    accent: '#38bdf8',
+                    hover: '#7dd3fc',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+                    borderRadius: '16px',
+                    commandsBackground: 'rgba(30, 41, 59, 0.5)',
+                    commandsBorder: '1px solid rgba(255, 255, 255, 0.1)',
+                    commandsBoxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#38bdf8',
+                    commandMaxWidth: '60rem',
+                    backdropFilter: 'blur(10px)',
+                    cornerTextStyle: 'text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.6rem; font-weight: 500;',
+                    dotSize: '6px',
+                    dotOpacity: '0.7',
+                    nameAfterHeight: '2px'
+                }
+            },
+            ocean: {
+                light: {
+                    background: '#e0f7fa',
+                    gradient: 'linear-gradient(135deg, #e0f7fa, #80deea 50%, #4dd0e1)',
+                    text: '#006064',
+                    textSubtle: '#0097a7',
+                    accent: '#00838f',
+                    hover: '#006064',
+                    boxShadow: '0 4px 14px rgba(0, 131, 143, 0.15)',
+                    borderRadius: '12px',
+                    commandsBackground: 'rgba(224, 247, 250, 0.8)',
+                    commandsBorder: '1px solid rgba(129, 212, 250, 0.4)',
+                    commandsBoxShadow: '0 6px 24px rgba(0, 131, 143, 0.1)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#00acc1',
+                    commandMaxWidth: '55rem',
+                    backdropFilter: 'blur(8px)',
+                    cornerTextStyle: 'font-style: italic; letter-spacing: 0.05em; font-size: 0.7rem;',
+                    dotSize: '8px',
+                    dotOpacity: '0.8',
+                    nameAfterHeight: '2px',
+                    nameFont: '500',
+                    commandsColumns: '3',
+                    inputBackground: 'rgba(224, 247, 250, 0.9)',
+                    inputBorder: '1px solid rgba(129, 212, 250, 0.5)',
+                    inputShadow: '0 2px 10px rgba(0, 131, 143, 0.1)',
+                    uiAnimation: 'true',
+                    cornerTextOpacity: '0.85'
+                },
+                dark: {
+                    background: '#002f35',
+                    gradient: 'linear-gradient(135deg, #002f35, #00363a 50%, #004d40)',
+                    text: '#e0f7fa',
+                    textSubtle: '#80deea',
+                    accent: '#26c6da',
+                    hover: '#4dd0e1',
+                    boxShadow: '0 4px 14px rgba(0, 172, 193, 0.2)',
+                    borderRadius: '12px',
+                    commandsBackground: 'rgba(0, 59, 66, 0.7)',
+                    commandsBorder: '1px solid rgba(38, 198, 218, 0.2)',
+                    commandsBoxShadow: '0 6px 24px rgba(0, 172, 193, 0.15)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    keyColor: '#26c6da',
+                    commandMaxWidth: '55rem',
+                    backdropFilter: 'blur(8px)',
+                    cornerTextStyle: 'font-style: italic; letter-spacing: 0.05em; font-size: 0.7rem;',
+                    dotSize: '8px',
+                    dotOpacity: '0.8',
+                    nameAfterHeight: '2px',
+                    nameFont: '500',
+                    commandsColumns: '3',
+                    inputBackground: 'rgba(0, 59, 66, 0.8)',
+                    inputBorder: '1px solid rgba(38, 198, 218, 0.3)',
+                    inputShadow: '0 2px 10px rgba(0, 172, 193, 0.15)',
+                    uiAnimation: 'true',
+                    cornerTextOpacity: '0.85'
+                }
+            }
+        };
+
+        // Variables to store settings and commands
+        let currentSettings = {
+            openLinksInNewTab: false,
+            darkMode: false,
+            theme: 'default'
+        };
+        
+        let commands = new Map();
+        let editingKey = null;
+
+        // DOM Elements
+        const darkModeSetting = document.getElementById('dark-mode-setting');
+        const themeSelect = document.getElementById('theme-select');
+        const newTabSetting = document.getElementById('new-tab-setting');
+        const saveButton = document.getElementById('save-settings');
+        const shortcutsList = document.getElementById('shortcuts-list');
+        const addShortcutButton = document.getElementById('add-shortcut');
+        
+        // Modal Elements
+        const shortcutModal = document.getElementById('shortcut-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalCloseButton = document.getElementById('modal-close');
+        const modalCancelButton = document.getElementById('modal-cancel');
+        const shortcutForm = document.getElementById('shortcut-form');
+        const shortcutKeyInput = document.getElementById('shortcut-key');
+        const shortcutNameInput = document.getElementById('shortcut-name');
+        const shortcutUrlInput = document.getElementById('shortcut-url');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            loadCommands();
+            renderShortcuts();
+            
+            // Apply current theme
+            applyTheme(currentSettings.theme, currentSettings.darkMode);
+            
+            // Add event listeners
+            darkModeSetting.addEventListener('change', onDarkModeChange);
+            themeSelect.addEventListener('change', onThemeChange);
+            newTabSetting.addEventListener('change', onNewTabChange);
+            saveButton.addEventListener('click', saveSettings);
+            
+            // Shortcut modal event listeners
+            addShortcutButton.addEventListener('click', openAddShortcutModal);
+            modalCloseButton.addEventListener('click', closeModal);
+            modalCancelButton.addEventListener('click', closeModal);
+            shortcutForm.addEventListener('submit', onShortcutSave);
+        });
+
+        // Load settings from localStorage
+        function loadSettings() {
+            try {
+                const savedSettings = localStorage.getItem('homeSettings');
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    
+                    // Update current settings
+                    currentSettings = {
+                        openLinksInNewTab: settings.openLinksInNewTab || false,
+                        darkMode: settings.darkMode || false,
+                        theme: settings.theme || 'default'
+                    };
+                    
+                    // Update form elements
+                    darkModeSetting.checked = currentSettings.darkMode;
+                    themeSelect.value = currentSettings.theme;
+                    newTabSetting.checked = currentSettings.openLinksInNewTab;
+                }
+            } catch (e) {
+                console.error('Error loading settings:', e);
+            }
+        }
+
+        // Load commands from localStorage
+        function loadCommands() {
+            try {
+                const savedCommands = localStorage.getItem('homeCommands');
+                if (savedCommands) {
+                    const commandsArray = JSON.parse(savedCommands);
+                    commands = new Map(commandsArray);
+                } else {
+                    // Default commands
+                    commands = new Map([
+                        ['a', { name: 'Plex', url: 'https://app.plex.tv/desktop/' }],
+                        ['g', { name: 'Google', url: 'https://google.com' }],
+                        ['y', { name: 'YouTube', url: 'https://youtube.com/' }],
+                    ]);
+                }
+            } catch (e) {
+                console.error('Error loading commands:', e);
+            }
+        }
+
+        // Render the shortcuts list
+        function renderShortcuts() {
+            shortcutsList.innerHTML = '';
+            
+            // Sort commands alphabetically by key
+            const sortedCommands = Array.from(commands.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+            
+            for (const [key, command] of sortedCommands) {
+                const li = document.createElement('li');
+                li.className = 'shortcut-item';
+                li.dataset.key = key;
+                
+                const info = document.createElement('div');
+                info.className = 'shortcut-info';
+                
+                const keySpan = document.createElement('span');
+                keySpan.className = 'shortcut-key';
+                keySpan.textContent = key;
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'shortcut-name';
+                nameSpan.textContent = command.name;
+                
+                const urlSpan = document.createElement('span');
+                urlSpan.className = 'shortcut-url';
+                urlSpan.textContent = command.url;
+                
+                info.appendChild(keySpan);
+                info.appendChild(nameSpan);
+                info.appendChild(urlSpan);
+                
+                const actions = document.createElement('div');
+                actions.className = 'shortcut-actions';
+                
+                const editButton = document.createElement('button');
+                editButton.type = 'button';
+                editButton.className = 'shortcut-edit-btn';
+                editButton.textContent = 'Edit';
+                editButton.addEventListener('click', () => openEditShortcutModal(key));
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.className = 'shortcut-delete-btn';
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => deleteShortcut(key));
+                
+                actions.appendChild(editButton);
+                actions.appendChild(deleteButton);
+                
+                li.appendChild(info);
+                li.appendChild(actions);
+                
+                shortcutsList.appendChild(li);
+            }
+        }
+
+        // Dark mode toggle handler
+        function onDarkModeChange(e) {
+            const isDarkMode = e.target.checked;
+            applyTheme(currentSettings.theme, isDarkMode);
+            currentSettings.darkMode = isDarkMode;
+        }
+
+        // Theme change handler
+        function onThemeChange(e) {
+            const theme = e.target.value;
+            applyTheme(theme, currentSettings.darkMode);
+            currentSettings.theme = theme;
+        }
+
+        // New tab setting handler
+        function onNewTabChange(e) {
+            currentSettings.openLinksInNewTab = e.target.checked;
+        }
+
+        // Apply theme to page
+        function applyTheme(themeName, isDarkMode) {
+            const theme = THEMES[themeName] || THEMES.default;
+            const colors = isDarkMode ? theme.dark : theme.light;
+            
+            // Toggle dark mode class
+            document.documentElement.classList.toggle('dark-mode', isDarkMode);
+            
+            // Store theme data in the document
+            document.documentElement.dataset.theme = themeName;
+            document.documentElement.dataset.darkMode = isDarkMode;
+            
+            // Apply basic colors
+            document.documentElement.style.setProperty('--color-background', colors.background);
+            document.documentElement.style.setProperty('--color-text', colors.text);
+            document.documentElement.style.setProperty('--color-text-subtle', colors.textSubtle);
+            document.documentElement.style.setProperty('--color-accent', colors.accent);
+            document.documentElement.style.setProperty('--color-hover', colors.hover);
+            document.documentElement.style.setProperty('--box-shadow', colors.boxShadow);
+            
+            // Apply gradient
+            if (colors.gradient && colors.gradient !== 'none') {
+                document.documentElement.style.backgroundImage = colors.gradient;
+            } else {
+                document.documentElement.style.backgroundImage = 'none';
+            }
+            
+            // Apply additional theme-specific styles
+            if (colors.borderRadius) {
+                document.documentElement.style.setProperty('--border-radius', colors.borderRadius);
+            } else {
+                document.documentElement.style.setProperty('--border-radius', '8px');
+            }
+            
+            if (colors.fontFamily) {
+                document.documentElement.style.fontFamily = colors.fontFamily;
+            } else {
+                document.documentElement.style.fontFamily = 'var(--font-family)';
+            }
+            
+            if (colors.fontSize) {
+                document.documentElement.style.fontSize = colors.fontSize;
+            } else {
+                document.documentElement.style.fontSize = 'var(--font-size)';
+            }
+            
+            // Dispatch theme changed event for other components
+            document.dispatchEvent(new CustomEvent('themeChanged', {
+                detail: { theme: themeName, darkMode: isDarkMode }
+            }));
+            
+            // Handle special theme properties
+            if (themeName === 'minimal') {
+                // Set minimal styles
+                document.querySelectorAll('.corner-text').forEach(el => {
+                    el.style.opacity = '0';
+                });
+                
+                // Style minimal specific settings
+                const buttons = document.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    btn.style.borderRadius = colors.borderRadius || '0';
+                });
+                
+            } else if (themeName === 'glass') {
+                // Apply glass theme properties
+                document.documentElement.style.backdropFilter = colors.backdropFilter || 'blur(10px)';
+                
+                // Style the back link for glass theme
+                const backLink = document.querySelector('.back-link');
+                if (backLink) {
+                    backLink.style.color = colors.accent;
+                }
+                
+                // Style buttons for glass theme
+                const buttons = document.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    if (btn.classList.contains('save-button')) {
+                        btn.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.1)';
+                    }
+                });
+                
+            } else if (themeName === 'ocean') {
+                // Apply Ocean theme properties
+                document.documentElement.style.backdropFilter = colors.backdropFilter || 'blur(8px)';
+                
+                // Style buttons for ocean theme
+                const saveButton = document.querySelector('.save-button');
+                if (saveButton) {
+                    saveButton.style.boxShadow = colors.boxShadow;
+                }
+                
+                // Apply animations if enabled
+                if (colors.uiAnimation === 'true') {
+                    const styleElement = document.getElementById('ocean-animations');
+                    if (!styleElement) {
+                        const style = document.createElement('style');
+                        style.id = 'ocean-animations';
+                        style.textContent = `
+                            .shortcut-item {
+                                transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+                            }
+                            .shortcut-item:hover {
+                                transform: translateY(-2px) !important;
+                                box-shadow: 0 4px 12px rgba(0, 131, 143, 0.15) !important;
+                            }
+                            
+                            .save-button {
+                                transition: all 0.3s ease !important;
+                            }
+                            .save-button:hover {
+                                transform: translateY(-2px);
+                                box-shadow: 0 6px 14px rgba(0, 131, 143, 0.2) !important;
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+                } else {
+                    const styleElement = document.getElementById('ocean-animations');
+                    if (styleElement) {
+                        styleElement.remove();
+                    }
+                }
+                
+            } else if (themeName === 'swiss') {
+                // Apply Swiss theme properties
+                document.documentElement.style.letterSpacing = colors.letterSpacing || '0.03em';
+                
+                if (colors.fontWeight) {
+                    document.documentElement.style.fontWeight = colors.fontWeight;
+                }
+                
+                // Style corner texts for Swiss theme
+                document.querySelectorAll('.shortcut-key').forEach(el => {
+                    el.style.backgroundColor = colors.accent;
+                    el.style.borderRadius = '0';
+                });
+                
+                // Apply Swiss button styles
+                document.querySelectorAll('button').forEach(btn => {
+                    btn.style.borderRadius = '0';
+                    if (btn.classList.contains('save-button')) {
+                        btn.style.backgroundColor = colors.accent;
+                    }
+                });
+                
+                // Create Swiss style for form elements
+                const styleElement = document.getElementById('swiss-style');
+                if (!styleElement) {
+                    const style = document.createElement('style');
+                    style.id = 'swiss-style';
+                    style.textContent = `
+                        .settings-select, .form-input {
+                            border-radius: 0 !important;
+                        }
+                        .shortcut-item {
+                            border-radius: 0 !important;
+                            border-left: 2px solid transparent;
+                            transition: all 0.2s ease;
+                        }
+                        .shortcut-item:hover {
+                            border-left-color: ${colors.accent};
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            } else {
+                // Reset to default styles for other themes
+                document.documentElement.style.backdropFilter = 'none';
+                document.documentElement.style.letterSpacing = '';
+                document.documentElement.style.fontWeight = '';
+                
+                // Remove theme-specific style elements
+                const oceanStyles = document.getElementById('ocean-animations');
+                if (oceanStyles) oceanStyles.remove();
+                
+                const swissStyles = document.getElementById('swiss-style');
+                if (swissStyles) swissStyles.remove();
+                
+                // Reset any styled elements
+                document.querySelectorAll('.shortcut-key').forEach(el => {
+                    el.style.borderRadius = '';
+                    el.style.backgroundColor = '';
+                });
+                
+                document.querySelectorAll('button').forEach(btn => {
+                    btn.style.borderRadius = '';
+                    btn.style.boxShadow = '';
+                    btn.style.backgroundColor = '';
+                });
+            }
+        }
+
+        // Save settings to localStorage
+        function saveSettings() {
+            try {
+                // Save settings with all necessary theme information
+                localStorage.setItem('homeSettings', JSON.stringify(currentSettings));
+                
+                // Save commands
+                const commandsArray = Array.from(commands.entries());
+                localStorage.setItem('homeCommands', JSON.stringify(commandsArray));
+                
+                // Show a brief success message
+                const button = saveButton;
+                const originalText = button.textContent;
+                button.textContent = 'Saved!';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 2000);
+                
+                // Alert user that they need to go back to homepage to see changes
+                setTimeout(() => {
+                    alert('Settings saved successfully! Return to the homepage to see your changes.');
+                }, 500);
+            } catch (e) {
+                console.error('Error saving settings:', e);
+                alert('There was an error saving your settings. Please try again.');
+            }
+        }
+
+        // Open add shortcut modal
+        function openAddShortcutModal() {
+            editingKey = null;
+            modalTitle.textContent = 'Add Shortcut';
+            shortcutKeyInput.value = '';
+            shortcutNameInput.value = '';
+            shortcutUrlInput.value = '';
+            shortcutModal.classList.add('active');
+        }
+
+        // Open edit shortcut modal
+        function openEditShortcutModal(key) {
+            if (!commands.has(key)) return;
+            
+            const command = commands.get(key);
+            editingKey = key;
+            
+            modalTitle.textContent = 'Edit Shortcut';
+            shortcutKeyInput.value = key;
+            shortcutNameInput.value = command.name || '';
+            shortcutUrlInput.value = command.url || '';
+            
+            shortcutModal.classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            shortcutModal.classList.remove('active');
+        }
+
+        // Save shortcut
+        function onShortcutSave(e) {
+            e.preventDefault();
+            
+            const key = shortcutKeyInput.value.trim().toLowerCase();
+            const name = shortcutNameInput.value.trim();
+            const url = shortcutUrlInput.value.trim();
+            
+            // Validate inputs
+            if (!key || !name || !url) {
+                alert('All fields are required.');
+                return;
+            }
+            
+            // Ensure key is a single character
+            if (key.length !== 1) {
+                alert('Key must be a single character.');
+                return;
+            }
+            
+            // If we're changing the key, check if it's already in use
+            if (key !== editingKey && commands.has(key)) {
+                alert(`Key "${key}" is already in use. Please choose another.`);
+                return;
+            }
+            
+            // Create or update the command
+            const command = { name, url };
+            
+            // If we're changing the key, remove the old entry
+            if (editingKey && editingKey !== key) {
+                commands.delete(editingKey);
+            }
+            
+            // Set the new command
+            commands.set(key, command);
+            
+            // Re-render shortcuts
+            renderShortcuts();
+            
+            // Close the modal
+            closeModal();
+        }
+
+        // Delete shortcut
+        function deleteShortcut(key) {
+            if (!commands.has(key)) return;
+            
+            const command = commands.get(key);
+            if (confirm(`Delete the shortcut "${key}" - ${command.name}?`)) {
+                commands.delete(key);
+                renderShortcuts();
+            }
+        }
+    </script>
+</body>
+</html>
