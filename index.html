@@ -9,6 +9,105 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <title>~</title>
 
+<!-- Preload theme script to prevent flash -->
+<script>
+    // Apply theme immediately before page renders to prevent flash
+    (function() {
+        try {
+            const savedSettings = localStorage.getItem('homeSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                const themeName = settings.theme || 'default';
+                const isDarkMode = settings.darkMode || false;
+                
+                // Apply dark mode class
+                document.documentElement.classList.toggle('dark-mode', isDarkMode);
+                
+                // Store theme data in a data attribute for components to access
+                document.documentElement.dataset.theme = themeName;
+                document.documentElement.dataset.darkMode = isDarkMode;
+                
+                // Define basic theme properties - just enough to prevent flash
+                const BASIC_THEMES = {
+                    default: {
+                        light: {
+                            background: '#f8f5e6',
+                            gradient: 'linear-gradient(135deg, #f8f5e6, #f2edd0)',
+                            text: '#222222'
+                        },
+                        dark: {
+                            background: '#1a1a1a',
+                            gradient: 'linear-gradient(135deg, #222, #333)',
+                            text: '#e0e0e0'
+                        }
+                    },
+                    minimal: {
+                        light: {
+                            background: '#ffffff',
+                            gradient: 'none',
+                            text: '#000000'
+                        },
+                        dark: {
+                            background: '#000000',
+                            gradient: 'none',
+                            text: '#ffffff'
+                        }
+                    },
+                    glass: {
+                        light: {
+                            background: 'rgba(255, 255, 255, 0.7)',
+                            gradient: 'linear-gradient(135deg, #f5f7fa, #c3cfe2)',
+                            text: '#334155'
+                        },
+                        dark: {
+                            background: 'rgba(15, 23, 42, 0.7)',
+                            gradient: 'linear-gradient(135deg, #0f172a, #1e293b)',
+                            text: '#e2e8f0'
+                        }
+                    },
+                    ocean: {
+                        light: {
+                            background: '#e0f7fa',
+                            gradient: 'linear-gradient(135deg, #e0f7fa, #80deea 50%, #4dd0e1)',
+                            text: '#006064'
+                        },
+                        dark: {
+                            background: '#002f35',
+                            gradient: 'linear-gradient(135deg, #002f35, #00363a 50%, #004d40)',
+                            text: '#e0f7fa'
+                        }
+                    },
+                    swiss: {
+                        light: {
+                            background: '#ffffff',
+                            gradient: 'none',
+                            text: '#111111'
+                        },
+                        dark: {
+                            background: '#000000',
+                            gradient: 'none',
+                            text: '#ffffff'
+                        }
+                    }
+                };
+                
+                // Apply basic colors immediately
+                const theme = BASIC_THEMES[themeName] || BASIC_THEMES.default;
+                const colors = isDarkMode ? theme.dark : theme.light;
+                
+                document.documentElement.style.backgroundColor = colors.background;
+                document.documentElement.style.color = colors.text;
+                
+                if (colors.gradient && colors.gradient !== 'none') {
+                    document.documentElement.style.backgroundImage = colors.gradient;
+                }
+            }
+        } catch (e) {
+            console.error('Error pre-loading theme:', e);
+        }
+    })();
+</script>
+
 <script>
     // Initialize and load saved shortcuts
     document.addEventListener('DOMContentLoaded', function() {
@@ -29,13 +128,13 @@
             console.error('Error loading saved commands:', e);
         }
         
-        // Make sure to apply saved theme first before other components initialize
+        // Apply saved theme with full settings
         try {
             const savedSettings = localStorage.getItem('homeSettings');
             if (savedSettings) {
                 const settings = JSON.parse(savedSettings);
                 
-                // Apply dark mode class
+                // Apply dark mode class (already done in preload, but ensure it's set)
                 document.documentElement.classList.toggle('dark-mode', settings.darkMode || false);
                 
                 // Store theme data in a data attribute for commands component to access
@@ -47,11 +146,11 @@
                 // Update CONFIG with openLinksInNewTab setting
                 CONFIG.openLinksInNewTab = settings.openLinksInNewTab || false;
                 
-                // Apply theme styling based on the theme name
+                // Apply complete theme styling
                 applyTheme(themeName, isDarkMode);
             }
         } catch (e) {
-            console.error('Error pre-loading theme settings:', e);
+            console.error('Error loading theme settings:', e);
         }
     });
 
