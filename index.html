@@ -111,6 +111,9 @@
 <script>
     // Initialize and load saved shortcuts
     document.addEventListener('DOMContentLoaded', function() {
+        // Mark body as loading
+        document.body.classList.add('loading');
+        
         // Load saved commands if they exist
         try {
             const savedCommands = localStorage.getItem('homeCommands');
@@ -152,6 +155,11 @@
         } catch (e) {
             console.error('Error loading theme settings:', e);
         }
+        
+        // Show the body after a short delay to ensure everything is rendered
+        setTimeout(() => {
+            document.body.classList.remove('loading');
+        }, 100);
     });
 
     // Function to apply theme styling
@@ -613,6 +621,16 @@
                     console.error(`Error updating URL for command ${key}:`, e);
                 }
             });
+            
+            // After updating links, manually trigger a re-render of the commands component
+            setTimeout(() => {
+                const commandsComponent = document.querySelector('commands-component');
+                if (commandsComponent) {
+                    commandsComponent.initialize();
+                }
+                // Make sure the page is visible
+                document.body.classList.remove('loading');
+            }, 10);
         }
 
         function isLocalNetwork() {
@@ -633,18 +651,21 @@
                             console.log('Is local network:', isLocal);
 
                             updateLinks(isLocal);
-                            // Reinitialize the commands component to apply the updated URLs
-                            document.querySelector('commands-component').initialize();
                         })
                         .catch(error => {
                             console.error('Error resolving domain IP:', error);
+                            // Show the body even if there's an error
+                            document.body.classList.remove('loading');
                         });
                 })
                 .catch(error => {
                     console.error('Error detecting public IP:', error);
+                    // Show the body even if there's an error
+                    document.body.classList.remove('loading');
                 });
         }
 
+        // Start the local network check
         isLocalNetwork();
         
         // Create settings dot that links to settings.html
@@ -653,9 +674,17 @@
         settingsDot.href = 'settings.html';
         document.body.appendChild(settingsDot);
         
-        // Existing event listeners
+        // Set greeting and quote
         document.getElementById('greeting').textContent = getGreeting();
         document.getElementById('quote').textContent = getRandomQuote();
+        
+        // Load corner text
+        loadCornerText();
+        
+        // Failsafe: ensure page becomes visible after 2 seconds no matter what
+        setTimeout(() => {
+            document.body.classList.remove('loading');
+        }, 2000);
     });
 
     class Commands extends HTMLElement {
@@ -667,7 +696,12 @@
             // to prevent any flash of unstyled content
             this._preStyleShadowRoot();
             
-            this.initialize();
+            // Wait for the document to be fully loaded before initializing
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => this.initialize());
+            } else {
+                this.initialize();
+            }
         }
         
         // Pre-style the shadow root with theme-specific styles before content is added
@@ -1877,6 +1911,12 @@
         margin: 0;
         color: var(--color-text);
         height: 100%;
+        visibility: visible; /* Changed from opacity to visibility */
+    }
+
+    /* Remove the opacity transition */
+    body.loading {
+        visibility: hidden; /* Hide during loading */
     }
 
     main {
@@ -2049,11 +2089,31 @@
         return QUOTES[Math.floor(Math.random() * QUOTES.length)];
     }
 
+    // Function to load corner text from settings
+    function loadCornerText() {
+        try {
+            const savedSettings = localStorage.getItem('homeSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                const cornerText = document.getElementById('corner-text');
+                if (cornerText && settings.cornerText) {
+                    cornerText.textContent = settings.cornerText;
+                }
+            }
+        } catch (e) {
+            console.error('Error loading corner text:', e);
+        }
+    }
+
     // Set corner text content when DOM is loaded
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('greeting').textContent = getGreeting();
         document.getElementById('quote').textContent = getRandomQuote();
+        loadCornerText();
     });
+
+    // Listen for theme changes to update corner text
+    document.addEventListener('themeChanged', loadCornerText);
 </script>
 
 <main>
@@ -2075,5 +2135,5 @@
 </div>
 
 <div class="corner-text bottom-right">
-    A. Magno
+    <span id="corner-text">A. Magno</span>
 </div>

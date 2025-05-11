@@ -118,6 +118,7 @@
             --color-text: #222222; /* Near black text */
             --color-accent: #333333; /* Accent color */
             --color-hover: #444444; /* Hover color */
+            --color-accent-rgb: 51, 51, 51; /* RGB values for accent color */
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-size: clamp(13px, 1vw, 15px); /* Smaller font size */
             --font-weight-bold: 500;
@@ -138,25 +139,28 @@
 
         body {
             margin: 0;
+            padding: 0;
             color: var(--color-text);
-            height: 100%;
+            min-height: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            align-items: flex-start;
+            padding-top: 2rem;
+            padding-bottom: 4rem;
         }
 
         .back-link {
             position: fixed;
-            top: 1rem;
-            left: 1rem;
-            color: var(--color-text-subtle);
+            top: 1.5rem;
+            left: 1.5rem;
+            padding: 0.7rem 1.2rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 100;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            transition: all var(--transition-speed);
-            font-weight: var(--font-weight-bold);
-            font-size: 0.9em;
         }
 
         .back-link:hover {
@@ -171,19 +175,32 @@
 
         .settings-container {
             width: 100%;
-            max-width: 600px;
+            max-width: 1200px;
             padding: 2rem;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            align-items: start;
+            box-sizing: border-box;
         }
 
         .settings-header {
-            margin-bottom: 2rem;
+            grid-column: 1 / -1;
+            margin-bottom: 1.5rem;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            padding-bottom: 1rem;
+            padding-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-header-content {
+            flex: 1;
         }
 
         .settings-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: var(--font-weight-bold);
             margin: 0 0 0.5rem 0;
         }
@@ -194,16 +211,37 @@
             font-size: 0.9rem;
         }
 
-        /* Settings sections styling */
         .settings-section {
-            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        html.dark-mode .settings-section {
+            background: rgba(30, 30, 30, 0.5);
+            border-color: rgba(255, 255, 255, 0.05);
         }
 
         .settings-section-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: var(--font-weight-bold);
-            margin: 0 0 1rem 0;
+            margin: 0 0 1.2rem 0;
             color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-section-title::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 1.2em;
+            background-color: var(--color-accent);
+            border-radius: 2px;
         }
 
         .settings-option {
@@ -211,22 +249,270 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 1rem;
-            padding: 0.8rem;
+            padding: 1rem;
             background-color: rgba(255, 255, 255, 0.5);
             border-radius: var(--border-radius);
             border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .settings-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        html.dark-mode .settings-option {
+            background-color: rgba(40, 40, 40, 0.5);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        html.dark-mode .settings-option:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .settings-option:last-child {
+            margin-bottom: 0;
         }
 
         .settings-option-label {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--color-text);
+            font-weight: var(--font-weight-bold);
         }
 
         .settings-option-description {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--color-text-subtle);
             margin-top: 0.3rem;
+            max-width: 80%;
+        }
+
+        /* Make shortcuts section full width */
+        .settings-section.shortcuts-section {
+            grid-column: 1 / -1;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        html.dark-mode .settings-section.shortcuts-section {
+            background: rgba(30, 30, 30, 0.7);
+        }
+
+        .shortcuts-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .shortcut-item {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        html.dark-mode .shortcut-item {
+            background: rgba(40, 40, 40, 0.8);
+            border-color: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .shortcut-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .shortcut-key {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-accent);
+            color: white;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: var(--font-weight-bold);
+            flex-shrink: 0;
+        }
+
+        .shortcut-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .shortcut-name {
+            font-size: 1rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text);
+            margin-bottom: 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .shortcut-url {
+            font-size: 0.85rem;
+            color: var(--color-text-subtle);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .shortcut-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .shortcut-edit-btn, .shortcut-delete-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--color-text);
+            font-size: 0.85rem;
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .shortcut-edit-btn:hover {
+            background: var(--color-accent);
+            color: white;
+            border-color: var(--color-accent);
+        }
+
+        .shortcut-delete-btn {
+            color: #e53935;
+            border-color: rgba(229, 57, 53, 0.2);
+        }
+
+        .shortcut-delete-btn:hover {
+            background: #e53935;
+            color: white;
+            border-color: #e53935;
+        }
+
+        .shortcut-add-btn {
+            width: 100%;
+            padding: 1rem;
+            border: 2px dashed rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.3);
+            color: var(--color-text-subtle);
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .shortcut-add-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        .shortcut-add-btn::before {
+            content: "+";
+            font-size: 1.2em;
+        }
+
+        /* Data management section styling */
+        .data-management-section {
+            grid-column: 1 / -1;
+        }
+
+        .data-management-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .data-btn {
+            padding: 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--color-text);
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .data-btn:hover {
+            background: var(--color-accent);
+            color: white;
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .export-btn::before {
+            content: "↓";
+        }
+
+        .import-btn::before {
+            content: "↑";
+        }
+
+        /* Save button container */
+        .save-button-container {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .save-button {
+            padding: 1rem 2.5rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 200px;
+        }
+
+        .save-button:hover {
+            background: var(--color-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        html.dark-mode .save-button {
+            background: #505050;
+        }
+
+        html.dark-mode .save-button:hover {
+            background: #707070;
         }
 
         /* Toggle switch styling */
@@ -277,199 +563,26 @@
 
         /* Select styling */
         .settings-select {
-            font-family: var(--font-family);
-            font-size: 0.85rem;
-            color: var(--color-text);
-            background-color: rgba(255, 255, 255, 0.7);
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
             border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: var(--border-radius);
-            padding: 0.5rem;
-            min-width: 120px;
-            outline: none;
-            transition: all var(--transition-speed);
+            background-color: rgba(255, 255, 255, 0.7);
+            color: var(--color-text);
+            transition: all 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .settings-select:focus {
+            outline: none;
             border-color: var(--color-accent);
-        }
-
-        /* Dark mode style overrides */
-        html.dark-mode {
-            background-color: #1a1a1a;
-            background-image: linear-gradient(135deg, #222, #333);
-            color: #e0e0e0;
-        }
-
-        html.dark-mode .settings-option {
-            background-color: rgba(30, 30, 30, 0.5);
-            border-color: rgba(255, 255, 255, 0.05);
-        }
-
-        html.dark-mode .settings-option-label {
-            color: #e0e0e0;
-        }
-
-        html.dark-mode .settings-option-description {
-            color: #a0a0a0;
+            box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.1);
         }
 
         html.dark-mode .settings-select {
             background-color: rgba(40, 40, 40, 0.7);
-            color: #e0e0e0;
             border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Save button styling */
-        .save-button {
-            display: block;
-            margin: 2rem auto 0;
-            padding: 0.8rem 2rem;
-            background-color: var(--color-accent);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            font-family: var(--font-family);
-            font-size: 0.9rem;
-            font-weight: var(--font-weight-bold);
-            cursor: pointer;
-            transition: all var(--transition-speed);
-        }
-
-        .save-button:hover {
-            background-color: var(--color-hover);
-        }
-
-        html.dark-mode .save-button {
-            background-color: #505050;
-        }
-
-        html.dark-mode .save-button:hover {
-            background-color: #707070;
-        }
-
-        /* Shortcut management styling */
-        .shortcuts-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .shortcut-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            padding: 0.6rem 0.8rem;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: var(--border-radius);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        html.dark-mode .shortcut-item {
-            background-color: rgba(30, 30, 30, 0.5);
-            border-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .shortcut-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .shortcut-key {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            line-height: 24px;
-            text-align: center;
-            background-color: var(--color-accent);
-            color: white;
-            border-radius: 4px;
-            margin-right: 0.5rem;
-            font-size: 0.8rem;
-            font-weight: var(--font-weight-bold);
-        }
-
-        .shortcut-name {
-            font-size: 0.85rem;
-            margin-right: 0.5rem;
-        }
-
-        .shortcut-url {
-            font-size: 0.75rem;
-            color: var(--color-text-subtle);
-            max-width: 250px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        html.dark-mode .shortcut-url {
-            color: #a0a0a0;
-        }
-
-        .shortcut-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .shortcut-edit-btn, .shortcut-delete-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 0.8rem;
-            opacity: 0.7;
-            transition: opacity var(--transition-speed);
-            color: var(--color-text);
-            padding: 0.3rem;
-        }
-
-        html.dark-mode .shortcut-edit-btn, 
-        html.dark-mode .shortcut-delete-btn {
-            color: #e0e0e0;
-        }
-
-        .shortcut-edit-btn:hover, 
-        .shortcut-delete-btn:hover {
-            opacity: 1;
-        }
-
-        .shortcut-delete-btn {
-            color: #e53935;
-        }
-
-        html.dark-mode .shortcut-delete-btn {
-            color: #f44336;
-        }
-
-        .shortcut-add-btn {
-            display: block;
-            margin-top: 1rem;
-            padding: 0.5rem;
-            width: 100%;
-            border: 1px dashed rgba(0, 0, 0, 0.2);
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: var(--border-radius);
-            font-family: var(--font-family);
-            font-size: 0.85rem;
-            color: var(--color-text-subtle);
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            text-align: center;
-        }
-
-        html.dark-mode .shortcut-add-btn {
-            border-color: rgba(255, 255, 255, 0.2);
-            background-color: rgba(255, 255, 255, 0.05);
-            color: #a0a0a0;
-        }
-
-        .shortcut-add-btn:hover {
-            background-color: rgba(255, 255, 255, 0.5);
-            color: var(--color-text);
-        }
-
-        html.dark-mode .shortcut-add-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
             color: #e0e0e0;
         }
 
@@ -488,6 +601,7 @@
             opacity: 0;
             visibility: hidden;
             transition: all var(--transition-speed);
+            backdrop-filter: blur(3px);
         }
 
         .modal-overlay.active {
@@ -551,26 +665,27 @@
         }
 
         .form-input {
-            width: 100%;
-            padding: 0.5rem;
-            font-family: var(--font-family);
-            font-size: 0.85rem;
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
             border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: var(--border-radius);
             background-color: rgba(255, 255, 255, 0.7);
             color: var(--color-text);
+            transition: all 0.2s ease;
+            width: 100%;
             box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.1);
         }
 
         html.dark-mode .form-input {
             background-color: rgba(40, 40, 40, 0.7);
             border-color: rgba(255, 255, 255, 0.1);
             color: #e0e0e0;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--color-accent);
         }
 
         .form-input.key-input {
@@ -630,55 +745,6 @@
 
         html.dark-mode .modal-btn-save:hover {
             background-color: #707070;
-        }
-
-        /* Data management section */
-        .data-management-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .data-btn {
-            padding: 0.6rem 1rem;
-            font-family: var(--font-family);
-            font-size: 0.85rem;
-            background-color: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: var(--border-radius);
-            color: var(--color-text);
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            display: flex;
-            align-items: center;
-            flex: 1;
-            justify-content: center;
-        }
-
-        .data-btn:hover {
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-
-        .data-btn:before {
-            margin-right: 0.5rem;
-            font-size: 1.1em;
-        }
-
-        .export-btn:before {
-            content: "↓";
-        }
-
-        .import-btn:before {
-            content: "↑";
-        }
-
-        html.dark-mode .data-btn {
-            background-color: rgba(40, 40, 40, 0.5);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        html.dark-mode .data-btn:hover {
-            background-color: rgba(60, 60, 60, 0.7);
         }
 
         /* Import input styling */
@@ -875,11 +941,12 @@
     
     <div class="settings-container">
         <div class="settings-header">
-            <h1 class="settings-title">Settings</h1>
-            <p class="settings-description">Customize your homepage experience</p>
+            <div class="settings-header-content">
+                <h1 class="settings-title">Settings</h1>
+                <p class="settings-description">Customize your homepage experience</p>
+            </div>
         </div>
 
-        <!-- Settings content will be added here in subsequent edits -->
         <div class="settings-section">
             <h2 class="settings-section-title">Appearance</h2>
             
@@ -907,6 +974,14 @@
                     <option value="swiss">Swiss</option>
                 </select>
             </div>
+
+            <div class="settings-option">
+                <div>
+                    <span class="settings-option-label">Corner Text</span>
+                    <span class="settings-option-description">Text displayed in the bottom right corner</span>
+                </div>
+                <input type="text" id="corner-text-setting" class="settings-select" placeholder="Enter corner text">
+            </div>
         </div>
 
         <div class="settings-section">
@@ -924,7 +999,7 @@
             </div>
         </div>
 
-        <div class="settings-section">
+        <div class="settings-section shortcuts-section">
             <h2 class="settings-section-title">Shortcuts</h2>
             <p class="settings-option-description" style="margin-bottom: 1rem;">Manage your homepage shortcuts</p>
             
@@ -935,8 +1010,7 @@
             <button type="button" id="add-shortcut" class="shortcut-add-btn">+ Add New Shortcut</button>
         </div>
 
-        <!-- Data Management Section -->
-        <div class="settings-section">
+        <div class="settings-section data-management-section">
             <h2 class="settings-section-title">Data Management</h2>
             <p class="settings-option-description" style="margin-bottom: 1rem;">Export or import your settings and shortcuts</p>
             
@@ -946,7 +1020,9 @@
             </div>
         </div>
 
-        <button type="button" id="save-settings" class="save-button">Save Settings</button>
+        <div class="save-button-container">
+            <button type="button" id="save-settings" class="save-button">Save Settings</button>
+        </div>
     </div>
 
     <!-- Shortcut Editor Modal -->
@@ -1238,7 +1314,8 @@
         let currentSettings = {
             openLinksInNewTab: false,
             darkMode: false,
-            theme: 'default'
+            theme: 'default',
+            cornerText: ''
         };
         
         let commands = new Map();
@@ -1248,6 +1325,7 @@
         const darkModeSetting = document.getElementById('dark-mode-setting');
         const themeSelect = document.getElementById('theme-select');
         const newTabSetting = document.getElementById('new-tab-setting');
+        const cornerTextSetting = document.getElementById('corner-text-setting');
         const saveButton = document.getElementById('save-settings');
         const shortcutsList = document.getElementById('shortcuts-list');
         const addShortcutButton = document.getElementById('add-shortcut');
@@ -1287,6 +1365,9 @@
             darkModeSetting.addEventListener('change', onDarkModeChange);
             themeSelect.addEventListener('change', onThemeChange);
             newTabSetting.addEventListener('change', onNewTabChange);
+            cornerTextSetting.addEventListener('change', (e) => {
+                currentSettings.cornerText = e.target.value.trim();
+            });
             saveButton.addEventListener('click', saveSettings);
             
             // Shortcut modal event listeners
@@ -1315,13 +1396,15 @@
                     currentSettings = {
                         openLinksInNewTab: settings.openLinksInNewTab || false,
                         darkMode: settings.darkMode || false,
-                        theme: settings.theme || 'default'
+                        theme: settings.theme || 'default',
+                        cornerText: settings.cornerText || ''
                     };
                     
                     // Update form elements
                     darkModeSetting.checked = currentSettings.darkMode;
                     themeSelect.value = currentSettings.theme;
                     newTabSetting.checked = currentSettings.openLinksInNewTab;
+                    cornerTextSetting.value = currentSettings.cornerText;
                 }
             } catch (e) {
                 console.error('Error loading settings:', e);
@@ -1367,17 +1450,22 @@
                 keySpan.className = 'shortcut-key';
                 keySpan.textContent = key;
                 
-                const nameSpan = document.createElement('span');
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'shortcut-details';
+                
+                const nameSpan = document.createElement('div');
                 nameSpan.className = 'shortcut-name';
                 nameSpan.textContent = command.name;
                 
-                const urlSpan = document.createElement('span');
+                const urlSpan = document.createElement('div');
                 urlSpan.className = 'shortcut-url';
                 urlSpan.textContent = command.url;
                 
+                detailsDiv.appendChild(nameSpan);
+                detailsDiv.appendChild(urlSpan);
+                
                 info.appendChild(keySpan);
-                info.appendChild(nameSpan);
-                info.appendChild(urlSpan);
+                info.appendChild(detailsDiv);
                 
                 const actions = document.createElement('div');
                 actions.className = 'shortcut-actions';
@@ -1626,7 +1714,7 @@
                 const commandsArray = Array.from(commands.entries());
                 localStorage.setItem('homeCommands', JSON.stringify(commandsArray));
                 
-                // Show a brief success message
+                // Show a brief success message in the button
                 const button = saveButton;
                 const originalText = button.textContent;
                 button.textContent = 'Saved!';
@@ -1635,12 +1723,7 @@
                 setTimeout(() => {
                     button.textContent = originalText;
                     button.disabled = false;
-                }, 2000);
-                
-                // Alert user that they need to go back to homepage to see changes
-                setTimeout(() => {
-                    alert('Settings saved successfully! Return to the homepage to see your changes.');
-                }, 500);
+                }, 1500);
             } catch (e) {
                 console.error('Error saving settings:', e);
                 alert('There was an error saving your settings. Please try again.');
@@ -1861,13 +1944,15 @@
                 currentSettings = {
                     openLinksInNewTab: importData.settings.openLinksInNewTab || false,
                     darkMode: importData.settings.darkMode || false,
-                    theme: importData.settings.theme || 'default'
+                    theme: importData.settings.theme || 'default',
+                    cornerText: importData.settings.cornerText || ''
                 };
                 
                 // Update UI to reflect imported settings
                 darkModeSetting.checked = currentSettings.darkMode;
                 themeSelect.value = currentSettings.theme;
                 newTabSetting.checked = currentSettings.openLinksInNewTab;
+                cornerTextSetting.value = currentSettings.cornerText;
                 
                 // Update commands
                 commands = new Map(importData.commands);
