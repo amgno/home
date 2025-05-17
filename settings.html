@@ -186,6 +186,18 @@
                                 gradient: 'linear-gradient(135deg, #2e3440, #3b4252)',
                                 text: '#eceff4'
                             }
+                        },
+                        mac: {
+                            light: {
+                                background: '#ffffff',
+                                gradient: 'linear-gradient(135deg, #ffffff, #f5f5f7)',
+                                text: '#1d1d1f'
+                            },
+                            dark: {
+                                background: '#000000',
+                                gradient: 'linear-gradient(135deg, #000000, #1d1d1f)',
+                                text: '#f5f5f7'
+                            }
                         }
                     };
                     
@@ -1280,6 +1292,7 @@
                     <option value="bauhaus">Bauhaus</option>
                     <option value="vaporwave">Vaporwave</option>
                     <option value="nordic">Nordic</option>
+                    <option value="mac">Mac</option>
                     <option value="custom">Custom</option>
                 </select>
             </div>
@@ -2183,6 +2196,90 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                     nameHoverColor: '#88c0d0',
                     simplifiedLayout: 'true'
                 }
+            },
+            mac: {
+                light: {
+                    background: '#ffffff',
+                    gradient: 'linear-gradient(135deg, #ffffff, #f5f5f7)',
+                    text: '#1d1d1f',
+                    textSubtle: '#86868b',
+                    accent: '#0071e3',
+                    hover: '#0077ed',
+                    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.03)',
+                    borderRadius: '8px',
+                    commandsBackground: 'rgba(255, 255, 255, 0.8)',
+                    commandsBorder: '1px solid rgba(0, 0, 0, 0.05)',
+                    commandsBoxShadow: '0 10px 20px rgba(0, 0, 0, 0.05)',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    keyColor: '#0071e3',
+                    commandMaxWidth: '70rem',
+                    cornerTextStyle: 'font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; letter-spacing: -0.01em; font-size: 0.75rem; font-weight: 400; opacity: 0.7;',
+                    dotSize: '4px',
+                    dotOpacity: '0.1',
+                    nameAfterHeight: '0px',
+                    gridGap: '1.5rem',
+                    minimalInterface: 'true',
+                    subtleTransitions: 'true',
+                    cleanSpacing: 'true',
+                    keyStyle: 'background: linear-gradient(to bottom, #f7f7f7, #e2e2e2); border: 1px solid #d1d1d1; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 -1px 0 rgba(255,255,255,0.5) inset, 0 1px 0 rgba(0,0,0,0.1); color: #333; font-weight: 600; transform: translateY(0); transition: all 0.1s ease; position: relative; text-shadow: 0 1px 0 rgba(255,255,255,0.5);',
+                    keyHoverStyle: 'transform: translateY(-1px); box-shadow: 0 2px 3px rgba(0,0,0,0.07), 0 -1px 0 rgba(255,255,255,0.5) inset, 0 1px 0 rgba(0,0,0,0.1);',
+                    keyActiveStyle: 'transform: translateY(1px); box-shadow: 0 0 1px rgba(0,0,0,0.1), 0 -1px 0 rgba(255,255,255,0.5) inset, 0 1px 0 rgba(0,0,0,0.1);',
+                    nameHoverColor: '#0071e3',
+                    keycapStyle: 'true',
+                    key3D: 'true',
+                    keyFontSize: '0.9em',
+                    keyBorderRadius: '4px',
+                    keyPadding: '6px 8px',
+                    keyHeight: '30px',
+                    keyWidth: '30px',
+                    keyVerticalAlign: 'middle',
+                    macKeyboardEffect: 'true',
+                    keyTextAlign: 'center',
+                    inputStyle: 'border-radius: 8px; border: 1px solid rgba(0, 0, 0, 0.1); padding: 8px 12px; background: rgba(255, 255, 255, 0.8);'
+                },
+                dark: {
+                    background: '#000000',
+                    gradient: 'linear-gradient(135deg, #000000, #1d1d1f)',
+                    text: '#f5f5f7',
+                    textSubtle: '#86868b',
+                    accent: '#0077ed',
+                    hover: '#0284ff',
+                    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
+                    borderRadius: '8px',
+                    commandsBackground: 'rgba(28, 28, 30, 0.8)',
+                    commandsBorder: '1px solid rgba(255, 255, 255, 0.05)',
+                    commandsBoxShadow: '0 10px 20px rgba(0, 0, 0, 0.15)',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    keyColor: '#0077ed',
+                    commandMaxWidth: '70rem',
+                    cornerTextStyle: 'font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; letter-spacing: -0.01em; font-size: 0.75rem; font-weight: 400; opacity: 0.7;',
+                    dotSize: '4px',
+                    dotOpacity: '0.2',
+                    nameAfterHeight: '0px',
+                    gridGap: '1.5rem',
+                    minimalInterface: 'true',
+                    subtleTransitions: 'true',
+                    cleanSpacing: 'true',
+                    keyStyle: 'background: linear-gradient(to bottom, #3a3a3c, #2c2c2e); border: 1px solid #1c1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2); color: #f5f5f7; font-weight: 600; transform: translateY(0); transition: all 0.1s ease; position: relative; text-shadow: 0 1px 1px rgba(0,0,0,0.2);',
+                    keyHoverStyle: 'transform: translateY(-1px); box-shadow: 0 2px 3px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2);',
+                    keyActiveStyle: 'transform: translateY(1px); box-shadow: 0 0 1px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2);',
+                    nameHoverColor: '#0077ed',
+                    keycapStyle: 'true',
+                    key3D: 'true',
+                    keyFontSize: '0.9em',
+                    keyBorderRadius: '4px',
+                    keyPadding: '6px 8px',
+                    keyHeight: '30px',
+                    keyWidth: '30px',
+                    keyVerticalAlign: 'middle',
+                    macKeyboardEffect: 'true',
+                    keyTextAlign: 'center',
+                    inputStyle: 'border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 12px; background: rgba(28, 28, 30, 0.8);'
+                }
             }
         };
 
@@ -2884,6 +2981,79 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                     `;
                     document.head.appendChild(style);
                 }
+            } else if (themeName === 'mac') {
+                // Apply Mac theme properties with 3D keyboard-like effects
+                if (colors.fontWeight) {
+                    document.documentElement.style.fontWeight = colors.fontWeight;
+                }
+                
+                // Create Mac 3D keyboard style for shortcut keys
+                const macStyleElement = document.getElementById('mac-style');
+                if (!macStyleElement) {
+                    const style = document.createElement('style');
+                    style.id = 'mac-style';
+                    style.textContent = `
+                        .shortcut-key {
+                            ${colors.keyStyle}
+                            width: ${colors.keyWidth || '30px'};
+                            height: ${colors.keyHeight || '30px'};
+                            border-radius: ${colors.keyBorderRadius || '4px'};
+                            padding: ${colors.keyPadding || '6px 8px'};
+                            text-align: ${colors.keyTextAlign || 'center'};
+                            vertical-align: ${colors.keyVerticalAlign || 'middle'};
+                            font-size: ${colors.keyFontSize || '0.9em'};
+                        }
+                        
+                        .shortcut-key:hover {
+                            ${colors.keyHoverStyle}
+                        }
+                        
+                        .shortcut-key:active {
+                            ${colors.keyActiveStyle}
+                        }
+                        
+                        .shortcut-name {
+                            font-weight: 500;
+                            transition: color 0.2s ease;
+                        }
+                        
+                        .shortcut-item {
+                            background: ${isDarkMode ? 'rgba(28, 28, 30, 0.5)' : 'rgba(255, 255, 255, 0.5)'};
+                            border: 1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'};
+                            transition: transform 0.15s ease, box-shadow 0.15s ease;
+                        }
+                        
+                        .shortcut-item:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 10px ${isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.05)'};
+                        }
+                        
+                        .shortcut-edit-btn, .shortcut-delete-btn {
+                            ${colors.inputStyle || ''}
+                            transition: all 0.15s ease;
+                        }
+                        
+                        .shortcut-edit-btn:hover {
+                            background: ${colors.accent};
+                            color: white;
+                        }
+                        
+                        .settings-select, .form-input, .color-picker-input {
+                            ${colors.inputStyle || ''}
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+                
+                // Update any specific elements that need special styling
+                document.querySelectorAll('.save-button').forEach(btn => {
+                    btn.style.borderRadius = '8px';
+                    btn.style.background = useCustomColors ? currentSettings.customColors.accent : colors.accent;
+                    btn.style.color = '#ffffff';
+                    btn.style.fontWeight = '600';
+                    btn.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
+                    btn.style.transition = 'all 0.15s ease';
+                });
             } else {
                 // Reset to default styles for other themes
                 document.documentElement.style.backdropFilter = 'none';
@@ -2896,6 +3066,9 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                 
                 const swissStyles = document.getElementById('swiss-style');
                 if (swissStyles) swissStyles.remove();
+                
+                const macStyles = document.getElementById('mac-style');
+                if (macStyles) macStyles.remove();
                 
                 // Reset any styled elements
                 document.querySelectorAll('.shortcut-key').forEach(el => {

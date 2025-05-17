@@ -1,8 +1,15 @@
 <!doctype html>
 <meta charset="utf-8" />
-<meta name="color-scheme" content="light" />
+<meta name="color-scheme" content="dark" />
 <meta name="robots" content="noindex" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+    html, body, :root {
+        background-color: #000000 !important;
+        background-image: none !important;
+        color: #f5f5f7 !important;
+    }
+</style>
 <link rel="icon" type="image/x-icon" href="./favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -234,12 +241,18 @@
             if (savedSettings) {
                 const settings = JSON.parse(savedSettings);
                 
-                // Apply dark mode class (already done in preload, but ensure it's set)
-                document.documentElement.classList.toggle('dark-mode', settings.darkMode || false);
+                // For mac theme, force dark mode
+                const themeName = settings.theme || 'default';
+                let isDarkMode = settings.darkMode || false;
+                
+                if (themeName === 'mac') {
+                    isDarkMode = true;
+                }
+                
+                // Apply dark mode class
+                document.documentElement.classList.toggle('dark-mode', isDarkMode);
                 
                 // Store theme data in a data attribute for commands component to access
-                const themeName = settings.theme || 'default';
-                const isDarkMode = settings.darkMode || false;
                 document.documentElement.dataset.theme = themeName;
                 document.documentElement.dataset.darkMode = isDarkMode;
                 
@@ -259,6 +272,10 @@
         }, 100);
     });
 
+    // Force background to be truly black
+    document.documentElement.style.backgroundColor = '#000000';
+    document.documentElement.style.backgroundImage = 'none';
+    
     // Function to apply theme styling
     function applyTheme(themeName, isDarkMode) {
         // Define themes - must match settings.html themes
@@ -1001,6 +1018,94 @@
                     subtleTransitions: 'true',
                     commandsSpacing: '2.2rem'
                 }
+            },
+            mac: {
+                light: {
+                    background: '#000000',
+                    gradient: 'none',
+                    text: '#f5f5f7',
+                    textSubtle: '#86868b',
+                    accent: '#0071e3',
+                    hover: '#0077ed',
+                    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.03)',
+                    borderRadius: '8px',
+                    commandsBackground: 'rgba(255, 255, 255, 0.8)',
+                    commandsBorder: '1px solid rgba(0, 0, 0, 0.05)',
+                    commandsBoxShadow: '0 10px 20px rgba(0, 0, 0, 0.05)',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    keyColor: '#1d1d1f',
+                    commandMaxWidth: '70rem',
+                    cornerTextStyle: 'font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; letter-spacing: -0.01em; font-size: 0.75rem; font-weight: 400; opacity: 0.7;',
+                    dotSize: '4px',
+                    dotOpacity: '0.1',
+                    nameAfterHeight: '0px',
+                    gridGap: '1.5rem',
+                    minimalInterface: 'true',
+                    subtleTransitions: 'true',
+                    cleanSpacing: 'true',
+                    keyStyle: 'background: linear-gradient(to bottom, #f7f7f7, #e2e2e2); border: 1px solid #d1d1d1; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 -1px 0 rgba(255,255,255,0.5) inset, 0 1px 0 rgba(0,0,0,0.1); color: #1d1d1f; font-weight: 500; transform: translateY(0); transition: all 0.1s ease; position: relative; text-shadow: 0 1px 0 rgba(255,255,255,0.5);',
+                    keyHoverStyle: 'transform: translateY(-1px); box-shadow: 0 2px 3px rgba(0,0,0,0.07), 0 -1px 0 rgba(255,255,255,0.5) inset, 0 1px 0 rgba(0,0,0,0.1);',
+                    keyActiveStyle: 'transform: translateY(1px); box-shadow: 0 0 1px rgba(0,0,0,0.1), 0 -1px 0 rgba(255,255,255,0.5) inset, 0 1px 0 rgba(0,0,0,0.1);',
+                    nameHoverColor: '#0071e3',
+                    keycapStyle: 'true',
+                    key3D: 'true',
+                    keyFontSize: '0.9em',
+                    keyBorderRadius: '4px',
+                    keyPadding: '6px 8px',
+                    keyHeight: '30px',
+                    keyWidth: '30px',
+                    keyVerticalAlign: 'middle',
+                    macKeyboardEffect: 'true',
+                    keyTextAlign: 'center',
+                    inputStyle: 'border-radius: 8px; border: 1px solid rgba(0, 0, 0, 0.1); padding: 8px 12px; background: rgba(255, 255, 255, 0.8);',
+                    commandsColumns: '4',
+                    commandPadding: '1.5rem'
+                },
+                dark: {
+                    background: '#000000',
+                    gradient: 'none',
+                    text: '#f5f5f7',
+                    textSubtle: '#86868b',
+                    accent: '#0077ed',
+                    hover: '#0284ff',
+                    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
+                    borderRadius: '8px',
+                    commandsBackground: 'rgba(28, 28, 30, 0.8)',
+                    commandsBorder: '1px solid rgba(255, 255, 255, 0.05)',
+                    commandsBoxShadow: '0 10px 20px rgba(0, 0, 0, 0.15)',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    keyColor: '#f5f5f7',
+                    commandMaxWidth: '70rem',
+                    cornerTextStyle: 'font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; letter-spacing: -0.01em; font-size: 0.75rem; font-weight: 400; opacity: 0.7;',
+                    dotSize: '4px',
+                    dotOpacity: '0.2',
+                    nameAfterHeight: '0px',
+                    gridGap: '1.5rem',
+                    minimalInterface: 'true',
+                    subtleTransitions: 'true',
+                    cleanSpacing: 'true',
+                    keyStyle: 'background: linear-gradient(to bottom, #3a3a3c, #2c2c2e); border: 1px solid #1c1c1e; box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2); color: #f5f5f7; font-weight: 500; transform: translateY(0); transition: all 0.1s ease; position: relative; text-shadow: 0 1px 1px rgba(0,0,0,0.2);',
+                    keyHoverStyle: 'transform: translateY(-1px); box-shadow: 0 2px 3px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2);',
+                    keyActiveStyle: 'transform: translateY(1px); box-shadow: 0 0 1px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2);',
+                    nameHoverColor: '#0077ed',
+                    keycapStyle: 'true',
+                    key3D: 'true',
+                    keyFontSize: '0.9em',
+                    keyBorderRadius: '4px',
+                    keyPadding: '6px 8px',
+                    keyHeight: '30px',
+                    keyWidth: '30px',
+                    keyVerticalAlign: 'middle',
+                    macKeyboardEffect: 'true',
+                    keyTextAlign: 'center',
+                    inputStyle: 'border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 12px; background: rgba(28, 28, 30, 0.8);',
+                    commandsColumns: '4',
+                    commandPadding: '1.5rem'
+                }
             }
         };
         
@@ -1634,7 +1739,90 @@
                 `;
                 document.head.appendChild(swissStyle);
             }
+        } else if (themeName === 'mac') {
+            // Apply Mac theme properties with 3D keyboard-like effects
+            if (colors.fontWeight) {
+                document.documentElement.style.fontWeight = colors.fontWeight;
+            }
             
+            // Style corner texts for Mac theme
+            document.querySelectorAll('.corner-text').forEach(el => {
+                el.style.cssText = colors.cornerTextStyle || '';
+                el.style.opacity = '0.7';
+            });
+            
+            // Style the settings dot
+            const settingsDot = document.querySelector('.settings-dot');
+            if (settingsDot) {
+                settingsDot.style.width = colors.dotSize || '4px';
+                settingsDot.style.height = colors.dotSize || '4px';
+                settingsDot.style.opacity = colors.dotOpacity || '0.1';
+                settingsDot.style.backgroundColor = colors.accent;
+                settingsDot.style.boxShadow = 'none';
+            }
+            
+            // Create the Mac 3D keyboard style for shortcuts 
+            const macStyleElement = document.getElementById('mac-style');
+            if (!macStyleElement) {
+                const macStyle = document.createElement('style');
+                macStyle.id = 'mac-style';
+                macStyle.textContent = `
+                    .command-key {
+                        ${colors.keyStyle}
+                        width: ${colors.keyWidth || '30px'};
+                        height: ${colors.keyHeight || '30px'};
+                        border-radius: ${colors.keyBorderRadius || '4px'};
+                        padding: ${colors.keyPadding || '6px 8px'};
+                        text-align: ${colors.keyTextAlign || 'center'};
+                        vertical-align: ${colors.keyVerticalAlign || 'middle'};
+                        font-size: ${colors.keyFontSize || '0.9em'};
+                        margin-bottom: 0.75rem !important;
+                        display: inline-block;
+                        min-width: ${colors.keyWidth || '30px'};
+                        line-height: 1.1;
+                    }
+                    
+                    .command-key:hover {
+                        ${colors.keyHoverStyle}
+                    }
+                    
+                    .command-key:active {
+                        ${colors.keyActiveStyle}
+                    }
+                    
+                    .command-name {
+                        font-weight: 500;
+                        transition: color 0.2s ease;
+                    }
+                    
+                    .command-name:hover {
+                        color: ${colors.nameHoverColor} !important;
+                    }
+                    
+                    li.command {
+                        margin-bottom: 1.2rem !important;
+                    }
+                    
+                    .commands {
+                        padding: ${colors.commandPadding || '1.5rem'} !important;
+                    }
+                    
+                    #widget-container {
+                        opacity: 0.9;
+                    }
+                    
+                    input[type="text"], input[type="url"] {
+                        ${colors.inputStyle || ''}
+                    }
+                    
+                    @media (max-width: 768px) {
+                        .commands {
+                            columns: 2 !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(macStyle);
+            }
         } else {
             // Reset to default styles for default theme
             document.documentElement.style.backdropFilter = 'none';
@@ -1647,6 +1835,9 @@
             
             const swissStyles = document.getElementById('swiss-style');
             if (swissStyles) swissStyles.remove();
+            
+            const macStyles = document.getElementById('mac-style');
+            if (macStyles) macStyles.remove();
             
             // Show corner texts for default theme
             document.querySelectorAll('.corner-text').forEach(el => {
@@ -1809,6 +2000,12 @@
                     border = 'none';
                     boxShadow = 'none';
                     maxWidth = '80rem';
+                } else if (themeName === 'mac') {
+                    backgroundColor = isDarkMode ? 'rgba(28, 28, 30, 0.8)' : 'rgba(255, 255, 255, 0.8)';
+                    border = isDarkMode ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.05)';
+                    boxShadow = isDarkMode ? '0 10px 20px rgba(0, 0, 0, 0.15)' : '0 10px 20px rgba(0, 0, 0, 0.05)';
+                    backdropFilter = 'blur(5px)';
+                    maxWidth = '70rem';
                 }
                 
                 // Create basic CSS for the commands container
@@ -1871,8 +2068,8 @@
             const currentTheme = document.documentElement.dataset.theme || 'default';
             const isDarkMode = document.documentElement.dataset.darkMode === 'true';
             
-            // If Swiss theme is active, ensure we preserve the original order
-            if (currentTheme === 'swiss' && window.originalCommandOrder) {
+            // If Swiss theme or Mac theme is active, ensure we preserve the original order
+            if ((currentTheme === 'swiss' || currentTheme === 'mac') && window.originalCommandOrder) {
                 // Sort command entries using the original order
                 commandEntries.sort((a, b) => {
                     const indexA = window.originalCommandOrder.indexOf(a[0]);
@@ -2140,6 +2337,93 @@
                 `;
                 this.shadowRoot.appendChild(style);
                 
+            } else if (themeName === 'mac') {
+                // Apply Mac theme with 3D keyboard effect
+                commandsMenu.style.backgroundColor = 'transparent';
+                commandsMenu.style.border = 'none';
+                commandsMenu.style.boxShadow = 'none';
+                commandsMenu.style.backdropFilter = 'none';
+                commandsMenu.style.maxWidth = '70rem';
+                
+                // Update keys with 3D keyboard styling
+                const macStyle = document.createElement('style');
+                macStyle.className = 'theme-style';
+                macStyle.textContent = `
+                    .key {
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        width: 50px !important;
+                        height: 50px !important;
+                        border-radius: 5px !important;
+                        padding: 0 !important;
+                        text-align: center !important;
+                        vertical-align: middle !important;
+                        font-size: 1.2em !important;
+                        margin-bottom: 0 !important;
+                        line-height: 1 !important;
+                        opacity: 1 !important;
+                        font-weight: 500 !important;
+                        text-shadow: none !important;
+                        transform: translateY(0) !important;
+                        transition: all 0.1s ease !important;
+                        position: relative !important;
+                        background: linear-gradient(to bottom, #3a3a3c, #2c2c2e) !important; 
+                        border: 1px solid #1c1c1e !important; 
+                        box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2) !important; 
+                        color: #f5f5f7 !important;
+                    }
+                    
+                    .key:hover {
+                        transform: translateY(-1px) !important;
+                        box-shadow: 0 2px 3px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2) !important;
+                    }
+                    
+                    .key:active {
+                        transform: translateY(1px) !important;
+                        box-shadow: 0 0 1px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2) !important;
+                    }
+                    
+                    .name {
+                        display: none !important;
+                    }
+                    
+                    .command {
+                        display: flex !important;
+                        flex-direction: column !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        margin-bottom: 0 !important;
+                    }
+                    
+                    .commands {
+                        display: grid !important;
+                        grid-template-columns: repeat(4, 50px) !important;
+                        grid-template-rows: repeat(3, auto) !important;
+                        grid-column-gap: 0.5rem !important;
+                        grid-row-gap: 0.5rem !important;
+                        grid-auto-flow: column !important;
+                        padding: 0 !important;
+                        justify-content: center !important;
+                        margin: 0 auto !important;
+                        max-width: 350px !important;
+                    }
+                    
+                    @media (max-width: 768px) {
+                        .commands {
+                            grid-template-columns: repeat(4, minmax(60px, 1fr)) !important;
+                            grid-gap: 1rem !important;
+                        }
+                    }
+                    
+                    @media (max-width: 480px) {
+                        .commands {
+                            grid-template-columns: repeat(2, minmax(60px, 1fr)) !important;
+                        }
+                    }
+                `;
+                this.shadowRoot.appendChild(macStyle);
+                
             } else {
                 // Default theme styling
                 //commandsMenu.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
@@ -2155,9 +2439,9 @@
 <style>
     :root {
         --border-radius: 8px;
-        --color-background: #f8f5e6; /* Vanilla/yellowish background */
+        --color-background: #000000; /* Black background */
         --color-text-subtle: #666666; /* Subtle gray text */
-        --color-text: #222222; /* Near black text */
+        --color-text: #f5f5f7; /* Light text for dark background */
         --color-accent: #333333; /* Accent color */
         --color-hover: #444444; /* Hover color */
         --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -2167,6 +2451,21 @@
         --space: .5rem;
         --transition-speed: 200ms;
         --box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    }
+    
+    /* Force true black background with no gradients */
+    html, body {
+        background-color: #000000 !important;
+        background-image: none !important;
+        color: #f5f5f7;
+    }
+    
+    html {
+        background: #000000 !important;
+    }
+    
+    body {
+        background: #000000 !important;
     }
     
     /* Hide scrollbar for all browsers */
