@@ -2374,9 +2374,9 @@
                         display: flex !important;
                         align-items: center !important;
                         justify-content: center !important;
-                        width: 50px !important;
-                        height: 50px !important;
-                        border-radius: 5px !important;
+                        width: 60px !important;
+                        height: 60px !important;
+                        border-radius: 7px !important;
                         padding: 0 !important;
                         text-align: center !important;
                         vertical-align: middle !important;
@@ -2417,32 +2417,38 @@
                         flex-direction: column !important;
                         align-items: center !important;
                         justify-content: center !important;
-                        margin-bottom: 0 !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        height: auto !important;
                     }
                     
                     .commands {
                         display: grid !important;
-                        grid-template-columns: repeat(4, 50px) !important;
-                        grid-template-rows: repeat(3, auto) !important;
-                        grid-column-gap: 0.5rem !important;
-                        grid-row-gap: 0.5rem !important;
+                        grid-template-columns: repeat(4, 60px) !important;
+                        grid-template-rows: repeat(3, 65px) !important;
+                        grid-column-gap: 0.8rem !important;
+                        grid-row-gap: 0.6rem !important;
                         grid-auto-flow: column !important;
                         padding: 0 !important;
                         justify-content: center !important;
+                        align-items: center !important;
                         margin: 0 auto !important;
-                        max-width: 350px !important;
+                        max-width: 400px !important;
                     }
                     
                     @media (max-width: 768px) {
                         .commands {
-                            grid-template-columns: repeat(4, minmax(60px, 1fr)) !important;
-                            grid-gap: 1rem !important;
+                            grid-template-columns: repeat(4, 60px) !important;
+                            grid-column-gap: 0.8rem !important;
+                            grid-row-gap: 0.6rem !important;
                         }
                     }
                     
                     @media (max-width: 480px) {
                         .commands {
-                            grid-template-columns: repeat(2, minmax(60px, 1fr)) !important;
+                            grid-template-columns: repeat(2, 60px) !important;
+                            grid-column-gap: 0.8rem !important;
+                            grid-row-gap: 0.6rem !important;
                         }
                     }
                 `;
