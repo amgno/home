@@ -90,6 +90,102 @@
                                 gradient: 'none',
                                 text: '#ffffff'
                             }
+                        },
+                        neon: {
+                            light: {
+                                background: '#0f0f1a',
+                                gradient: 'radial-gradient(circle at top right, rgba(120, 0, 255, 0.2), transparent), radial-gradient(circle at bottom left, rgba(0, 255, 255, 0.2), transparent)',
+                                text: '#ffffff'
+                            },
+                            dark: {
+                                background: '#0a0a12',
+                                gradient: 'radial-gradient(circle at top right, rgba(120, 0, 255, 0.3), transparent), radial-gradient(circle at bottom left, rgba(0, 255, 255, 0.3), transparent)',
+                                text: '#ffffff'
+                            }
+                        },
+                        retro: {
+                            light: {
+                                background: '#faf4d4',
+                                gradient: 'linear-gradient(135deg, #faf4d4, #f9c58d)',
+                                text: '#562349'
+                            },
+                            dark: {
+                                background: '#2c1320',
+                                gradient: 'linear-gradient(135deg, #2c1320, #42253b)',
+                                text: '#f9c58d'
+                            }
+                        },
+                        brutalist: {
+                            light: {
+                                background: '#ffffff',
+                                gradient: 'none',
+                                text: '#000000'
+                            },
+                            dark: {
+                                background: '#000000',
+                                gradient: 'none',
+                                text: '#ffffff'
+                            }
+                        },
+                        gaming: {
+                            light: {
+                                background: '#121212',
+                                gradient: 'linear-gradient(135deg, #121212, #1a1a1a)',
+                                text: '#e0e0e0'
+                            },
+                            dark: {
+                                background: '#0a0a0a',
+                                gradient: 'linear-gradient(135deg, #0a0a0a, #151515)',
+                                text: '#e0e0e0'
+                            }
+                        },
+                        cyberpunk: {
+                            light: {
+                                background: '#050023',
+                                gradient: 'radial-gradient(circle at top right, rgba(255, 0, 170, 0.2), transparent), radial-gradient(circle at bottom left, rgba(0, 255, 255, 0.2), transparent)',
+                                text: '#ffffff'
+                            },
+                            dark: {
+                                background: '#0d0221',
+                                gradient: 'radial-gradient(circle at top right, rgba(255, 0, 170, 0.2), transparent), radial-gradient(circle at bottom left, rgba(0, 255, 255, 0.2), transparent)',
+                                text: '#ffffff'
+                            }
+                        },
+                        bauhaus: {
+                            light: {
+                                background: '#ffffff',
+                                gradient: 'none',
+                                text: '#000000'
+                            },
+                            dark: {
+                                background: '#121212',
+                                gradient: 'none',
+                                text: '#ffffff'
+                            }
+                        },
+                        vaporwave: {
+                            light: {
+                                background: '#f2c6de',
+                                gradient: 'linear-gradient(135deg, #f2c6de, #c2f5e9)',
+                                text: '#000b8e'
+                            },
+                            dark: {
+                                background: '#08012e',
+                                gradient: 'linear-gradient(135deg, #08012e, #290b45)',
+                                text: '#ff00f2'
+                            }
+                        },
+                        nordic: {
+                            light: {
+                                background: '#ffffff',
+                                gradient: 'linear-gradient(135deg, #ffffff, #f7f9fc)',
+                                text: '#2e3440'
+                            },
+                            dark: {
+                                background: '#2e3440',
+                                gradient: 'linear-gradient(135deg, #2e3440, #3b4252)',
+                                text: '#eceff4'
+                            }
                         }
                     };
                     
@@ -1180,6 +1276,10 @@
                     <option value="retro">Retro</option>
                     <option value="brutalist">Brutalist</option>
                     <option value="gaming">Gaming</option>
+                    <option value="cyberpunk">Cyberpunk</option>
+                    <option value="bauhaus">Bauhaus</option>
+                    <option value="vaporwave">Vaporwave</option>
+                    <option value="nordic">Nordic</option>
                     <option value="custom">Custom</option>
                 </select>
             </div>
@@ -1828,6 +1928,260 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                     uiAnimation: 'true',
                     keyFontSize: '1em',
                     keyStyle: 'border: 1px solid rgba(0, 255, 102, 0.3); padding: 2px 6px; border-radius: 2px;'
+                }
+            },
+            cyberpunk: {
+                light: {
+                    background: '#050023',
+                    gradient: 'radial-gradient(circle at top right, rgba(255, 0, 170, 0.2), transparent), radial-gradient(circle at bottom left, rgba(0, 255, 255, 0.2), transparent)',
+                    text: '#ffffff',
+                    textSubtle: '#9e9ebf',
+                    accent: '#ff2a6d',
+                    hover: '#ff5a8d',
+                    boxShadow: '0 0 25px rgba(255, 42, 109, 0.5)',
+                    borderRadius: '2px',
+                    commandsBackground: 'rgba(10, 10, 40, 0.7)',
+                    commandsBorder: '1px solid rgba(255, 42, 109, 0.3)',
+                    commandsBoxShadow: '0 0 20px rgba(255, 42, 109, 0.3)',
+                    fontFamily: '"Rajdhani", "Inter", sans-serif',
+                    fontSize: '15px',
+                    keyColor: '#ff2a6d',
+                    commandMaxWidth: '65rem',
+                    cornerTextStyle: 'font-family: "Rajdhani", sans-serif; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.7rem; font-weight: 600;',
+                    dotSize: '4px',
+                    dotOpacity: '0.9',
+                    nameAfterHeight: '2px',
+                    uiAnimation: 'true',
+                    keyFontSize: '1em',
+                    keyStyle: 'border: 1px solid rgba(255, 42, 109, 0.5); padding: 2px 6px; background: rgba(255, 42, 109, 0.1);',
+                    textGlow: 'true',
+                    textGlowColor: 'rgba(255, 42, 109, 0.7)',
+                    scanlines: 'true',
+                    nameHoverColor: '#05d9e8',
+                    glitchEffect: 'true'
+                },
+                dark: {
+                    background: '#0d0221',
+                    gradient: 'radial-gradient(circle at top right, rgba(255, 0, 170, 0.2), transparent), radial-gradient(circle at bottom left, rgba(0, 255, 255, 0.2), transparent)',
+                    text: '#ffffff',
+                    textSubtle: '#9e9ebf',
+                    accent: '#05d9e8',
+                    hover: '#65fdf0',
+                    boxShadow: '0 0 25px rgba(5, 217, 232, 0.5)',
+                    borderRadius: '2px',
+                    commandsBackground: 'rgba(13, 2, 33, 0.7)',
+                    commandsBorder: '1px solid rgba(5, 217, 232, 0.3)',
+                    commandsBoxShadow: '0 0 20px rgba(5, 217, 232, 0.3)',
+                    fontFamily: '"Rajdhani", "Inter", sans-serif',
+                    fontSize: '15px',
+                    keyColor: '#05d9e8',
+                    commandMaxWidth: '65rem',
+                    cornerTextStyle: 'font-family: "Rajdhani", sans-serif; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.7rem; font-weight: 600;',
+                    dotSize: '4px',
+                    dotOpacity: '0.9',
+                    nameAfterHeight: '2px',
+                    uiAnimation: 'true',
+                    keyFontSize: '1em',
+                    keyStyle: 'border: 1px solid rgba(5, 217, 232, 0.5); padding: 2px 6px; background: rgba(5, 217, 232, 0.1);',
+                    textGlow: 'true',
+                    textGlowColor: 'rgba(5, 217, 232, 0.7)',
+                    scanlines: 'true',
+                    nameHoverColor: '#ff2a6d',
+                    glitchEffect: 'true'
+                }
+            },
+            bauhaus: {
+                light: {
+                    background: '#ffffff',
+                    gradient: 'none',
+                    text: '#000000',
+                    textSubtle: '#333333',
+                    accent: '#e53935',
+                    hover: '#f44336',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    commandsBackground: 'rgba(255, 255, 255, 0.9)',
+                    commandsBorder: '2px solid #000000',
+                    commandsBoxShadow: 'none',
+                    fontFamily: '"Futura PT", "Helvetica Neue", Arial, sans-serif',
+                    fontSize: '16px',
+                    keyColor: '#e53935',
+                    commandMaxWidth: '100%',
+                    cornerTextStyle: 'font-family: "Futura PT", sans-serif; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; font-weight: 700;',
+                    nameAfterHeight: '0',
+                    gridLayout: 'true',
+                    layoutType: 'grid',
+                    borderStyle: 'solid',
+                    borderWidth: '2px',
+                    borderColor: '#000000',
+                    keyStyle: 'background-color: #e53935; color: white; border-radius: 0; width: 40px; height: 40px;',
+                    nameHoverColor: '#e53935',
+                    geometricElements: 'true',
+                    transformAngle: '7deg',
+                    primaryColor: '#e53935',
+                    secondaryColor: '#2196f3',
+                    tertiaryColor: '#ffeb3b'
+                },
+                dark: {
+                    background: '#121212',
+                    gradient: 'none',
+                    text: '#ffffff',
+                    textSubtle: '#cccccc',
+                    accent: '#e53935',
+                    hover: '#f44336',
+                    boxShadow: 'none',
+                    borderRadius: '0',
+                    commandsBackground: 'rgba(30, 30, 30, 0.9)',
+                    commandsBorder: '2px solid #ffffff',
+                    commandsBoxShadow: 'none',
+                    fontFamily: '"Futura PT", "Helvetica Neue", Arial, sans-serif',
+                    fontSize: '16px',
+                    keyColor: '#e53935',
+                    commandMaxWidth: '100%',
+                    cornerTextStyle: 'font-family: "Futura PT", sans-serif; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; font-weight: 700;',
+                    nameAfterHeight: '0',
+                    gridLayout: 'true',
+                    layoutType: 'grid',
+                    borderStyle: 'solid',
+                    borderWidth: '2px',
+                    borderColor: '#ffffff',
+                    keyStyle: 'background-color: #e53935; color: white; border-radius: 0; width: 40px; height: 40px;',
+                    nameHoverColor: '#e53935',
+                    geometricElements: 'true',
+                    transformAngle: '7deg',
+                    primaryColor: '#e53935',
+                    secondaryColor: '#2196f3',
+                    tertiaryColor: '#ffeb3b'
+                }
+            },
+            vaporwave: {
+                light: {
+                    background: '#f2c6de',
+                    gradient: 'linear-gradient(135deg, #f2c6de, #c2f5e9)',
+                    text: '#000b8e',
+                    textSubtle: '#671e75',
+                    accent: '#ff00f2',
+                    hover: '#ff66f5',
+                    boxShadow: '0 6px 20px rgba(103, 30, 117, 0.3)',
+                    borderRadius: '0',
+                    commandsBackground: 'rgba(242, 198, 222, 0.7)',
+                    commandsBorder: '2px solid #ff00f2',
+                    commandsBoxShadow: '0 8px 24px rgba(255, 0, 242, 0.25)',
+                    fontFamily: '"VT323", "Press Start 2P", monospace',
+                    fontSize: '16px',
+                    keyColor: '#ff00f2',
+                    commandMaxWidth: '70rem',
+                    cornerTextStyle: 'font-family: "VT323", monospace; font-size: 1rem;',
+                    dotSize: '10px',
+                    dotOpacity: '0.9',
+                    nameAfterHeight: '0',
+                    preserve3d: 'true',
+                    gridGap: '1.5rem',
+                    borderStyle: 'solid',
+                    borderWidth: '2px',
+                    borderColor: '#ff00f2',
+                    keyStyle: 'box-shadow: 2px 2px 0 #000b8e; transform: translateZ(10px);',
+                    nameHoverColor: '#ff00f2',
+                    gridColumns: '2',
+                    scanlines: 'true',
+                    floatItems: 'true',
+                    driftAnimation: 'true',
+                    sunsetGradient: 'true',
+                    pixelFont: 'true'
+                },
+                dark: {
+                    background: '#08012e',
+                    gradient: 'linear-gradient(135deg, #08012e, #290b45)',
+                    text: '#ff00f2',
+                    textSubtle: '#c78df0',
+                    accent: '#00fad9',
+                    hover: '#66fceb',
+                    boxShadow: '0 6px 20px rgba(0, 250, 217, 0.3)',
+                    borderRadius: '0',
+                    commandsBackground: 'rgba(8, 1, 46, 0.7)',
+                    commandsBorder: '2px solid #00fad9',
+                    commandsBoxShadow: '0 8px 24px rgba(0, 250, 217, 0.25)',
+                    fontFamily: '"VT323", "Press Start 2P", monospace',
+                    fontSize: '16px',
+                    keyColor: '#00fad9',
+                    commandMaxWidth: '70rem',
+                    cornerTextStyle: 'font-family: "VT323", monospace; font-size: 1rem;',
+                    dotSize: '10px',
+                    dotOpacity: '0.9',
+                    nameAfterHeight: '0',
+                    preserve3d: 'true',
+                    gridGap: '1.5rem',
+                    borderStyle: 'solid',
+                    borderWidth: '2px',
+                    borderColor: '#00fad9',
+                    keyStyle: 'box-shadow: 2px 2px 0 #ff00f2; transform: translateZ(10px);',
+                    nameHoverColor: '#00fad9',
+                    gridColumns: '2',
+                    scanlines: 'true',
+                    floatItems: 'true',
+                    driftAnimation: 'true',
+                    sunsetGradient: 'true',
+                    pixelFont: 'true'
+                }
+            },
+            nordic: {
+                light: {
+                    background: '#ffffff',
+                    gradient: 'linear-gradient(135deg, #ffffff, #f7f9fc)',
+                    text: '#2e3440',
+                    textSubtle: '#4c566a',
+                    accent: '#5e81ac',
+                    hover: '#81a1c1',
+                    boxShadow: '0 4px 12px rgba(46, 52, 64, 0.05)',
+                    borderRadius: '12px',
+                    commandsBackground: 'rgba(255, 255, 255, 0.8)',
+                    commandsBorder: '1px solid rgba(216, 222, 233, 0.7)',
+                    commandsBoxShadow: '0 8px 24px rgba(46, 52, 64, 0.05)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: '400',
+                    keyColor: '#5e81ac',
+                    commandMaxWidth: '60rem',
+                    cornerTextStyle: 'font-family: "Inter", sans-serif; letter-spacing: 0.02em; font-size: 0.75rem; font-weight: 400; opacity: 0.7;',
+                    dotSize: '5px',
+                    dotOpacity: '0.3',
+                    nameAfterHeight: '1px',
+                    gridGap: '2rem',
+                    minimalInterface: 'true',
+                    subtleTransitions: 'true',
+                    cleanSpacing: 'true',
+                    keyStyle: 'background-color: rgba(94, 129, 172, 0.1); color: #5e81ac; font-weight: 500;',
+                    nameHoverColor: '#5e81ac',
+                    simplifiedLayout: 'true'
+                },
+                dark: {
+                    background: '#2e3440',
+                    gradient: 'linear-gradient(135deg, #2e3440, #3b4252)',
+                    text: '#eceff4',
+                    textSubtle: '#d8dee9',
+                    accent: '#88c0d0',
+                    hover: '#8fbcbb',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '12px',
+                    commandsBackground: 'rgba(46, 52, 64, 0.6)',
+                    commandsBorder: '1px solid rgba(76, 86, 106, 0.5)',
+                    commandsBoxShadow: '0 8px 24px rgba(0, 0, 0, 0.1)',
+                    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: '400',
+                    keyColor: '#88c0d0',
+                    commandMaxWidth: '60rem',
+                    cornerTextStyle: 'font-family: "Inter", sans-serif; letter-spacing: 0.02em; font-size: 0.75rem; font-weight: 400; opacity: 0.7;',
+                    dotSize: '5px',
+                    dotOpacity: '0.3',
+                    nameAfterHeight: '1px',
+                    gridGap: '2rem',
+                    minimalInterface: 'true',
+                    subtleTransitions: 'true',
+                    cleanSpacing: 'true',
+                    keyStyle: 'background-color: rgba(136, 192, 208, 0.1); color: #88c0d0; font-weight: 500;',
+                    nameHoverColor: '#88c0d0',
+                    simplifiedLayout: 'true'
                 }
             }
         };
