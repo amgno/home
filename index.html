@@ -1,13 +1,21 @@
 <!doctype html>
 <meta charset="utf-8" />
-<meta name="color-scheme" content="dark" />
+<meta name="color-scheme" content="light dark" />
 <meta name="robots" content="noindex" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
     html, body, :root {
-        background-color: #000000 !important;
         background-image: none !important;
+    }
+    
+    html.dark-mode, body.dark-mode, :root.dark-mode {
+        background-color: #000000 !important;
         color: #f5f5f7 !important;
+    }
+    
+    html:not(.dark-mode), body:not(.dark-mode), :root:not(.dark-mode) {
+        background-color: #ffffff !important;
+        color: #1d1d1f !important;
     }
 </style>
 <link rel="icon" type="image/x-icon" href="./favicon.ico">
@@ -241,13 +249,9 @@
             if (savedSettings) {
                 const settings = JSON.parse(savedSettings);
                 
-                // For mac theme, force dark mode
+                // Get theme name and dark mode setting
                 const themeName = settings.theme || 'default';
                 let isDarkMode = settings.darkMode || false;
-                
-                if (themeName === 'mac') {
-                    isDarkMode = true;
-                }
                 
                 // Apply dark mode class
                 document.documentElement.classList.toggle('dark-mode', isDarkMode);
@@ -272,9 +276,26 @@
         }, 100);
     });
 
-    // Force background to be truly black
-    document.documentElement.style.backgroundColor = '#000000';
-    document.documentElement.style.backgroundImage = 'none';
+    // Apply theme-appropriate background
+    function updateBackgroundColor() {
+        const themeName = document.documentElement.dataset.theme;
+        const isDarkMode = document.documentElement.dataset.darkMode === 'true';
+        
+        if (themeName === 'mac' && !isDarkMode) {
+            document.documentElement.style.backgroundColor = '#ffffff';
+        } else if (themeName === 'mac' && isDarkMode) {
+            document.documentElement.style.backgroundColor = '#000000';
+        }
+        document.documentElement.style.backgroundImage = 'none';
+    }
+    
+    // Initial call
+    updateBackgroundColor();
+    
+    // Listen for theme changes
+    document.addEventListener('themeChanged', function(e) {
+        updateBackgroundColor();
+    });
     
     // Function to apply theme styling
     function applyTheme(themeName, isDarkMode) {
@@ -1021,9 +1042,9 @@
             },
             mac: {
                 light: {
-                    background: '#000000',
+                    background: '#ffffff',
                     gradient: 'none',
-                    text: '#f5f5f7',
+                    text: '#1d1d1f',
                     textSubtle: '#86868b',
                     accent: '#0071e3',
                     hover: '#0077ed',
@@ -2368,20 +2389,23 @@
                         transform: translateY(0) !important;
                         transition: all 0.1s ease !important;
                         position: relative !important;
-                        background: linear-gradient(to bottom, #3a3a3c, #2c2c2e) !important; 
-                        border: 1px solid #1c1c1e !important; 
-                        box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2) !important; 
-                        color: #f5f5f7 !important;
+                        ${isDarkMode ? 
+                          'background: linear-gradient(to bottom, #3a3a3c, #2c2c2e) !important; border: 1px solid #1c1c1e !important; box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2) !important; color: #f5f5f7 !important;' : 
+                          'background: linear-gradient(to bottom, #f7f7f7, #e2e2e2) !important; border: 1px solid #d1d1d1 !important; box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 -1px 0 rgba(255,255,255,0.5) inset, 0 1px 0 rgba(0,0,0,0.1) !important; color: #1d1d1f !important;'}
                     }
                     
                     .key:hover {
                         transform: translateY(-1px) !important;
-                        box-shadow: 0 2px 3px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2) !important;
+                        ${isDarkMode ? 
+                          'box-shadow: 0 2px 3px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2) !important;' : 
+                          'box-shadow: 0 2px 3px rgba(0,0,0,0.07), 0 -1px 0 rgba(255,255,255,0.5) inset, 0 1px 0 rgba(0,0,0,0.1) !important;'}
                     }
                     
                     .key:active {
                         transform: translateY(1px) !important;
-                        box-shadow: 0 0 1px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2) !important;
+                        ${isDarkMode ? 
+                          'box-shadow: 0 0 1px rgba(0,0,0,0.3), 0 -1px 0 rgba(255,255,255,0.1) inset, 0 1px 0 rgba(0,0,0,0.2) !important;' : 
+                          'box-shadow: 0 0 1px rgba(0,0,0,0.1), 0 -1px 0 rgba(255,255,255,0.5) inset, 0 1px 0 rgba(0,0,0,0.1) !important;'}
                     }
                     
                     .name {
@@ -2453,19 +2477,19 @@
         --box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
     }
     
-    /* Force true black background with no gradients */
+    /* Theme-adaptive backgrounds */
     html, body {
-        background-color: #000000 !important;
         background-image: none !important;
+    }
+    
+    html.dark-mode, body.dark-mode {
+        background-color: #000000 !important;
         color: #f5f5f7;
     }
     
-    html {
-        background: #000000 !important;
-    }
-    
-    body {
-        background: #000000 !important;
+    html:not(.dark-mode), body:not(.dark-mode) {
+        background-color: #ffffff !important;
+        color: #1d1d1f;
     }
     
     /* Hide scrollbar for all browsers */
