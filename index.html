@@ -2429,6 +2429,12 @@
         font-size: 0.9rem;
     }
     
+    .feed-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
     .feed-sort-controls {
         display: flex;
         align-items: center;
@@ -2458,6 +2464,100 @@
     .feed-sort-select:focus {
         outline: none;
         border-color: var(--color-accent);
+    }
+    
+    .refresh-button {
+        background-color: rgba(0, 0, 0, 0.05);
+        border: none;
+        border-radius: var(--border-radius);
+        color: var(--color-text);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        transition: all 0.2s ease;
+    }
+    
+    .dark-mode .refresh-button {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .refresh-button:hover {
+        background-color: var(--color-accent);
+        color: white;
+    }
+    
+    .refresh-icon {
+        display: none;
+        width: 14px;
+        height: 14px;
+        margin-right: 6px;
+        position: relative;
+        transition: transform 0.3s ease;
+    }
+    
+    .refresh-icon::before {
+        content: '';
+        position: absolute;
+        border: 2px solid currentColor;
+        border-top-color: transparent;
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+    }
+    
+    .refresh-icon::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 4px 4px 0;
+        border-color: transparent currentColor transparent transparent;
+        transform: rotate(-45deg);
+    }
+    
+    .refresh-button.loading .refresh-icon {
+        animation: spin 1s linear infinite;
+    }
+    
+    /* Collapsible section styles */
+    .feed-section.collapsible .feed-section-header {
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .feed-section.collapsible .feed-section-header::after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 6px 6px 0 6px;
+        border-color: var(--color-text-subtle) transparent transparent transparent;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.2s ease;
+    }
+    
+    .feed-section.collapsible .feed-cards-grid {
+        overflow: hidden;
+        max-height: 2000px;
+        transition: max-height 0.5s ease;
+    }
+    
+    .feed-section.collapsed .feed-cards-grid {
+        max-height: 0;
+    }
+    
+    .feed-section.collapsed .feed-section-header::after {
+        transform: translateY(-50%) rotate(-90deg);
     }
     
     /* General styles */
@@ -2549,12 +2649,21 @@
     });
     
     // RSS Feed Functionality
-    function loadRssFeeds() {
+    function loadRssFeeds(isRefresh = false) {
         const feedContainer = document.getElementById('rss-feed-container');
         if (!feedContainer) return;
         
         // Show loading state
-        feedContainer.innerHTML = '<div class="feed-loading">Loading feeds...</div>';
+        if (!isRefresh) {
+            feedContainer.innerHTML = '<div class="feed-loading">Loading feeds...</div>';
+        } else {
+            // If refreshing, just update the refresh button
+            const refreshButton = document.getElementById('refresh-button');
+            if (refreshButton) {
+                refreshButton.classList.add('loading');
+                refreshButton.disabled = true;
+            }
+        }
         
         // Get RSS feed URLs from settings
         let feedUrls = [];
@@ -2606,37 +2715,83 @@
         // Handle all feeds
         Promise.all(feedPromises)
             .then(feeds => {
-                // Clear loading state
-                feedContainer.innerHTML = '';
+                // If refreshing, keep the existing layout
+                if (isRefresh) {
+                    const refreshButton = document.getElementById('refresh-button');
+                    if (refreshButton) {
+                        refreshButton.classList.remove('loading');
+                        refreshButton.disabled = false;
+                    }
+                    // Remove all existing sections except controls
+                    const feedItemsContainer = document.getElementById('feed-items-container');
+                    if (feedItemsContainer) {
+                        feedItemsContainer.innerHTML = '';
+                    }
+                } else {
+                    // Clear loading state
+                    feedContainer.innerHTML = '';
+                }
                 
                 // If all feeds failed, show error
                 if (feeds.every(feed => feed.items.length === 0)) {
-                    feedContainer.innerHTML = `
-                        <div class="feed-empty">
-                            <p>Could not load any feeds.</p>
-                            <p>Check the RSS feed URLs in the <a href="settings.html" style="color: var(--color-accent);">settings page</a>.</p>
-                        </div>
-                    `;
+                    if (isRefresh) {
+                        const feedItemsContainer = document.getElementById('feed-items-container');
+                        if (feedItemsContainer) {
+                            feedItemsContainer.innerHTML = `
+                                <div class="feed-empty">
+                                    <p>Could not load any feeds.</p>
+                                    <p>Check the RSS feed URLs in the <a href="settings.html" style="color: var(--color-accent);">settings page</a>.</p>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        feedContainer.innerHTML = `
+                            <div class="feed-empty">
+                                <p>Could not load any feeds.</p>
+                                <p>Check the RSS feed URLs in the <a href="settings.html" style="color: var(--color-accent);">settings page</a>.</p>
+                            </div>
+                        `;
+                    }
                     return;
                 }
                 
-                // Add feed controls
-                const controlsDiv = document.createElement('div');
-                controlsDiv.className = 'feed-controls';
-                controlsDiv.innerHTML = `
-                    <div class="feed-title-section">
-                        <h2>News Feed</h2>
-                        <p>Latest updates from your selected sources</p>
-                    </div>
-                    <div class="feed-sort-controls">
-                        <span class="feed-sort-label">Sort by:</span>
-                        <select id="feed-sort" class="feed-sort-select">
-                            <option value="date">Date (Newest first)</option>
-                            <option value="source">Source</option>
-                        </select>
-                    </div>
-                `;
-                feedContainer.appendChild(controlsDiv);
+                // If not refreshing, add the controls
+                if (!isRefresh) {
+                    // Add feed controls
+                    const controlsDiv = document.createElement('div');
+                    controlsDiv.className = 'feed-controls';
+                    controlsDiv.innerHTML = `
+                        <div class="feed-title-section">
+                            <h2>News Feed</h2>
+                            <p>Latest updates from your selected sources</p>
+                        </div>
+                        <div class="feed-actions">
+                            <div class="feed-sort-controls">
+                                <span class="feed-sort-label">Sort by:</span>
+                                <select id="feed-sort" class="feed-sort-select">
+                                    <option value="date">Date (Newest first)</option>
+                                    <option value="source">Source</option>
+                                </select>
+                            </div>
+                            <button id="refresh-button" class="refresh-button">
+                                <span class="refresh-icon"></span>
+                                Refresh
+                            </button>
+                        </div>
+                    `;
+                    feedContainer.appendChild(controlsDiv);
+                    
+                    // Create feed container for items
+                    const feedItemsContainer = document.createElement('div');
+                    feedItemsContainer.id = 'feed-items-container';
+                    feedContainer.appendChild(feedItemsContainer);
+                    
+                    // Add event listener for the refresh button
+                    const refreshButton = document.getElementById('refresh-button');
+                    refreshButton.addEventListener('click', () => {
+                        loadRssFeeds(true); // Pass true to indicate refresh
+                    });
+                }
                 
                 // Aggregate all items for date sorting
                 let allItems = [];
@@ -2658,13 +2813,11 @@
                     return dateB - dateA; // Newest first
                 });
                 
-                // Create feed container for items
-                const feedItemsContainer = document.createElement('div');
-                feedItemsContainer.id = 'feed-items-container';
-                feedContainer.appendChild(feedItemsContainer);
-                
                 // Function to render feeds by date
                 function renderByDate() {
+                    const feedItemsContainer = document.getElementById('feed-items-container');
+                    if (!feedItemsContainer) return;
+                    
                     feedItemsContainer.innerHTML = '';
                     
                     if (allItems.length === 0) {
@@ -2705,10 +2858,10 @@
                     
                     // Render each group with a heading
                     const groups = [
-                        { name: 'Today', items: groupedItems.today },
-                        { name: 'Yesterday', items: groupedItems.yesterday },
-                        { name: 'This Week', items: groupedItems.thisWeek },
-                        { name: 'Earlier', items: groupedItems.earlier }
+                        { name: 'Today', items: groupedItems.today, collapsed: false },
+                        { name: 'Yesterday', items: groupedItems.yesterday, collapsed: true },
+                        { name: 'This Week', items: groupedItems.thisWeek, collapsed: true },
+                        { name: 'Earlier', items: groupedItems.earlier, collapsed: false }
                     ];
                     
                     groups.forEach(group => {
@@ -2716,7 +2869,7 @@
                         
                         // Create date section
                         const dateSection = document.createElement('div');
-                        dateSection.className = 'feed-section';
+                        dateSection.className = `feed-section collapsible ${group.collapsed ? 'collapsed' : ''}`;
                         
                         // Add section header
                         const sectionHeader = document.createElement('div');
@@ -2726,6 +2879,11 @@
                         sectionTitle.className = 'feed-section-title';
                         sectionTitle.textContent = group.name;
                         sectionHeader.appendChild(sectionTitle);
+                        
+                        // Add toggle functionality
+                        sectionHeader.addEventListener('click', () => {
+                            dateSection.classList.toggle('collapsed');
+                        });
                         
                         dateSection.appendChild(sectionHeader);
                         
@@ -2796,6 +2954,9 @@
                 
                 // Function to render feeds by source
                 function renderBySource() {
+                    const feedItemsContainer = document.getElementById('feed-items-container');
+                    if (!feedItemsContainer) return;
+                    
                     feedItemsContainer.innerHTML = '';
                     
                     if (feeds.every(feed => feed.items.length === 0)) {
@@ -2882,27 +3043,57 @@
                     feedItemsContainer.appendChild(sourcesSection);
                 }
                 
-                // Initial render by date (default)
+                // Call renderByDate to render the initial view
                 renderByDate();
                 
-                // Add event listener for sort dropdown
-                const sortSelect = document.getElementById('feed-sort');
-                sortSelect.addEventListener('change', function() {
-                    if (this.value === 'date') {
-                        renderByDate();
-                    } else {
+                // If we're not refreshing, set up event listeners
+                if (!isRefresh) {
+                    // Add event listener for sort dropdown
+                    const sortSelect = document.getElementById('feed-sort');
+                    sortSelect.addEventListener('change', function() {
+                        if (this.value === 'date') {
+                            renderByDate();
+                        } else {
+                            renderBySource();
+                        }
+                    });
+                } else {
+                    // If refreshing, maintain the current sort option
+                    const sortSelect = document.getElementById('feed-sort');
+                    if (sortSelect && sortSelect.value === 'source') {
                         renderBySource();
+                    } else {
+                        renderByDate();
                     }
-                });
+                }
             })
             .catch(error => {
                 console.error('Error processing feeds:', error);
-                feedContainer.innerHTML = `
-                    <div class="feed-error">
-                        <p>An error occurred while loading feeds.</p>
-                        <p>${error.message}</p>
-                    </div>
-                `;
+                
+                if (isRefresh) {
+                    const refreshButton = document.getElementById('refresh-button');
+                    if (refreshButton) {
+                        refreshButton.classList.remove('loading');
+                        refreshButton.disabled = false;
+                    }
+                    
+                    const feedItemsContainer = document.getElementById('feed-items-container');
+                    if (feedItemsContainer) {
+                        feedItemsContainer.innerHTML = `
+                            <div class="feed-error">
+                                <p>An error occurred while refreshing feeds.</p>
+                                <p>${error.message}</p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    feedContainer.innerHTML = `
+                        <div class="feed-error">
+                            <p>An error occurred while loading feeds.</p>
+                            <p>${error.message}</p>
+                        </div>
+                    `;
+                }
             });
     }
     
