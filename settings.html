@@ -1070,6 +1070,74 @@
             background-color: var(--preview-accent-color, #333333);
             border-radius: 4px;
         }
+
+        /* RSS Feeds Settings Styles */
+        .rss-feeds-container {
+            margin-top: 1rem;
+        }
+        
+        .rss-feeds-textarea {
+            width: 100%;
+            height: 120px;
+            padding: 0.75rem;
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            resize: vertical;
+            background-color: rgba(255, 255, 255, 0.7);
+            transition: border-color 0.2s ease;
+        }
+        
+        .dark-mode .rss-feeds-textarea {
+            background-color: rgba(30, 30, 30, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--color-text);
+        }
+        
+        .rss-feeds-textarea:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+        
+        .rss-feeds-suggestions {
+            margin-top: 1rem;
+        }
+        
+        .rss-feeds-suggestions h3 {
+            font-size: 0.9rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 500;
+        }
+        
+        .suggestion-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .suggestion-btn {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .dark-mode .suggestion-btn {
+            background-color: rgba(50, 50, 50, 0.5);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .suggestion-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .dark-mode .suggestion-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -1222,6 +1290,29 @@
             <div class="data-management-buttons">
                 <button type="button" id="export-settings" class="data-btn export-btn">Export Settings</button>
                 <button type="button" id="import-settings" class="data-btn import-btn">Import Settings</button>
+            </div>
+        </div>
+
+        <!-- RSS Feeds configuration section -->
+        <div class="settings-section">
+            <h2 class="settings-section-title">RSS Feeds</h2>
+            <p class="settings-option-description" style="margin-bottom: 1rem;">Configure RSS feeds to display in the news section</p>
+            
+            <div class="rss-feeds-container">
+                <textarea id="rss-feeds" class="rss-feeds-textarea" placeholder="Enter RSS feed URLs, one per line
+Example: https://news.ycombinator.com/rss
+Example: https://www.theverge.com/rss/index.xml"></textarea>
+                
+                <div class="rss-feeds-suggestions">
+                    <h3>Common RSS feeds:</h3>
+                    <div class="suggestion-buttons">
+                        <button class="suggestion-btn" data-url="https://news.ycombinator.com/rss">Hacker News</button>
+                        <button class="suggestion-btn" data-url="https://www.theverge.com/rss/index.xml">The Verge</button>
+                        <button class="suggestion-btn" data-url="https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml">New York Times</button>
+                        <button class="suggestion-btn" data-url="https://feeds.bbci.co.uk/news/world/rss.xml">BBC News</button>
+                        <button class="suggestion-btn" data-url="https://feeds.arstechnica.com/arstechnica/index">Ars Technica</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1620,6 +1711,54 @@
             
             // Color picker event listeners
             setupColorPickers();
+
+            // Add RSS feed suggestion buttons functionality
+            const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+            const rssFeedsTextarea = document.getElementById('rss-feeds');
+            
+            suggestionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    
+                    // Get current feeds
+                    const currentFeeds = rssFeedsTextarea.value
+                        .split('\n')
+                        .map(feed => feed.trim())
+                        .filter(feed => feed !== '');
+                    
+                    // Check if already added
+                    if (!currentFeeds.includes(url)) {
+                        // Add to textarea
+                        if (currentFeeds.length > 0) {
+                            rssFeedsTextarea.value = currentFeeds.join('\n') + '\n' + url;
+                        } else {
+                            rssFeedsTextarea.value = url;
+                        }
+                        
+                        // Show feedback
+                        button.innerText = '✓ Added';
+                        button.style.backgroundColor = 'rgba(0, 200, 0, 0.2)';
+                        
+                        // Reset after 1 second
+                        setTimeout(() => {
+                            button.innerText = button.getAttribute('data-original-text') || 
+                                              button.innerText.replace('✓ Added', '');
+                            button.style.backgroundColor = '';
+                        }, 1000);
+                    } else {
+                        // Already added - show feedback
+                        button.innerText = 'Already added';
+                        
+                        // Reset after 1 second
+                        setTimeout(() => {
+                            button.innerText = button.getAttribute('data-original-text') || button.innerText.replace('Already added', button.innerText);
+                        }, 1000);
+                    }
+                });
+                
+                // Store original text
+                button.setAttribute('data-original-text', button.innerText);
+            });
         });
 
         // Load settings from localStorage
@@ -1666,6 +1805,11 @@
                     // Update color pickers
                     if (currentSettings.customColors) {
                         updateColorPickers(currentSettings.customColors);
+                    }
+                    
+                    // Load RSS feeds
+                    if (settings.rssFeeds && Array.isArray(settings.rssFeeds)) {
+                        document.getElementById('rss-feeds').value = settings.rssFeeds.join('\n');
                     }
                     
                     console.log("Settings loaded:", currentSettings);
@@ -2204,6 +2348,13 @@
             try {
                 console.log("Saving settings:", currentSettings);
                 
+                // Save RSS feeds
+                const rssFeeds = document.getElementById('rss-feeds').value
+                    .split('\n')
+                    .map(url => url.trim())
+                    .filter(url => url !== '');
+                currentSettings.rssFeeds = rssFeeds;
+                
                 // Save settings with all necessary theme information
                 localStorage.setItem('homeSettings', JSON.stringify(currentSettings));
                 
@@ -2452,7 +2603,8 @@
                         text: '#222222',
                         accent: '#333333'
                     },
-                    useCustomColors: importData.settings.useCustomColors || false
+                    useCustomColors: importData.settings.useCustomColors || false,
+                    rssFeeds: importData.settings.rssFeeds || []
                 };
                 
                 // Update UI to reflect imported settings
@@ -2460,6 +2612,11 @@
                 themeSelect.value = currentSettings.theme;
                 newTabSetting.checked = currentSettings.openLinksInNewTab;
                 cornerTextSetting.value = currentSettings.cornerText;
+                
+                // Update RSS feeds textarea if rssFeeds exist
+                if (currentSettings.rssFeeds && Array.isArray(currentSettings.rssFeeds)) {
+                    document.getElementById('rss-feeds').value = currentSettings.rssFeeds.join('\n');
+                }
                 
                 // Update commands
                 commands = new Map(importData.commands);

@@ -2173,7 +2173,7 @@
     }
     
     .scroll-content {
-        max-width: 60rem;
+        max-width: 90vw;
         width: 100%;
         border-radius: var(--border-radius);
         padding: 2rem;
@@ -2185,6 +2185,339 @@
     
     .dark-mode .scroll-content {
         background-color: rgba(30, 30, 30, 0.7);
+    }
+    
+    /* RSS Feed Styles */
+    .rss-feed {
+        width: 100%;
+        margin-bottom: 2.5rem;
+        border-radius: var(--border-radius);
+        background-color: rgba(255, 255, 255, 0.4);
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark-mode .rss-feed {
+        background-color: rgba(0, 0, 0, 0.15);
+    }
+    
+    .rss-feed:last-child {
+        margin-bottom: 0;
+    }
+    
+    .rss-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background-color: rgba(0, 0, 0, 0.03);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark-mode .rss-header {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .rss-title {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+    
+    .rss-source {
+        font-size: 0.8rem;
+        opacity: 0.7;
+        padding: 0.3rem 0.6rem;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+    }
+    
+    .dark-mode .rss-source {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .feed-items {
+        padding: 0.5rem;
+    }
+    
+    .feed-item {
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: var(--border-radius);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .dark-mode .feed-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        background-color: rgba(255, 255, 255, 0.02);
+    }
+    
+    .feed-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    }
+    
+    .dark-mode .feed-item:hover {
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .feed-item:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .feed-title {
+        font-weight: 500;
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+    }
+    
+    .feed-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.7;
+    }
+    
+    .feed-source {
+        padding: 0.15rem 0.4rem;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+        font-size: 0.75rem;
+    }
+    
+    .dark-mode .feed-source {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .feed-date {
+        font-weight: 500;
+        padding: 0.15rem 0.4rem;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+        font-size: 0.75rem;
+    }
+    
+    .dark-mode .feed-date {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .feed-description {
+        margin: 0.5rem 0;
+        line-height: 1.5;
+    }
+    
+    .feed-link {
+        display: inline-block;
+        margin-top: 0.5rem;
+        color: var(--color-accent);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        background-color: rgba(0, 0, 0, 0.03);
+    }
+    
+    .dark-mode .feed-link {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .feed-link:hover {
+        color: var(--color-hover);
+        text-decoration: underline;
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark-mode .feed-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .feed-error {
+        text-align: center;
+        padding: 2rem;
+        color: var(--color-text-subtle);
+    }
+    
+    .feed-loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--color-text-subtle);
+    }
+    
+    /* New styles for the feed message */
+    .feed-message {
+        padding: 2rem;
+        color: var(--color-text);
+    }
+    
+    .feed-list {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
+    
+    .dark-mode .feed-list {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .feed-list li {
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        font-family: monospace;
+        font-size: 0.9rem;
+        word-break: break-all;
+    }
+    
+    .dark-mode .feed-list li {
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .feed-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .feed-list li:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+    
+    .dark-mode .feed-list li:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Feed sorting controls */
+    .feed-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark-mode .feed-controls {
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .feed-title-section {
+        flex: 1;
+    }
+    
+    .feed-sort-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .feed-sort-label {
+        font-size: 0.8rem;
+        color: var(--color-text-subtle);
+    }
+    
+    .feed-sort-select {
+        padding: 0.3rem 0.6rem;
+        border-radius: var(--border-radius);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.7);
+        font-size: 0.8rem;
+        color: var(--color-text);
+    }
+    
+    .dark-mode .feed-sort-select {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: var(--color-text);
+    }
+    
+    .feed-sort-select:focus {
+        outline: none;
+        border-color: var(--color-accent);
+    }
+    
+    /* Feed empty state */
+    .feed-empty {
+        padding: 2rem;
+        text-align: center;
+        color: var(--color-text-subtle);
+        font-style: italic;
+    }
+    
+    /* Date sections */
+    .feed-date-section {
+        margin: 2rem 0;
+        border-left: 3px solid var(--color-accent);
+        padding-left: 1rem;
+    }
+    
+    .feed-date-section-title {
+        margin: 0 0 1rem 0;
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--color-text);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding-bottom: 0.5rem;
+    }
+    
+    .dark-mode .feed-date-section-title {
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    /* Source specific styles */
+    .feed-source-section {
+        margin-bottom: 2.5rem;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .dark-mode .feed-source-section {
+        border-color: rgba(255, 255, 255, 0.05);
+        background-color: rgba(0, 0, 0, 0.15);
+    }
+    
+    .feed-source-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark-mode .feed-source-header {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .feed-source-title {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+    
+    .feed-source-url {
+        font-size: 0.8rem;
+        opacity: 0.7;
+        padding: 0.3rem 0.6rem;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+    }
+    
+    .dark-mode .feed-source-url {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .feed-source-content {
+        padding: 1rem;
     }
 </style>
 
@@ -2231,8 +2564,444 @@
             
             // Listen for theme changes
             document.addEventListener('themeChanged', updateScrollSectionTheme);
+            
+            // Load RSS feeds
+            loadRssFeeds();
         }, 100);
     });
+    
+    // RSS Feed Functionality
+    function loadRssFeeds() {
+        const feedContainer = document.getElementById('rss-feed-container');
+        if (!feedContainer) return;
+        
+        // Show loading state
+        feedContainer.innerHTML = '<div class="feed-loading">Loading feeds...</div>';
+        
+        // Get RSS feed URLs from settings
+        let feedUrls = [];
+        try {
+            const savedSettings = localStorage.getItem('homeSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                feedUrls = settings.rssFeeds || [];
+            }
+        } catch (e) {
+            console.error('Error loading RSS feed settings:', e);
+        }
+        
+        // If no feeds configured, show message
+        if (feedUrls.length === 0) {
+            feedContainer.innerHTML = `
+                <div class="feed-error">
+                    <p>No RSS feeds configured.</p>
+                    <p>Add RSS feeds in the <a href="settings.html" style="color: var(--color-accent);">settings page</a>.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // We'll use a CORS proxy to fetch the RSS feeds
+        const corsProxy = 'https://api.allorigins.win/get?url=';
+        
+        // Use Promise.all to fetch all feeds in parallel
+        const feedPromises = feedUrls.map(feedUrl => {
+            const encodedUrl = encodeURIComponent(feedUrl);
+            return fetch(corsProxy + encodedUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.contents) {
+                        return parseRSS(data.contents, feedUrl);
+                    }
+                    throw new Error('Invalid feed data');
+                })
+                .catch(error => {
+                    console.error('Error fetching feed:', feedUrl, error);
+                    return {
+                        title: 'Error loading feed',
+                        link: feedUrl,
+                        items: []
+                    };
+                });
+        });
+        
+        // Handle all feeds
+        Promise.all(feedPromises)
+            .then(feeds => {
+                // Clear loading state
+                feedContainer.innerHTML = '';
+                
+                // If all feeds failed, show error
+                if (feeds.every(feed => feed.items.length === 0)) {
+                    feedContainer.innerHTML = `
+                        <div class="feed-error">
+                            <p>Could not load any feeds.</p>
+                            <p>Check the RSS feed URLs in the <a href="settings.html" style="color: var(--color-accent);">settings page</a>.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Add feed controls
+                const controlsDiv = document.createElement('div');
+                controlsDiv.className = 'feed-controls';
+                controlsDiv.innerHTML = `
+                    <div class="feed-title-section">
+                        <h2 style="margin: 0; color: var(--color-accent);">News Feed</h2>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Latest updates from your selected sources</p>
+                    </div>
+                    <div class="feed-sort-controls">
+                        <span class="feed-sort-label">Sort by:</span>
+                        <select id="feed-sort" class="feed-sort-select">
+                            <option value="date">Date (Newest first)</option>
+                            <option value="source">Source</option>
+                        </select>
+                    </div>
+                `;
+                feedContainer.appendChild(controlsDiv);
+                
+                // Aggregate all items for date sorting
+                let allItems = [];
+                feeds.forEach(feed => {
+                    if (feed.items.length === 0) return;
+                    
+                    feed.items.forEach(item => {
+                        // Add source info to each item
+                        item.sourceName = feed.title;
+                        item.sourceUrl = feed.link;
+                        allItems.push(item);
+                    });
+                });
+                
+                // Sort all items by date (newest first)
+                allItems.sort((a, b) => {
+                    const dateA = a.pubDate ? new Date(a.pubDate) : new Date(0);
+                    const dateB = b.pubDate ? new Date(b.pubDate) : new Date(0);
+                    return dateB - dateA; // Newest first
+                });
+                
+                // Create feed container for items
+                const feedItemsContainer = document.createElement('div');
+                feedItemsContainer.id = 'feed-items-container';
+                feedContainer.appendChild(feedItemsContainer);
+                
+                // Function to render feeds by date
+                function renderByDate() {
+                    feedItemsContainer.innerHTML = '';
+                    
+                    if (allItems.length === 0) {
+                        feedItemsContainer.innerHTML = `
+                            <div class="feed-empty">No news items found from your feeds.</div>
+                        `;
+                        return;
+                    }
+                    
+                    // Group items by date (today, yesterday, this week, earlier)
+                    const now = new Date();
+                    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    const lastWeek = new Date(today);
+                    lastWeek.setDate(lastWeek.getDate() - 7);
+                    
+                    const groupedItems = {
+                        today: [],
+                        yesterday: [],
+                        thisWeek: [],
+                        earlier: []
+                    };
+                    
+                    allItems.forEach(item => {
+                        const itemDate = item.pubDate ? new Date(item.pubDate) : new Date(0);
+                        
+                        if (itemDate >= today) {
+                            groupedItems.today.push(item);
+                        } else if (itemDate >= yesterday) {
+                            groupedItems.yesterday.push(item);
+                        } else if (itemDate >= lastWeek) {
+                            groupedItems.thisWeek.push(item);
+                        } else {
+                            groupedItems.earlier.push(item);
+                        }
+                    });
+                    
+                    // Render each group with a heading
+                    const groups = [
+                        { name: 'Today', items: groupedItems.today },
+                        { name: 'Yesterday', items: groupedItems.yesterday },
+                        { name: 'This Week', items: groupedItems.thisWeek },
+                        { name: 'Earlier', items: groupedItems.earlier }
+                    ];
+                    
+                    groups.forEach(group => {
+                        if (group.items.length === 0) return;
+                        
+                        // Create date section
+                        const dateSection = document.createElement('div');
+                        dateSection.className = 'feed-date-section';
+                        
+                        // Add group header
+                        const sectionTitle = document.createElement('h3');
+                        sectionTitle.className = 'feed-date-section-title';
+                        sectionTitle.textContent = group.name;
+                        dateSection.appendChild(sectionTitle);
+                        
+                        // Group items by source within each date group
+                        const sourceMap = new Map();
+                        
+                        group.items.forEach(item => {
+                            if (!sourceMap.has(item.sourceName)) {
+                                sourceMap.set(item.sourceName, []);
+                            }
+                            sourceMap.get(item.sourceName).push(item);
+                        });
+                        
+                        // Create items for each source
+                        sourceMap.forEach((items, sourceName) => {
+                            // Add items
+                            items.forEach(item => {
+                                const feedItem = document.createElement('div');
+                                feedItem.className = 'feed-item';
+                                
+                                const itemDate = item.pubDate ? formatDate(new Date(item.pubDate)) : '';
+                                
+                                feedItem.innerHTML = `
+                                    <h3 class="feed-title">${escapeHTML(item.title)}</h3>
+                                    <div class="feed-meta">
+                                        <span class="feed-source">${escapeHTML(item.sourceName)}</span>
+                                        <span class="feed-date">${itemDate}</span>
+                                    </div>
+                                    <div class="feed-description">${truncateText(item.description, 150)}</div>
+                                    <a href="${item.link}" class="feed-link" target="_blank" rel="noopener noreferrer">Read more</a>
+                                `;
+                                
+                                dateSection.appendChild(feedItem);
+                            });
+                        });
+                        
+                        feedItemsContainer.appendChild(dateSection);
+                    });
+                }
+                
+                // Function to render feeds by source
+                function renderBySource() {
+                    feedItemsContainer.innerHTML = '';
+                    
+                    if (feeds.every(feed => feed.items.length === 0)) {
+                        feedItemsContainer.innerHTML = `
+                            <div class="feed-empty">No news items found from your feeds.</div>
+                        `;
+                        return;
+                    }
+                    
+                    // Display each feed
+                    feeds.forEach(feed => {
+                        if (feed.items.length === 0) return;
+                        
+                        // Create source section
+                        const sourceSection = document.createElement('div');
+                        sourceSection.className = 'feed-source-section';
+                        
+                        // Create feed header
+                        const sourceHeader = document.createElement('div');
+                        sourceHeader.className = 'feed-source-header';
+                        sourceHeader.innerHTML = `
+                            <h2 class="feed-source-title">${escapeHTML(feed.title)}</h2>
+                            <div class="feed-source-url">${new URL(feed.link).hostname}</div>
+                        `;
+                        sourceSection.appendChild(sourceHeader);
+                        
+                        // Create feed items container
+                        const sourceContent = document.createElement('div');
+                        sourceContent.className = 'feed-source-content';
+                        
+                        // Sort items by date (newest first)
+                        feed.items.sort((a, b) => {
+                            const dateA = a.pubDate ? new Date(a.pubDate) : new Date(0);
+                            const dateB = b.pubDate ? new Date(b.pubDate) : new Date(0);
+                            return dateB - dateA; // Newest first
+                        });
+                        
+                        // Add each feed item
+                        feed.items.slice(0, 5).forEach(item => {
+                            const feedItem = document.createElement('div');
+                            feedItem.className = 'feed-item';
+                            
+                            const itemDate = item.pubDate ? formatDate(new Date(item.pubDate)) : '';
+                            
+                            feedItem.innerHTML = `
+                                <h3 class="feed-title">${escapeHTML(item.title)}</h3>
+                                <div class="feed-meta">
+                                    ${item.author ? `<span>${escapeHTML(item.author)}</span>` : ''}
+                                    <span class="feed-date">${itemDate}</span>
+                                </div>
+                                <div class="feed-description">${truncateText(item.description, 150)}</div>
+                                <a href="${item.link}" class="feed-link" target="_blank" rel="noopener noreferrer">Read more</a>
+                            `;
+                            
+                            sourceContent.appendChild(feedItem);
+                        });
+                        
+                        // Assemble the source section
+                        sourceSection.appendChild(sourceContent);
+                        
+                        // Add to container
+                        feedItemsContainer.appendChild(sourceSection);
+                    });
+                }
+                
+                // Initial render by date (default)
+                renderByDate();
+                
+                // Add event listener for sort dropdown
+                const sortSelect = document.getElementById('feed-sort');
+                sortSelect.addEventListener('change', function() {
+                    if (this.value === 'date') {
+                        renderByDate();
+                    } else {
+                        renderBySource();
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error processing feeds:', error);
+                feedContainer.innerHTML = `
+                    <div class="feed-error">
+                        <p>An error occurred while loading feeds.</p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            });
+    }
+    
+    // Parse RSS content
+    function parseRSS(content, feedUrl) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(content, "text/xml");
+        
+        // Check if it's a valid feed
+        const rssRoot = xmlDoc.querySelector('rss, feed, rdf\\:RDF');
+        if (!rssRoot) {
+            throw new Error('Invalid RSS/Atom feed format');
+        }
+        
+        // Check feed type and parse accordingly
+        let feed = {
+            title: 'Unknown Feed',
+            link: feedUrl,
+            items: []
+        };
+        
+        // RSS 2.0 or 1.0
+        const channel = xmlDoc.querySelector('channel');
+        if (channel) {
+            feed.title = getTextContent(channel, 'title') || feed.title;
+            feed.link = getTextContent(channel, 'link') || feed.link;
+            
+            const items = xmlDoc.querySelectorAll('item');
+            feed.items = Array.from(items).map(item => ({
+                title: getTextContent(item, 'title') || 'No Title',
+                link: getTextContent(item, 'link') || '#',
+                description: getTextContent(item, 'description') || '',
+                pubDate: getTextContent(item, 'pubDate') || getTextContent(item, 'dc\\:date') || '',
+                author: getTextContent(item, 'author') || getTextContent(item, 'dc\\:creator') || ''
+            }));
+        } 
+        // Atom
+        else if (xmlDoc.querySelector('feed')) {
+            const atomFeed = xmlDoc.querySelector('feed');
+            feed.title = getTextContent(atomFeed, 'title') || feed.title;
+            
+            const linkElem = atomFeed.querySelector('link[rel="alternate"], link[rel="self"]');
+            if (linkElem && linkElem.getAttribute('href')) {
+                feed.link = linkElem.getAttribute('href');
+            }
+            
+            const entries = xmlDoc.querySelectorAll('entry');
+            feed.items = Array.from(entries).map(entry => {
+                const entryLink = entry.querySelector('link[rel="alternate"]');
+                const link = entryLink ? entryLink.getAttribute('href') : '#';
+                
+                return {
+                    title: getTextContent(entry, 'title') || 'No Title',
+                    link: link,
+                    description: getTextContent(entry, 'summary') || getTextContent(entry, 'content') || '',
+                    pubDate: getTextContent(entry, 'updated') || getTextContent(entry, 'published') || '',
+                    author: getTextContent(entry, 'author name') || ''
+                };
+            });
+        }
+        
+        return feed;
+    }
+    
+    // Helper to get text content from XML element
+    function getTextContent(parent, tagName) {
+        const elem = parent.querySelector(tagName);
+        return elem ? elem.textContent.trim() : '';
+    }
+    
+    // Format date nicely
+    function formatDate(date) {
+        const now = new Date();
+        const diff = now - date;
+        
+        // Invalid date
+        if (isNaN(diff)) return '';
+        
+        // Less than a minute ago
+        if (diff < 60 * 1000) return 'Just now';
+        
+        // Less than an hour ago
+        if (diff < 60 * 60 * 1000) {
+            const minutes = Math.floor(diff / (60 * 1000));
+            return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        }
+        
+        // Less than a day ago
+        if (diff < 24 * 60 * 60 * 1000) {
+            const hours = Math.floor(diff / (60 * 60 * 1000));
+            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        }
+        
+        // Less than a week ago
+        if (diff < 7 * 24 * 60 * 60 * 1000) {
+            const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        }
+        
+        // Regular date format
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return date.toLocaleDateString(undefined, options);
+    }
+    
+    // Truncate text with ellipsis
+    function truncateText(html, maxLength) {
+        // Create a temporary div to parse HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        
+        // Get text content
+        let text = tempDiv.textContent || tempDiv.innerText || '';
+        
+        // Truncate if needed
+        if (text.length > maxLength) {
+            text = text.substring(0, maxLength) + '...';
+        }
+        
+        return escapeHTML(text);
+    }
+    
+    // Escape HTML to prevent XSS
+    function escapeHTML(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
 </script>
 
 <body>
@@ -2245,21 +3014,9 @@
     <!-- New scrollable section -->
     <section class="scroll-section">
         <div class="scroll-content">
-            <h2 style="margin-top: 0; color: var(--color-accent);">Additional Information</h2>
-            <p>This is a scrollable section that appears when you scroll down from the main view. You can add any content you want here.</p>
-            <p>Some ideas for this section:</p>
-            <ul>
-                <li>Recent activity or updates</li>
-                <li>Detailed information or documentation</li>
-                <li>Secondary functions or features</li>
-                <li>Contact information or support resources</li>
-            </ul>
-        </div>
-        
-        <div class="scroll-content">
-            <h2 style="margin-top: 0; color: var(--color-accent);">Another Section</h2>
-            <p>You can add multiple content blocks in this scrollable area. Each will inherit the current theme styling.</p>
-            <p>This section automatically adapts to the current theme, maintaining visual consistency with the rest of the page.</p>
+            <div id="rss-feed-container" class="rss-container">
+                <div class="feed-loading">Loading feeds...</div>
+            </div>
         </div>
     </section>
 
