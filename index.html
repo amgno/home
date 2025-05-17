@@ -1102,6 +1102,28 @@
         --transition-speed: 200ms;
         --box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
     }
+    
+    /* Hide scrollbar for all browsers */
+    /* For Chrome, Safari, and newer Edge */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* For Firefox */
+    * {
+        scrollbar-width: none;
+    }
+    
+    /* For older IE/Edge */
+    * {
+        -ms-overflow-style: none;
+    }
+    
+    /* Ensure scrolling still works */
+    html, body, .app-container {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
 </style>
 
 <script>
@@ -2132,27 +2154,34 @@
         height: 100vh;
         overflow-y: auto;
         overflow-x: hidden;
-        scroll-snap-type: y mandatory;
+        scroll-snap-type: none; /* Remove snap scrolling */
+        scroll-behavior: smooth;
+        scroll-padding: 0;
     }
     
     main {
         height: 100vh;
-        scroll-snap-align: start;
         position: relative;
+        min-height: 100vh;
+        scroll-snap-align: none; /* Remove snap alignment */
+        scroll-snap-stop: none; /* Remove snap stopping */
     }
     
     .scroll-section {
-        min-height: 100vh;
+        min-height: auto; /* Allow natural height */
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding: 5rem 1rem 3rem;
+        padding: 5rem 1rem 5rem;
         box-sizing: border-box;
-        scroll-snap-align: start;
+        scroll-snap-align: none; /* Remove snap alignment */
+        scroll-snap-stop: none; /* Remove snap stopping */
         background-color: var(--color-background);
         position: relative;
+        height: auto;
+        overflow-y: visible;
     }
     
     /* Create a pseudo-element to handle the background gradient */
@@ -2181,6 +2210,8 @@
         margin-bottom: 2rem;
         backdrop-filter: blur(5px);
         background-color: rgba(255, 255, 255, 0.7);
+        height: auto;
+        min-height: 70vh;
     }
     
     .dark-mode .scroll-content {
@@ -2202,6 +2233,7 @@
         overflow: hidden;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         margin-bottom: 2rem;
+        max-width: 100%;
     }
     
     .dark-mode .feed-section {
@@ -2645,6 +2677,7 @@
             
             // Load RSS feeds
             loadRssFeeds();
+            
         }, 100);
     });
     
