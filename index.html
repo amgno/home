@@ -2116,24 +2116,167 @@
     document.addEventListener('themeChanged', loadCornerText);
 </script>
 
-<main>
-    <commands-component></commands-component>
-    <search-component></search-component>
-</main>
+<style>
+    /* New scroll section styles - not modifying any existing styles */
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    body {
+        overflow: hidden; /* Prevent double scrollbars */
+    }
+    
+    .app-container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scroll-snap-type: y mandatory;
+    }
+    
+    main {
+        height: 100vh;
+        scroll-snap-align: start;
+        position: relative;
+    }
+    
+    .scroll-section {
+        min-height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 5rem 1rem 3rem;
+        box-sizing: border-box;
+        scroll-snap-align: start;
+        background-color: var(--color-background);
+        position: relative;
+    }
+    
+    /* Create a pseudo-element to handle the background gradient */
+    .scroll-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-image: var(--background-gradient, linear-gradient(135deg, #f8f5e6, #f2edd0));
+        opacity: 0.8;
+    }
+    
+    .dark-mode .scroll-section::before {
+        background-image: var(--background-gradient, linear-gradient(135deg, #222, #333));
+    }
+    
+    .scroll-content {
+        max-width: 60rem;
+        width: 100%;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--box-shadow);
+        margin-bottom: 2rem;
+        backdrop-filter: blur(5px);
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .dark-mode .scroll-content {
+        background-color: rgba(30, 30, 30, 0.7);
+    }
+</style>
 
-<div class="corner-text top-left">
-    <span class="label">home</span><br>
-    <span class="label">links</span>
-</div>
+<script>
+    // Add scroll section theme handling
+    document.addEventListener('DOMContentLoaded', function() {
+        // Existing DOMContentLoaded code will run first
+        
+        // Add scroll section theme handling after a short delay
+        setTimeout(() => {
+            // Handle theme changes for the scroll section
+            function updateScrollSectionTheme() {
+                const themeName = document.documentElement.dataset.theme || 'default';
+                const isDarkMode = document.documentElement.dataset.darkMode === 'true';
+                const scrollContents = document.querySelectorAll('.scroll-content');
+                
+                // Adjust scroll content appearance based on theme
+                scrollContents.forEach(content => {
+                    if (themeName === 'glass') {
+                        content.style.backdropFilter = 'blur(10px)';
+                        content.style.backgroundColor = isDarkMode ? 'rgba(30, 41, 59, 0.5)' : 'rgba(255, 255, 255, 0.6)';
+                        content.style.border = isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.2)';
+                    } else if (themeName === 'minimal') {
+                        content.style.backdropFilter = 'none';
+                        content.style.backgroundColor = 'transparent';
+                        content.style.boxShadow = 'none';
+                        content.style.border = 'none';
+                        content.style.borderBottom = isDarkMode ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.05)';
+                    } else if (themeName === 'ocean') {
+                        content.style.backdropFilter = 'blur(8px)';
+                        content.style.backgroundColor = isDarkMode ? 'rgba(0, 59, 66, 0.7)' : 'rgba(224, 247, 250, 0.8)';
+                        content.style.border = isDarkMode ? '1px solid rgba(38, 198, 218, 0.2)' : '1px solid rgba(129, 212, 250, 0.4)';
+                    } else if (themeName === 'swiss') {
+                        content.style.backdropFilter = 'none';
+                        content.style.backgroundColor = isDarkMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(255, 255, 255, 0.7)';
+                        content.style.boxShadow = 'none';
+                        content.style.borderLeft = '2px solid ' + (isDarkMode ? '#ff3b30' : '#ff3b30');
+                    }
+                });
+            }
+            
+            // Apply initial theme
+            updateScrollSectionTheme();
+            
+            // Listen for theme changes
+            document.addEventListener('themeChanged', updateScrollSectionTheme);
+        }, 100);
+    });
+</script>
 
-<div class="corner-text top-right">
-    <span id="greeting">good day</span>
-</div>
+<body>
+<div class="app-container">
+    <main>
+        <commands-component></commands-component>
+        <search-component></search-component>
+    </main>
 
-<div class="corner-text bottom-left">
-    <span id="quote"></span>
-</div>
+    <!-- New scrollable section -->
+    <section class="scroll-section">
+        <div class="scroll-content">
+            <h2 style="margin-top: 0; color: var(--color-accent);">Additional Information</h2>
+            <p>This is a scrollable section that appears when you scroll down from the main view. You can add any content you want here.</p>
+            <p>Some ideas for this section:</p>
+            <ul>
+                <li>Recent activity or updates</li>
+                <li>Detailed information or documentation</li>
+                <li>Secondary functions or features</li>
+                <li>Contact information or support resources</li>
+            </ul>
+        </div>
+        
+        <div class="scroll-content">
+            <h2 style="margin-top: 0; color: var(--color-accent);">Another Section</h2>
+            <p>You can add multiple content blocks in this scrollable area. Each will inherit the current theme styling.</p>
+            <p>This section automatically adapts to the current theme, maintaining visual consistency with the rest of the page.</p>
+        </div>
+    </section>
 
-<div class="corner-text bottom-right">
-    <span id="corner-text">A. Magno</span>
+    <div class="corner-text top-left">
+        <span class="label">home</span><br>
+        <span class="label">links</span>
+    </div>
+
+    <div class="corner-text top-right">
+        <span id="greeting">good day</span>
+    </div>
+
+    <div class="corner-text bottom-left">
+        <span id="quote"></span>
+    </div>
+
+    <div class="corner-text bottom-right">
+        <span id="corner-text">A. Magno</span>
+    </div>
 </div>
