@@ -1077,7 +1077,7 @@
         }
         
         .rss-feeds-textarea {
-            width: 100%;
+            width: 90%;
             height: 120px;
             padding: 0.75rem;
             font-family: var(--font-family);
@@ -1272,6 +1272,32 @@
             </div>
         </div>
 
+        <!-- RSS Feeds configuration section -->
+        <div class="settings-section">
+            <h2 class="settings-section-title">RSS Feeds</h2>
+            <p class="settings-option-description" style="margin-bottom: 1rem;">Configure RSS feeds to display in the news section</p>
+            
+            <div class="rss-feeds-container">
+                <textarea id="rss-feeds" class="rss-feeds-textarea" placeholder="Enter RSS feed URLs, one per line
+Example: https://news.ycombinator.com/rss
+Example: https://www.theverge.com/rss/index.xml"></textarea>
+                
+                <div class="rss-feeds-suggestions">
+                    <h3>Common RSS feeds:</h3>
+                    <div class="suggestion-buttons">
+                        <button class="suggestion-btn" data-url="https://hnrss.org/frontpage">Hacker News</button>
+                        <button class="suggestion-btn" data-url="https://www.theverge.com/rss/index.xml">The Verge</button>
+                        <button class="suggestion-btn" data-url="https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml">New York Times</button>
+                        <button class="suggestion-btn" data-url="https://feeds.bbci.co.uk/news/world/rss.xml">BBC News</button>
+                        <button class="suggestion-btn" data-url="https://feeds.arstechnica.com/arstechnica/index">Ars Technica</button>
+                        <button class="suggestion-btn" data-url="https://www.repubblica.it/rss/homepage/rss2.0.xml">La Repubblica</button>
+                        <button class="suggestion-btn" data-url="https://www.ilsole24ore.com/rss/italia.xml">Il Sole 24 Ore</button>
+                        <button class="suggestion-btn" data-url="https://www.corriere.it/rss/homepage.xml">Corriere della Sera</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="settings-section shortcuts-section">
             <h2 class="settings-section-title">Shortcuts</h2>
             <p class="settings-option-description" style="margin-bottom: 1rem;">Manage your homepage shortcuts</p>
@@ -1290,29 +1316,6 @@
             <div class="data-management-buttons">
                 <button type="button" id="export-settings" class="data-btn export-btn">Export Settings</button>
                 <button type="button" id="import-settings" class="data-btn import-btn">Import Settings</button>
-            </div>
-        </div>
-
-        <!-- RSS Feeds configuration section -->
-        <div class="settings-section">
-            <h2 class="settings-section-title">RSS Feeds</h2>
-            <p class="settings-option-description" style="margin-bottom: 1rem;">Configure RSS feeds to display in the news section</p>
-            
-            <div class="rss-feeds-container">
-                <textarea id="rss-feeds" class="rss-feeds-textarea" placeholder="Enter RSS feed URLs, one per line
-Example: https://news.ycombinator.com/rss
-Example: https://www.theverge.com/rss/index.xml"></textarea>
-                
-                <div class="rss-feeds-suggestions">
-                    <h3>Common RSS feeds:</h3>
-                    <div class="suggestion-buttons">
-                        <button class="suggestion-btn" data-url="https://news.ycombinator.com/rss">Hacker News</button>
-                        <button class="suggestion-btn" data-url="https://www.theverge.com/rss/index.xml">The Verge</button>
-                        <button class="suggestion-btn" data-url="https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml">New York Times</button>
-                        <button class="suggestion-btn" data-url="https://feeds.bbci.co.uk/news/world/rss.xml">BBC News</button>
-                        <button class="suggestion-btn" data-url="https://feeds.arstechnica.com/arstechnica/index">Ars Technica</button>
-                    </div>
-                </div>
             </div>
         </div>
 
