@@ -2187,45 +2187,115 @@
         background-color: rgba(30, 30, 30, 0.7);
     }
     
-    /* RSS Feed Styles */
-    .rss-feed {
+    /* RSS Feed Layout Styles */
+    .rss-container {
         width: 100%;
-        margin-bottom: 2.5rem;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    /* Feed section styling - matches the settings page */
+    .feed-section {
+        width: 100%;
         border-radius: var(--border-radius);
-        background-color: rgba(255, 255, 255, 0.4);
         overflow: hidden;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
     }
     
-    .dark-mode .rss-feed {
-        background-color: rgba(0, 0, 0, 0.15);
+    .dark-mode .feed-section {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
     }
     
-    .rss-feed:last-child {
-        margin-bottom: 0;
+    /* Feed section header styling */
+    .feed-section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
     }
     
-    .rss-header {
+    .feed-section-title {
+        font-size: 1.4rem;
+        font-weight: 500;
+        margin: 0;
+        position: relative;
+        padding-left: 1rem;
+        color: var(--color-text);
+    }
+    
+    .feed-section-title::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: var(--color-accent);
+        border-radius: 2px;
+    }
+    
+    /* Grid for feed cards */
+    .feed-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 2rem;
+        width: 100%;
+    }
+    
+    @media (max-width: 768px) {
+        .feed-cards-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    /* Feed card styling - matches settings page cards */
+    .feed-card {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: var(--box-shadow);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .feed-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .dark-mode .feed-card {
+        background: rgba(40, 40, 40, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .dark-mode .feed-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Feed card header */
+    .feed-card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 1.5rem;
-        background-color: rgba(0, 0, 0, 0.03);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
     
-    .dark-mode .rss-header {
-        background-color: rgba(255, 255, 255, 0.05);
+    .dark-mode .feed-card-header {
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
     
-    .rss-title {
+    .feed-card-title {
         margin: 0;
         font-size: 1.2rem;
         font-weight: 500;
     }
     
-    .rss-source {
+    .feed-card-source {
         font-size: 0.8rem;
         opacity: 0.7;
         padding: 0.3rem 0.6rem;
@@ -2233,39 +2303,24 @@
         border-radius: 20px;
     }
     
-    .dark-mode .rss-source {
+    .dark-mode .feed-card-source {
         background-color: rgba(255, 255, 255, 0.1);
     }
     
-    .feed-items {
-        padding: 0.5rem;
-    }
-    
+    /* Feed item styling */
     .feed-item {
         margin-bottom: 1rem;
-        padding: 1rem;
+        padding-bottom: 1rem;
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        background-color: rgba(255, 255, 255, 0.5);
-        border-radius: var(--border-radius);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     
     .dark-mode .feed-item {
         border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        background-color: rgba(255, 255, 255, 0.02);
-    }
-    
-    .feed-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-    }
-    
-    .dark-mode .feed-item:hover {
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
     
     .feed-item:last-child {
         margin-bottom: 0;
+        padding-bottom: 0;
         border-bottom: none;
     }
     
@@ -2338,77 +2393,40 @@
         background-color: rgba(255, 255, 255, 0.1);
     }
     
-    .feed-error {
-        text-align: center;
-        padding: 2rem;
-        color: var(--color-text-subtle);
-    }
-    
-    .feed-loading {
-        text-align: center;
-        padding: 2rem;
-        color: var(--color-text-subtle);
-    }
-    
-    /* New styles for the feed message */
-    .feed-message {
-        padding: 2rem;
-        color: var(--color-text);
-    }
-    
-    .feed-list {
-        list-style: none;
-        padding: 0;
-        margin: 1rem 0;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        border-radius: var(--border-radius);
-        overflow: hidden;
-    }
-    
-    .dark-mode .feed-list {
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .feed-list li {
-        padding: 0.7rem 1rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        font-family: monospace;
-        font-size: 0.9rem;
-        word-break: break-all;
-    }
-    
-    .dark-mode .feed-list li {
-        border-bottom-color: rgba(255, 255, 255, 0.05);
-    }
-    
-    .feed-list li:last-child {
-        border-bottom: none;
-    }
-    
-    .feed-list li:hover {
-        background-color: rgba(0, 0, 0, 0.02);
-    }
-    
-    .dark-mode .feed-list li:hover {
-        background-color: rgba(255, 255, 255, 0.05);
-    }
-    
-    /* Feed sorting controls */
+    /* Feed controls */
     .feed-controls {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    .dark-mode .feed-controls {
-        border-bottom-color: rgba(255, 255, 255, 0.05);
+        margin-bottom: 2rem;
     }
     
     .feed-title-section {
-        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+    
+    .feed-title-section h2 {
+        margin: 0;
+        position: relative;
+        padding-left: 1rem;
+        color: var(--color-accent);
+    }
+    
+    .feed-title-section h2::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: var(--color-accent);
+        border-radius: 2px;
+    }
+    
+    .feed-title-section p {
+        margin: 0 0 0 1rem;
+        font-size: 0.9rem;
     }
     
     .feed-sort-controls {
@@ -2423,11 +2441,11 @@
     }
     
     .feed-sort-select {
-        padding: 0.3rem 0.6rem;
+        padding: 0.5rem 1rem;
         border-radius: var(--border-radius);
         border: 1px solid rgba(0, 0, 0, 0.1);
         background-color: rgba(255, 255, 255, 0.7);
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         color: var(--color-text);
     }
     
@@ -2442,7 +2460,7 @@
         border-color: var(--color-accent);
     }
     
-    /* Feed empty state */
+    /* General styles */
     .feed-empty {
         padding: 2rem;
         text-align: center;
@@ -2450,74 +2468,34 @@
         font-style: italic;
     }
     
-    /* Date sections */
-    .feed-date-section {
-        margin: 2rem 0;
-        border-left: 3px solid var(--color-accent);
-        padding-left: 1rem;
-    }
-    
-    .feed-date-section-title {
-        margin: 0 0 1rem 0;
-        font-size: 1.2rem;
-        font-weight: 500;
-        color: var(--color-text);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        padding-bottom: 0.5rem;
-    }
-    
-    .dark-mode .feed-date-section-title {
-        border-bottom-color: rgba(255, 255, 255, 0.05);
-    }
-    
-    /* Source specific styles */
-    .feed-source-section {
-        margin-bottom: 2.5rem;
-        border-radius: var(--border-radius);
-        overflow: hidden;
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        background-color: rgba(255, 255, 255, 0.3);
-    }
-    
-    .dark-mode .feed-source-section {
-        border-color: rgba(255, 255, 255, 0.05);
-        background-color: rgba(0, 0, 0, 0.15);
-    }
-    
-    .feed-source-header {
+    .feed-loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--color-text-subtle);
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         align-items: center;
-        padding: 1rem 1.5rem;
-        background-color: rgba(0, 0, 0, 0.05);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        gap: 1rem;
     }
     
-    .dark-mode .feed-source-header {
-        background-color: rgba(255, 255, 255, 0.05);
-        border-bottom-color: rgba(255, 255, 255, 0.05);
+    .feed-loading::after {
+        content: "";
+        width: 2rem;
+        height: 2rem;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-top: 2px solid var(--color-accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
     }
     
-    .feed-source-title {
-        margin: 0;
-        font-size: 1.2rem;
-        font-weight: 500;
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
     
-    .feed-source-url {
-        font-size: 0.8rem;
-        opacity: 0.7;
-        padding: 0.3rem 0.6rem;
-        background-color: rgba(0, 0, 0, 0.05);
-        border-radius: 20px;
-    }
-    
-    .dark-mode .feed-source-url {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .feed-source-content {
-        padding: 1rem;
+    .dark-mode .feed-loading::after {
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-top: 2px solid var(--color-accent);
     }
 </style>
 
@@ -2593,7 +2571,7 @@
         // If no feeds configured, show message
         if (feedUrls.length === 0) {
             feedContainer.innerHTML = `
-                <div class="feed-error">
+                <div class="feed-empty">
                     <p>No RSS feeds configured.</p>
                     <p>Add RSS feeds in the <a href="settings.html" style="color: var(--color-accent);">settings page</a>.</p>
                 </div>
@@ -2634,7 +2612,7 @@
                 // If all feeds failed, show error
                 if (feeds.every(feed => feed.items.length === 0)) {
                     feedContainer.innerHTML = `
-                        <div class="feed-error">
+                        <div class="feed-empty">
                             <p>Could not load any feeds.</p>
                             <p>Check the RSS feed URLs in the <a href="settings.html" style="color: var(--color-accent);">settings page</a>.</p>
                         </div>
@@ -2647,8 +2625,8 @@
                 controlsDiv.className = 'feed-controls';
                 controlsDiv.innerHTML = `
                     <div class="feed-title-section">
-                        <h2 style="margin: 0; color: var(--color-accent);">News Feed</h2>
-                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Latest updates from your selected sources</p>
+                        <h2>News Feed</h2>
+                        <p>Latest updates from your selected sources</p>
                     </div>
                     <div class="feed-sort-controls">
                         <span class="feed-sort-label">Sort by:</span>
@@ -2738,13 +2716,23 @@
                         
                         // Create date section
                         const dateSection = document.createElement('div');
-                        dateSection.className = 'feed-date-section';
+                        dateSection.className = 'feed-section';
                         
-                        // Add group header
+                        // Add section header
+                        const sectionHeader = document.createElement('div');
+                        sectionHeader.className = 'feed-section-header';
+                        
                         const sectionTitle = document.createElement('h3');
-                        sectionTitle.className = 'feed-date-section-title';
+                        sectionTitle.className = 'feed-section-title';
                         sectionTitle.textContent = group.name;
-                        dateSection.appendChild(sectionTitle);
+                        sectionHeader.appendChild(sectionTitle);
+                        
+                        dateSection.appendChild(sectionHeader);
+                        
+                        // Create grid for feed cards
+                        const cardsGrid = document.createElement('div');
+                        cardsGrid.className = 'feed-cards-grid';
+                        dateSection.appendChild(cardsGrid);
                         
                         // Group items by source within each date group
                         const sourceMap = new Map();
@@ -2756,10 +2744,31 @@
                             sourceMap.get(item.sourceName).push(item);
                         });
                         
-                        // Create items for each source
+                        // Create a card for each source
                         sourceMap.forEach((items, sourceName) => {
-                            // Add items
-                            items.forEach(item => {
+                            // Create source card
+                            const sourceCard = document.createElement('div');
+                            sourceCard.className = 'feed-card';
+                            
+                            // Create card header
+                            const cardHeader = document.createElement('div');
+                            cardHeader.className = 'feed-card-header';
+                            
+                            const cardTitle = document.createElement('h4');
+                            cardTitle.className = 'feed-card-title';
+                            cardTitle.textContent = sourceName;
+                            
+                            const sourceUrl = items.length > 0 ? items[0].sourceUrl : '#';
+                            const cardSource = document.createElement('div');
+                            cardSource.className = 'feed-card-source';
+                            cardSource.textContent = new URL(sourceUrl).hostname;
+                            
+                            cardHeader.appendChild(cardTitle);
+                            cardHeader.appendChild(cardSource);
+                            sourceCard.appendChild(cardHeader);
+                            
+                            // Add items to the card
+                            items.slice(0, 5).forEach(item => {
                                 const feedItem = document.createElement('div');
                                 feedItem.className = 'feed-item';
                                 
@@ -2768,15 +2777,17 @@
                                 feedItem.innerHTML = `
                                     <h3 class="feed-title">${escapeHTML(item.title)}</h3>
                                     <div class="feed-meta">
-                                        <span class="feed-source">${escapeHTML(item.sourceName)}</span>
                                         <span class="feed-date">${itemDate}</span>
                                     </div>
                                     <div class="feed-description">${truncateText(item.description, 150)}</div>
                                     <a href="${item.link}" class="feed-link" target="_blank" rel="noopener noreferrer">Read more</a>
                                 `;
                                 
-                                dateSection.appendChild(feedItem);
+                                sourceCard.appendChild(feedItem);
                             });
+                            
+                            // Add card to grid
+                            cardsGrid.appendChild(sourceCard);
                         });
                         
                         feedItemsContainer.appendChild(dateSection);
@@ -2794,26 +2805,49 @@
                         return;
                     }
                     
-                    // Display each feed
+                    // Create section
+                    const sourcesSection = document.createElement('div');
+                    sourcesSection.className = 'feed-section';
+                    
+                    // Add section header
+                    const sectionHeader = document.createElement('div');
+                    sectionHeader.className = 'feed-section-header';
+                    
+                    const sectionTitle = document.createElement('h3');
+                    sectionTitle.className = 'feed-section-title';
+                    sectionTitle.textContent = 'News Sources';
+                    sectionHeader.appendChild(sectionTitle);
+                    
+                    sourcesSection.appendChild(sectionHeader);
+                    
+                    // Create grid for feed cards
+                    const cardsGrid = document.createElement('div');
+                    cardsGrid.className = 'feed-cards-grid';
+                    sourcesSection.appendChild(cardsGrid);
+                    
+                    // Display each feed as a card
                     feeds.forEach(feed => {
                         if (feed.items.length === 0) return;
                         
-                        // Create source section
-                        const sourceSection = document.createElement('div');
-                        sourceSection.className = 'feed-source-section';
+                        // Create source card
+                        const sourceCard = document.createElement('div');
+                        sourceCard.className = 'feed-card';
                         
-                        // Create feed header
-                        const sourceHeader = document.createElement('div');
-                        sourceHeader.className = 'feed-source-header';
-                        sourceHeader.innerHTML = `
-                            <h2 class="feed-source-title">${escapeHTML(feed.title)}</h2>
-                            <div class="feed-source-url">${new URL(feed.link).hostname}</div>
-                        `;
-                        sourceSection.appendChild(sourceHeader);
+                        // Create card header
+                        const cardHeader = document.createElement('div');
+                        cardHeader.className = 'feed-card-header';
                         
-                        // Create feed items container
-                        const sourceContent = document.createElement('div');
-                        sourceContent.className = 'feed-source-content';
+                        const cardTitle = document.createElement('h4');
+                        cardTitle.className = 'feed-card-title';
+                        cardTitle.textContent = feed.title;
+                        
+                        const cardSource = document.createElement('div');
+                        cardSource.className = 'feed-card-source';
+                        cardSource.textContent = new URL(feed.link).hostname;
+                        
+                        cardHeader.appendChild(cardTitle);
+                        cardHeader.appendChild(cardSource);
+                        sourceCard.appendChild(cardHeader);
                         
                         // Sort items by date (newest first)
                         feed.items.sort((a, b) => {
@@ -2832,22 +2866,20 @@
                             feedItem.innerHTML = `
                                 <h3 class="feed-title">${escapeHTML(item.title)}</h3>
                                 <div class="feed-meta">
-                                    ${item.author ? `<span>${escapeHTML(item.author)}</span>` : ''}
                                     <span class="feed-date">${itemDate}</span>
                                 </div>
                                 <div class="feed-description">${truncateText(item.description, 150)}</div>
                                 <a href="${item.link}" class="feed-link" target="_blank" rel="noopener noreferrer">Read more</a>
                             `;
                             
-                            sourceContent.appendChild(feedItem);
+                            sourceCard.appendChild(feedItem);
                         });
                         
-                        // Assemble the source section
-                        sourceSection.appendChild(sourceContent);
-                        
-                        // Add to container
-                        feedItemsContainer.appendChild(sourceSection);
+                        // Add card to grid
+                        cardsGrid.appendChild(sourceCard);
                     });
+                    
+                    feedItemsContainer.appendChild(sourcesSection);
                 }
                 
                 // Initial render by date (default)
