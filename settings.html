@@ -655,10 +655,11 @@
             height: 18px;
             width: 18px;
             left: 3px;
-            bottom: 3px;
+            top: 3px;
             background-color: white;
             transition: .3s;
             border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         input:checked + .toggle-slider {
@@ -667,6 +668,30 @@
 
         input:checked + .toggle-slider:before {
             transform: translateX(24px);
+        }
+
+        /* Disabled toggle styling */
+        .toggle-switch input:disabled + .toggle-slider {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .toggle-switch input:disabled + .toggle-slider:before {
+            cursor: not-allowed;
+        }
+
+        /* Disabled toggle container styling */
+        .toggle-switch:has(input:disabled) {
+            opacity: 0.5;
+        }
+
+        /* Fallback for browsers that don't support :has() */
+        .toggle-switch.disabled {
+            opacity: 0.5;
+        }
+
+        .toggle-switch.disabled .toggle-slider {
+            cursor: not-allowed;
         }
 
         /* Select styling */
@@ -1247,6 +1272,149 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        /* Command Suggestions Management section styling */
+        .suggestions-manager {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .command-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .suggestions-editor {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .dark-mode .suggestions-editor {
+            background: rgba(40, 40, 40, 0.5);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .suggestions-current {
+            margin-bottom: 1.5rem;
+        }
+
+        .suggestions-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--color-text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            resize: vertical;
+            transition: all 0.2s ease;
+        }
+
+        .dark-mode .suggestions-textarea {
+            background: rgba(30, 30, 30, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--color-text);
+        }
+
+        .suggestions-textarea:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 2px rgba(var(--color-accent), 0.2);
+        }
+
+        .suggestions-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .suggestion-save-btn,
+        .suggestion-clear-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .suggestion-save-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .suggestion-save-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .suggestion-clear-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .suggestion-clear-btn:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+        }
+
+        .suggestions-help {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 1.5rem;
+        }
+
+        .dark-mode .suggestions-help {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .suggestions-help h4 {
+            margin: 0 0 1rem 0;
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text);
+        }
+
+        .quick-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .quick-suggestion-btn {
+            background-color: rgba(33, 150, 243, 0.1);
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            border-radius: var(--border-radius);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-suggestion-btn:hover {
+            background-color: rgba(33, 150, 243, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .dark-mode .quick-suggestion-btn {
+            background-color: rgba(33, 150, 243, 0.2);
+            border-color: rgba(33, 150, 243, 0.4);
+        }
+
+        .dark-mode .quick-suggestion-btn:hover {
+            background-color: rgba(33, 150, 243, 0.3);
+        }
+
         /* GitHub Sync section styling */
         .sync-section {
             grid-column: 1 / -1;
@@ -1474,6 +1642,17 @@
             
             <div class="settings-option">
                 <div>
+                    <span class="settings-option-label">Auto theme</span>
+                    <span class="settings-option-description">Automatically switch theme based on system preference</span>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="auto-theme-setting">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-option">
+                <div>
                     <span class="settings-option-label">Theme</span>
                     <span class="settings-option-description">Choose a design theme for your homepage</span>
                 </div>
@@ -1593,7 +1772,18 @@
             <h2 class="settings-section-title">RSS Feeds</h2>
             <p class="settings-option-description" style="margin-bottom: 1rem;">Configure RSS feeds to display in the news section</p>
             
-            <div class="rss-feeds-container">
+            <div class="settings-option">
+                <div>
+                    <span class="settings-option-label">Enable RSS feeds</span>
+                    <span class="settings-option-description">Show RSS feeds in the news section</span>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="rss-enabled-setting" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="rss-feeds-container" id="rss-feeds-container">
                 <textarea id="rss-feeds" class="rss-feeds-textarea" placeholder="Enter RSS feed URLs, one per line
 Example: https://news.ycombinator.com/rss
 Example: https://www.theverge.com/rss/index.xml"></textarea>
@@ -1609,6 +1799,51 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                         <button class="suggestion-btn" data-url="https://www.repubblica.it/rss/homepage/rss2.0.xml">La Repubblica</button>
                         <button class="suggestion-btn" data-url="https://www.ilsole24ore.com/rss/italia.xml">Il Sole 24 Ore</button>
                         <button class="suggestion-btn" data-url="https://www.corriere.it/rss/homepage.xml">Corriere della Sera</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Command Suggestions section -->
+        <div class="settings-section">
+            <h2 class="settings-section-title">Command Suggestions</h2>
+            <p class="settings-option-description" style="margin-bottom: 1rem;">Manage suggestions for your commands. Select a command to edit its suggestions.</p>
+            
+            <div class="suggestions-manager">
+                <div class="command-selector">
+                    <label for="command-select" class="form-label">Select Command:</label>
+                    <select id="command-select" class="form-input">
+                        <option value="">Choose a command...</option>
+                    </select>
+                </div>
+                
+                <div id="suggestions-editor" class="suggestions-editor" style="display: none;">
+                    <div class="suggestions-current">
+                        <label for="suggestions-textarea" class="form-label">Current Suggestions:</label>
+                        <textarea id="suggestions-textarea" class="suggestions-textarea" 
+                                placeholder="Enter suggestions one per line
+Example: web.whatsapp.com
+Example: anilist.co
+Example: discord.com/app"></textarea>
+                    </div>
+                    
+                    <div class="suggestions-actions">
+                        <button type="button" id="save-suggestions" class="suggestion-save-btn">Save Suggestions</button>
+                        <button type="button" id="clear-suggestions" class="suggestion-clear-btn">Clear All</button>
+                    </div>
+                    
+                    <div class="suggestions-help">
+                        <h4>Quick add common suggestions:</h4>
+                        <div class="quick-suggestions">
+                            <button class="quick-suggestion-btn" data-suggestion="web.whatsapp.com">WhatsApp Web</button>
+                            <button class="quick-suggestion-btn" data-suggestion="discord.com/app">Discord</button>
+                            <button class="quick-suggestion-btn" data-suggestion="anilist.co">AniList</button>
+                            <button class="quick-suggestion-btn" data-suggestion="github.com">GitHub</button>
+                            <button class="quick-suggestion-btn" data-suggestion="stackoverflow.com">Stack Overflow</button>
+                            <button class="quick-suggestion-btn" data-suggestion="reddit.com">Reddit</button>
+                            <button class="quick-suggestion-btn" data-suggestion="netflix.com">Netflix</button>
+                            <button class="quick-suggestion-btn" data-suggestion="spotify.com">Spotify</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2529,8 +2764,10 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
         let currentSettings = {
             openLinksInNewTab: false,
             darkMode: false,
+            autoTheme: false,  // New flag for auto theme switching
             theme: 'default',
             cornerText: '',
+            rssEnabled: true,  // New flag for RSS feeds functionality
             customColors: {
                 background: '#f8f5e6',
                 backgroundSecondary: '#f2edd0',
@@ -2545,9 +2782,11 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
 
         // DOM Elements
         const darkModeSetting = document.getElementById('dark-mode-setting');
+        const autoThemeSetting = document.getElementById('auto-theme-setting');
         const themeSelect = document.getElementById('theme-select');
         const newTabSetting = document.getElementById('new-tab-setting');
         const cornerTextSetting = document.getElementById('corner-text-setting');
+        const rssEnabledSetting = document.getElementById('rss-enabled-setting');
         const saveButton = document.getElementById('save-settings');
         const shortcutsList = document.getElementById('shortcuts-list');
         const addShortcutButton = document.getElementById('add-shortcut');
@@ -2588,6 +2827,13 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
         const gistIdDisplay = document.getElementById('gist-id-display');
         const userIdDisplay = document.getElementById('user-id-display');
 
+        // Suggestions Management Elements
+        const commandSelect = document.getElementById('command-select');
+        const suggestionsEditor = document.getElementById('suggestions-editor');
+        const suggestionsTextarea = document.getElementById('suggestions-textarea');
+        const saveSuggestionsBtn = document.getElementById('save-suggestions');
+        const clearSuggestionsBtn = document.getElementById('clear-suggestions');
+
         // GitHub Sync State Variables
         let githubToken = localStorage.getItem('githubToken') || '';
         let gistId = localStorage.getItem('gistId') || '';
@@ -2607,8 +2853,10 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
             
             // Add event listeners
             darkModeSetting.addEventListener('change', onDarkModeChange);
+            autoThemeSetting.addEventListener('change', onAutoThemeChange);
             themeSelect.addEventListener('change', onThemeChange);
             newTabSetting.addEventListener('change', onNewTabChange);
+            rssEnabledSetting.addEventListener('change', onRssEnabledChange);
             cornerTextSetting.addEventListener('change', (e) => {
                 currentSettings.cornerText = e.target.value.trim();
             });
@@ -2701,6 +2949,21 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                 button.setAttribute('data-original-text', button.innerText);
             });
 
+            // Initialize suggestions management functionality
+            initializeSuggestionsManager();
+
+            // Initialize auto theme if enabled
+            if (currentSettings.autoTheme) {
+                // Apply system preference and set up listener
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                currentSettings.darkMode = systemPrefersDark;
+                darkModeSetting.checked = systemPrefersDark;
+                darkModeSetting.disabled = true;
+                darkModeSetting.parentElement.classList.add('disabled');
+                setupSystemThemeListener();
+                applyTheme(currentSettings.theme, currentSettings.darkMode, currentSettings.useCustomColors);
+            }
+
             // GitHub Sync event listeners
             toggleTokenVisibilityBtn.addEventListener('click', toggleTokenVisibility);
             enableSyncBtn.addEventListener('click', enableSync);
@@ -2716,6 +2979,141 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
             checkForSyncUrl();
         });
 
+        // Initialize suggestions management functionality
+        function initializeSuggestionsManager() {
+            // Populate command selector
+            populateCommandSelector();
+            
+            // Add event listeners
+            commandSelect.addEventListener('change', onCommandSelectChange);
+            saveSuggestionsBtn.addEventListener('click', onSaveSuggestions);
+            clearSuggestionsBtn.addEventListener('click', onClearSuggestions);
+            
+            // Add event listeners for quick suggestion buttons
+            const quickSuggestionBtns = document.querySelectorAll('.quick-suggestion-btn');
+            quickSuggestionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const suggestion = this.getAttribute('data-suggestion');
+                    addQuickSuggestion(suggestion);
+                });
+            });
+        }
+
+        // Populate the command selector dropdown
+        function populateCommandSelector() {
+            // Clear existing options except the first one
+            while (commandSelect.children.length > 1) {
+                commandSelect.removeChild(commandSelect.lastChild);
+            }
+            
+            // Add commands that can have suggestions
+            for (const [key, command] of commands.entries()) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${key} - ${command.name}`;
+                commandSelect.appendChild(option);
+            }
+        }
+
+        // Handle command selection change
+        function onCommandSelectChange() {
+            const selectedKey = commandSelect.value;
+            
+            if (selectedKey) {
+                const command = commands.get(selectedKey);
+                if (command) {
+                    // Show the suggestions editor
+                    suggestionsEditor.style.display = 'block';
+                    
+                    // Load current suggestions if they exist
+                    const suggestions = command.suggestions || [];
+                    suggestionsTextarea.value = suggestions.join('\n');
+                }
+            } else {
+                // Hide the suggestions editor
+                suggestionsEditor.style.display = 'none';
+                suggestionsTextarea.value = '';
+            }
+        }
+
+        // Save suggestions for the selected command
+        function onSaveSuggestions() {
+            const selectedKey = commandSelect.value;
+            if (!selectedKey) return;
+            
+            const suggestionsText = suggestionsTextarea.value.trim();
+            const suggestions = suggestionsText ? 
+                suggestionsText.split('\n')
+                    .map(s => s.trim())
+                    .filter(s => s !== '') : 
+                [];
+            
+            // Update the command with new suggestions
+            const command = commands.get(selectedKey);
+            if (command) {
+                if (suggestions.length > 0) {
+                    command.suggestions = suggestions;
+                } else {
+                    // Remove suggestions property if empty
+                    delete command.suggestions;
+                }
+                commands.set(selectedKey, command);
+                
+                // Save to localStorage
+                saveCommandsToStorage();
+                
+                // Show success feedback
+                showFeedback(saveSuggestionsBtn, 'Saved!', '#4CAF50');
+            }
+        }
+
+        // Clear all suggestions for the selected command
+        function onClearSuggestions() {
+            if (confirm('Are you sure you want to clear all suggestions for this command?')) {
+                suggestionsTextarea.value = '';
+            }
+        }
+
+        // Add a quick suggestion to the textarea
+        function addQuickSuggestion(suggestion) {
+            const currentSuggestions = suggestionsTextarea.value
+                .split('\n')
+                .map(s => s.trim())
+                .filter(s => s !== '');
+            
+            if (!currentSuggestions.includes(suggestion)) {
+                if (currentSuggestions.length > 0) {
+                    suggestionsTextarea.value = currentSuggestions.join('\n') + '\n' + suggestion;
+                } else {
+                    suggestionsTextarea.value = suggestion;
+                }
+            }
+        }
+
+        // Save commands to localStorage
+        function saveCommandsToStorage() {
+            try {
+                const commandsArray = Array.from(commands.entries());
+                localStorage.setItem('homeCommands', JSON.stringify(commandsArray));
+            } catch (e) {
+                console.error('Error saving commands:', e);
+            }
+        }
+
+        // Show temporary feedback on buttons
+        function showFeedback(button, text, color) {
+            const originalText = button.textContent;
+            const originalBg = button.style.backgroundColor;
+            
+            button.textContent = text;
+            button.style.backgroundColor = color;
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = originalBg;
+            }, 1500);
+        }
+
         // Load settings from localStorage
         function loadSettings() {
             try {
@@ -2727,8 +3125,10 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                     currentSettings = {
                         openLinksInNewTab: settings.openLinksInNewTab || false,
                         darkMode: settings.darkMode || false,
+                        autoTheme: settings.autoTheme || false,  // New flag for auto theme switching
                         theme: settings.theme || 'default',
                         cornerText: settings.cornerText || '',
+                        rssEnabled: settings.rssEnabled !== undefined ? settings.rssEnabled : true,  // Default to enabled
                         customColors: settings.customColors || {
                             background: '#f8f5e6',
                             backgroundSecondary: '#f2edd0',
@@ -2740,8 +3140,10 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                     
                     // Update form elements
                     darkModeSetting.checked = currentSettings.darkMode;
+                    autoThemeSetting.checked = currentSettings.autoTheme;
                     themeSelect.value = currentSettings.theme;
                     newTabSetting.checked = currentSettings.openLinksInNewTab;
+                    rssEnabledSetting.checked = currentSettings.rssEnabled;
                     cornerTextSetting.value = currentSettings.cornerText;
                     
                     // Set custom colors toggle
@@ -2765,6 +3167,16 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                     // Load RSS feeds
                     if (settings.rssFeeds && Array.isArray(settings.rssFeeds)) {
                         document.getElementById('rss-feeds').value = settings.rssFeeds.join('\n');
+                    }
+                    
+                    // Set RSS container visibility
+                    const rssContainer = document.getElementById('rss-feeds-container');
+                    if (currentSettings.rssEnabled) {
+                        rssContainer.style.display = 'block';
+                        rssContainer.style.opacity = '1';
+                    } else {
+                        rssContainer.style.display = 'none';
+                        rssContainer.style.opacity = '0.5';
                     }
                     
                     console.log("Settings loaded:", currentSettings);
@@ -2861,6 +3273,11 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                 
                 shortcutsList.appendChild(li);
             }
+            
+            // Update command selector after rendering shortcuts
+            if (typeof populateCommandSelector === 'function') {
+                populateCommandSelector();
+            }
         }
 
         // Dark mode toggle handler
@@ -2872,6 +3289,66 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
             // Update color pickers to reflect the current theme's colors in the new mode
             const themeColors = getThemeColors(currentSettings.theme, isDarkMode);
             updateColorPreview(currentSettings.useCustomColors ? currentSettings.customColors : themeColors);
+        }
+
+        // Auto theme toggle handler
+        function onAutoThemeChange(e) {
+            currentSettings.autoTheme = e.target.checked;
+            
+            if (currentSettings.autoTheme) {
+                // Enable auto theme: disable manual dark mode toggle and apply system preference
+                darkModeSetting.disabled = true;
+                darkModeSetting.parentElement.classList.add('disabled');
+                
+                // Apply system preference immediately
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                currentSettings.darkMode = systemPrefersDark;
+                darkModeSetting.checked = systemPrefersDark;
+                
+                // Listen for system preference changes
+                setupSystemThemeListener();
+            } else {
+                // Disable auto theme: re-enable manual dark mode toggle
+                darkModeSetting.disabled = false;
+                darkModeSetting.parentElement.classList.remove('disabled');
+                
+                // Remove system preference listener
+                removeSystemThemeListener();
+            }
+            
+            applyTheme(currentSettings.theme, currentSettings.darkMode, currentSettings.useCustomColors);
+        }
+
+        // System theme listener setup
+        let systemThemeMediaQuery = null;
+        
+        function setupSystemThemeListener() {
+            if (systemThemeMediaQuery) {
+                removeSystemThemeListener();
+            }
+            
+            systemThemeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            systemThemeMediaQuery.addEventListener('change', handleSystemThemeChange);
+        }
+        
+        function removeSystemThemeListener() {
+            if (systemThemeMediaQuery) {
+                systemThemeMediaQuery.removeEventListener('change', handleSystemThemeChange);
+                systemThemeMediaQuery = null;
+            }
+        }
+        
+        function handleSystemThemeChange(e) {
+            if (currentSettings.autoTheme) {
+                currentSettings.darkMode = e.matches;
+                darkModeSetting.checked = e.matches;
+                applyTheme(currentSettings.theme, currentSettings.darkMode, currentSettings.useCustomColors);
+                
+                // Update color pickers to reflect the new mode
+                const themeColors = getThemeColors(currentSettings.theme, currentSettings.darkMode);
+                updateColorPickers(themeColors);
+                updateColorPreview(currentSettings.useCustomColors ? currentSettings.customColors : themeColors);
+            }
         }
 
         // Theme change handler
@@ -2889,6 +3366,22 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
         // New tab setting handler
         function onNewTabChange(e) {
             currentSettings.openLinksInNewTab = e.target.checked;
+        }
+
+        // RSS enabled setting handler
+        function onRssEnabledChange(e) {
+            currentSettings.rssEnabled = e.target.checked;
+            const rssContainer = document.getElementById('rss-feeds-container');
+            
+            if (currentSettings.rssEnabled) {
+                // Enable RSS feeds: show the container
+                rssContainer.style.display = 'block';
+                rssContainer.style.opacity = '1';
+            } else {
+                // Disable RSS feeds: hide the container
+                rssContainer.style.display = 'none';
+                rssContainer.style.opacity = '0.5';
+            }
         }
 
         // Setup color pickers
@@ -3473,7 +3966,27 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
             
             // If we're changing the key, remove the old entry
             if (editingKey && editingKey !== key) {
+                // Preserve existing properties from old command if changing key
+                const oldCommand = commands.get(editingKey);
+                if (oldCommand) {
+                    // Copy over additional properties like suggestions
+                    Object.keys(oldCommand).forEach(prop => {
+                        if (prop !== 'name' && prop !== 'url') {
+                            command[prop] = oldCommand[prop];
+                        }
+                    });
+                }
                 commands.delete(editingKey);
+            } else if (editingKey === key) {
+                // We're editing the same key, preserve existing properties
+                const existingCommand = commands.get(key);
+                if (existingCommand) {
+                    Object.keys(existingCommand).forEach(prop => {
+                        if (prop !== 'name' && prop !== 'url') {
+                            command[prop] = existingCommand[prop];
+                        }
+                    });
+                }
             }
             
             // Set the new command
@@ -3626,6 +4139,7 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                 currentSettings = {
                     openLinksInNewTab: importData.settings.openLinksInNewTab || false,
                     darkMode: importData.settings.darkMode || false,
+                    autoTheme: importData.settings.autoTheme || false,  // New flag for auto theme switching
                     theme: importData.settings.theme || 'default',
                     cornerText: importData.settings.cornerText || '',
                     customColors: importData.settings.customColors || {
@@ -3640,8 +4154,10 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                 
                 // Update UI to reflect imported settings
                 darkModeSetting.checked = currentSettings.darkMode;
+                autoThemeSetting.checked = currentSettings.autoTheme;
                 themeSelect.value = currentSettings.theme;
                 newTabSetting.checked = currentSettings.openLinksInNewTab;
+                rssEnabledSetting.checked = currentSettings.rssEnabled;
                 cornerTextSetting.value = currentSettings.cornerText;
                 
                 // Update RSS feeds textarea if rssFeeds exist
@@ -4077,8 +4593,10 @@ Example: https://www.theverge.com/rss/index.xml"></textarea>
                         
                         // Update UI elements
                         darkModeSetting.checked = currentSettings.darkMode;
+                        autoThemeSetting.checked = currentSettings.autoTheme;
                         themeSelect.value = currentSettings.theme;
                         newTabSetting.checked = currentSettings.openLinksInNewTab;
+                        rssEnabledSetting.checked = currentSettings.rssEnabled;
                         cornerTextSetting.value = currentSettings.cornerText;
                         
                         if (currentSettings.rssFeeds && Array.isArray(currentSettings.rssFeeds)) {

@@ -18,7 +18,13 @@
             if (savedSettings) {
                 const settings = JSON.parse(savedSettings);
                 const themeName = settings.theme || 'default';
-                const isDarkMode = settings.darkMode || false;
+                let isDarkMode = settings.darkMode || false;
+                
+                // Check if auto theme is enabled
+                if (settings.autoTheme) {
+                    // Override with system preference
+                    isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                }
                 
                 // Apply dark mode class
                 document.documentElement.classList.toggle('dark-mode', isDarkMode);
@@ -26,6 +32,7 @@
                 // Store theme data in a data attribute for components to access
                 document.documentElement.dataset.theme = themeName;
                 document.documentElement.dataset.darkMode = isDarkMode;
+                document.documentElement.dataset.autoTheme = settings.autoTheme || false;
                 
                 // Define basic theme properties - just enough to prevent flash
                 const BASIC_THEMES = {
@@ -254,12 +261,33 @@
                 const themeName = settings.theme || 'default';
                 let isDarkMode = settings.darkMode || false;
                 
+                // Check if auto theme is enabled
+                if (settings.autoTheme) {
+                    // Override with system preference
+                    isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    
+                    // Set up listener for system preference changes
+                    const systemThemeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                    systemThemeMediaQuery.addEventListener('change', (e) => {
+                        // Update theme when system preference changes
+                        document.documentElement.classList.toggle('dark-mode', e.matches);
+                        document.documentElement.dataset.darkMode = e.matches;
+                        applyTheme(themeName, e.matches);
+                        
+                        // Update localStorage to keep settings in sync
+                        const currentSettings = JSON.parse(localStorage.getItem('homeSettings') || '{}');
+                        currentSettings.darkMode = e.matches;
+                        localStorage.setItem('homeSettings', JSON.stringify(currentSettings));
+                    });
+                }
+                
                 // Apply dark mode class
                 document.documentElement.classList.toggle('dark-mode', isDarkMode);
                 
                 // Store theme data in a data attribute for commands component to access
                 document.documentElement.dataset.theme = themeName;
                 document.documentElement.dataset.darkMode = isDarkMode;
+                document.documentElement.dataset.autoTheme = settings.autoTheme || false;
                 
                 // Update CONFIG with openLinksInNewTab setting
                 CONFIG.openLinksInNewTab = settings.openLinksInNewTab || false;
